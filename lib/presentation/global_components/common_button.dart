@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import '../../common/theme.dart';
 
@@ -18,6 +19,7 @@ class CommonButton extends StatelessWidget {
     this.textColor,
     this.icon,
     this.padding,
+    this.border,
   });
 
   String text;
@@ -32,6 +34,7 @@ class CommonButton extends StatelessWidget {
   FontWeight? fontWeight;
   Widget? icon;
   EdgeInsets? padding;
+  BorderSide? border;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +46,10 @@ class CommonButton extends StatelessWidget {
           backgroundColor: backgroundColor ?? primaryColor,
           fixedSize: Size(width ?? double.nan, height ?? 0),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? 15)
+            side: border ?? BorderSide.none,
+              borderRadius: BorderRadius.circular(borderRadius ?? 15),
           ),
+
         ),
         child: icon ?? Text(
           text,

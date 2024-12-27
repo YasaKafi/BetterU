@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../common/theme.dart';
 
+import 'package:flutter/services.dart'; // Untuk inputFormatters
+
 class CustomTextFieldAuth extends StatelessWidget {
   final String title;
   final bool? readOnly;
@@ -10,8 +12,21 @@ class CustomTextFieldAuth extends StatelessWidget {
   final TextEditingController? controller;
   final Function(String)? onChanged;
   final Function()? onTap;
-  const CustomTextFieldAuth(
-      {super.key, required this.title, this.controller, this.borderRadius, this.borderFocusRadius, this.onChanged, this.onTap, this.readOnly});
+  final bool isNumeric;
+  final int? maxDigits;
+
+  const CustomTextFieldAuth({
+    super.key,
+    required this.title,
+    this.controller,
+    this.borderRadius,
+    this.borderFocusRadius,
+    this.onChanged,
+    this.onTap,
+    this.readOnly,
+    this.isNumeric = false,
+    this.maxDigits,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +46,21 @@ class CustomTextFieldAuth extends StatelessWidget {
           onChanged: onChanged,
           onTap: onTap,
           readOnly: readOnly ?? false,
+          keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+          inputFormatters: isNumeric
+              ? [
+                  FilteringTextInputFormatter.digitsOnly,
+                  if (maxDigits != null)
+                    LengthLimitingTextInputFormatter(maxDigits),
+                ]
+              : null,
           decoration: InputDecoration(
             hintText: title,
             hintStyle: txtSecondaryTitle.copyWith(
                 fontWeight: FontWeight.w600, color: grey),
             focusedBorder: OutlineInputBorder(
-              borderRadius: borderFocusRadius ?? BorderRadius.all(Radius.circular(20.0)),
+              borderRadius:
+                  borderFocusRadius ?? BorderRadius.all(Radius.circular(20.0)),
               borderSide: BorderSide(
                   width: 2, color: primaryColor, style: BorderStyle.solid),
             ),

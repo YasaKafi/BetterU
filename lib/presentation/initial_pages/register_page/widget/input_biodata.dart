@@ -90,7 +90,7 @@ Widget buildBiodataInputPage(double screenWidth, double screenHeight, RegisterCo
               children: [
                 Obx(() {
                   return CommonButton(
-                    backgroundColor: controller.selectedGender.value == 'Laki-Laki'
+                    backgroundColor: controller.selectedGender.value == 'Laki-laki'
                         ? primaryColor
                         : baseColor,
                     icon: Center(
@@ -98,7 +98,7 @@ Widget buildBiodataInputPage(double screenWidth, double screenHeight, RegisterCo
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            controller.selectedGender.value == 'Laki-Laki' ? icGenderMaleActive : icGenderMaleUnactive,
+                            controller.selectedGender.value == 'Laki-laki' ? icGenderMaleActive : icGenderMaleUnactive,
                             width: 24,
                             height: 24,
                           ),
@@ -108,22 +108,22 @@ Widget buildBiodataInputPage(double screenWidth, double screenHeight, RegisterCo
                           Text(
                             'Laki-laki',
                             style: txtSecondaryTitle.copyWith(
-                                fontWeight: FontWeight.w600, color: controller.selectedGender.value == 'Laki-Laki' ? baseColor : blackColor,
+                                fontWeight: FontWeight.w600, color: controller.selectedGender.value == 'Laki-laki' ? baseColor : blackColor,
                                 ),
                           ),
                         ],
                       ),
                     ),
                     text: '',
-                    onPressed: () => controller.selectGender('Laki-Laki'),
+                    onPressed: () => controller.selectGender('Laki-laki'),
                     height: 60,
                     width: screenWidth * 0.42,
                     borderRadius: 10,
                     style: txtButton.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: controller.selectedGender.value == 'Laki-Laki' ? baseColor : blackColor,
+                      color: controller.selectedGender.value == 'Laki-laki' ? baseColor : blackColor,
                     ),
-                    border: controller.selectedGender.value == 'Laki-Laki' ? BorderSide.none : BorderSide(color: blackColor, style: BorderStyle.solid),
+                    border: controller.selectedGender.value == 'Laki-laki' ? BorderSide.none : BorderSide(color: blackColor, style: BorderStyle.solid),
                   );
                 }),
                 Obx(() {
@@ -192,7 +192,7 @@ Widget buildBiodataInputPage(double screenWidth, double screenHeight, RegisterCo
               Expanded(
                 child: CommonButton(
                   text: 'Selanjutnya',
-                  onPressed: controller.nextPage,
+                  onPressed: controller.validateBiodata,
                   height: 60,
                   borderRadius: 80,
                 ),

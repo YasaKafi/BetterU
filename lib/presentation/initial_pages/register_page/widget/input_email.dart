@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
@@ -65,6 +66,16 @@ Widget buildEmailInputPage(double screenWidth, double screenHeight, RegisterCont
               width: screenWidth,
               height: 60,
               borderRadius: 10,
+              icon: controller.isLoading.value == false ? Text('Selanjutnya', style:  txtButton.copyWith(
+                fontWeight:  FontWeight.w600,
+                color:  baseColor,
+                fontSize:  16,
+
+              ),
+              ) : LoadingAnimationWidget.staggeredDotsWave(
+                color: baseColor,
+                size: 40,
+              ),
             ),
 
           ],

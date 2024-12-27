@@ -10,6 +10,9 @@ import '../../../../route/app_pages.dart';
 
 class RegisterController extends GetxController {
 
+  var isLoading = false.obs;
+  var isResendingOtp = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -19,6 +22,7 @@ class RegisterController extends GetxController {
   @override
   void onClose() {
     passwordController.dispose();
+    otpNumberController.dispose();
     usernameController.dispose();
     birthDateController.dispose();
     emailController.dispose();
@@ -29,6 +33,7 @@ class RegisterController extends GetxController {
   }
 
   TextEditingController usernameController = TextEditingController();
+  TextEditingController otpNumberController = TextEditingController();
   TextEditingController birthDateController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -93,6 +98,72 @@ class RegisterController extends GetxController {
     hasSymbol.value = text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
   }
 
+  void validateAndProceed() {
+    if (isMinLength.value && hasNumber.value && hasSymbol.value) {
+      nextPage(); // Jika validasi terpenuhi, pindah halaman
+    } else {
+      Get.snackbar(
+        "Password Invalid",
+        "Password harus memenuhi semua kriteria",
+        snackPosition: SnackPosition.TOP,
+      );
+    }
+  }
+
+
+  void validateBiodata() {
+    if (usernameController.text.isEmpty) {
+      Get.snackbar(
+        "Input Kosong",
+        "Nama panggilan tidak boleh kosong.",
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    if (birthDateController.text.isEmpty) {
+      Get.snackbar(
+        "Input Kosong",
+        "Tanggal lahir tidak boleh kosong.",
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    if (selectedGender.value.isEmpty) {
+      Get.snackbar(
+        "Input Kosong",
+        "Pilih jenis kelamin terlebih dahulu.",
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    nextPage();
+  }
+
+  void validateTbBb() {
+    if (weightController.text.isEmpty) {
+      Get.snackbar(
+        "Input Kosong",
+        "Berat badan tidak boleh kosong.",
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    if (heightController.text.isEmpty) {
+      Get.snackbar(
+        "Input Kosong",
+        "Tinggi badan tidak boleh kosong.",
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    nextPage();
+  }
+
   void selectGender(String gender) {
     selectedGender.value = gender;
   }
@@ -126,11 +197,19 @@ class RegisterController extends GetxController {
   final AuthServices authServices = AuthServices();
 
   Future<void> postRegister() async {
+    validateTbBb();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      if (usernameController.text.isNotEmpty &&
+      if (heightController.text.isNotEmpty &&
+          weightController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty) {
+          birthDateController.text.isNotEmpty &&
+          usernameController.text.isNotEmpty &&
+          selectedGoal.value.isNotEmpty &&
+          selectedGender.value.isNotEmpty &&
+          selectedActivity.value.isNotEmpty
+      ) {
           final response = await authServices.postRegister(
             name: usernameController.text,
             email: emailController.text,
@@ -163,32 +242,101 @@ class RegisterController extends GetxController {
 
   Future<void> postOtpCode() async {
     try {
-      if (emailController.text.isNotEmpty ) {
-          final response = await authServices.postOtpCode(
-            email: emailController.text,
-          );
+      if (emailController.text.isNotEmpty) {
+        isLoading.value = true;
+        final response = await authServices.postOtpCode(
+          email: emailController.text,
+        );
 
+        createdAt = response.data['data']['created_at'];
+        expiredAt = response.data['data']['expired_at'];
 
-          createdAt = response.data['data']['created_at'];
-          expiredAt = response.data['data']['expired_at'];
+        Get.snackbar(
+          "Success Send OTP",
+          "get otp code and input your code",
+          snackPosition: SnackPosition.TOP,
+        );
 
-          Get.snackbar("Success Send OTP", "get otp code and input your code",
-              snackPosition: SnackPosition.TOP);
-          if (createdAt != null && expiredAt != null) {
-            startTimer(createdAt!, expiredAt!);
-          }
-          if (currentPage.value == 1) {
-            nextPage();
-          }
-
-
+        if (createdAt != null && expiredAt != null) {
+          startTimer(createdAt!, expiredAt!);
+        }
+        if (currentPage.value == 1) {
+          nextPage();
+        }
       } else {
         Get.snackbar(
-            "Please fill in all required fields", "Please checking your field",
-            snackPosition: SnackPosition.TOP);
+          "Please fill in all required fields",
+          "Please checking your field",
+          snackPosition: SnackPosition.TOP,
+        );
       }
     } catch (e) {
       print('Error placing order: $e');
+    } finally {
+      isLoading.value = false; // Selesai loading
+    }
+  }
+
+  Future<void> resendOtpCode() async {
+    try {
+      isResendingOtp.value = true; // Mulai loading overlay
+      final response = await authServices.postOtpCode(
+        email: emailController.text,
+      );
+
+      createdAt = response.data['data']['created_at'];
+      expiredAt = response.data['data']['expired_at'];
+
+      Get.snackbar(
+        "OTP Sent",
+        "A new OTP has been sent to your email.",
+        snackPosition: SnackPosition.TOP,
+      );
+
+      if (createdAt != null && expiredAt != null) {
+        startTimer(createdAt!, expiredAt!);
+      }
+    } catch (e) {
+      print('Error resending OTP: $e');
+    } finally {
+      isResendingOtp.value = false; // Selesai loading overlay
+    }
+  }
+
+  Future<void> postOtpCheck() async {
+    try {
+      if (otpNumberController.text.isNotEmpty) {
+        isLoading.value = true;
+        final response = await authServices.postOtpCheck(
+          email: emailController.text,
+          otp: otpNumberController.text,
+        );
+
+
+        Get.snackbar(
+          "Berhasil diverifikasi",
+          "lanjut isi password",
+          snackPosition: SnackPosition.TOP,
+        );
+
+          nextPage();
+
+      } else {
+        Get.snackbar(
+          "Please fill in all required fields",
+          "Please checking your field",
+          snackPosition: SnackPosition.TOP,
+        );
+      }
+    } catch (e) {
+      print('Error : $e');
+      Get.snackbar(
+        "Failed to verify OTP",
+        'Please check your OTP code',
+        snackPosition: SnackPosition.TOP,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
 }

@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/dimensions.dart';
 import '../../../../common/theme.dart';
+import '../../../../route/app_pages.dart';
 import '../../../global_components/common_button.dart';
-import '../controller/onboarding_controller.dart';
 
 class OnboardingFinalScreen extends StatelessWidget {
   OnboardingFinalScreen({Key? key}) : super(key: key);
@@ -33,7 +32,7 @@ class OnboardingFinalScreen extends StatelessWidget {
                       SizedBox(height: 60),
                       Column(
                         children: [
-                          Center(child: SvgPicture.asset(icLogoPrimary)),
+                          Center(child: Image.asset(gifHappyTogether)),
                           SizedBox(height: Dimensions.marginSizeLarge),
                           Container(
                             width: screenWidth,
@@ -81,7 +80,7 @@ class OnboardingFinalScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  CommonButton(text: 'Buat Akun Baru', onPressed: () {}, width: screenWidth, height: 60, borderRadius: 10,),
+                  CommonButton(text: 'Buat Akun Baru', onPressed: () => Get.offAllNamed(Routes.REGISTER_PAGE), width: screenWidth, height: 60, borderRadius: 10,),
                   TextButton(
                     onPressed: () {},
                     child: Center(

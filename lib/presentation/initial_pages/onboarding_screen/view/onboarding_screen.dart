@@ -13,8 +13,10 @@ import '../controller/onboarding_controller.dart';
 import '../model/onboard_data.dart';
 import '../widgets/item_pageview.dart';
 
-class OnboardingScreen extends GetView<OnBoardingController> {
+class OnboardingScreen extends StatelessWidget {
   OnboardingScreen({Key? key}) : super(key: key);
+
+  final OnBoardingController controller = Get.put(OnBoardingController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
         .size
         .height;
     return Scaffold(
+      backgroundColor: baseColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(

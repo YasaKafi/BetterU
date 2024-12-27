@@ -30,7 +30,7 @@ class ItemOnBoarding extends StatelessWidget {
           SizedBox(height: 60),
           Column(
             children: [
-              Center(child: SvgPicture.asset(imgBoarding)),
+              Center(child: Image.asset(imgBoarding)),
               SizedBox(height: Dimensions.marginSizeLarge),
               Container(
                 width: screenWidth,

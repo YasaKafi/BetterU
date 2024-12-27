@@ -12,6 +12,7 @@ const Color redMedium = Color(0xFFD85458);
 const Color redLight = Color(0xFFF8E8E5);
 const Color pinkLight = Color(0xFFFF7CA3);
 const Color grey = Color(0xFFD9D9D9);
+const Color grey2 = Color(0xFFF7F7F7);
 const Color lightGrey = Color(0xFFF5F6F7);
 const Color errorColor = Color(0xFFE3422B);
 const Color primaryColor = Color(0xFF28C5BF);

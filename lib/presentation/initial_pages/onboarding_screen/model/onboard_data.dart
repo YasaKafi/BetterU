@@ -5,17 +5,17 @@ import 'onboard_model.dart';
 
 final List <Onboard> onboard_data = [
   Onboard(
-    image: icLogoPrimary,
+    image: gifListDiet,
     text: "Ketahui Semua Nutrisi Dalam Makananmu",
     description: 'Temukan nutrisi mulai dari protein, kalori, vitamin hingga semua resiko makanan kamu',
   ),
   Onboard(
-    image: icLogoPrimary,
+    image: gifHealtyFood,
     text: "Temukan Rekomendasi Makanan Sehat",
     description: 'Kami akan memberikan beberapa rekomendasi menu makanan sehat',
   ),
   Onboard(
-    image: icLogoPrimary,
+    image: gifHealtyEffect,
     text: "Lihat Efek Dari Kegiatanmu Hari Ini",
     description: 'Informasi lengkap terkait efek dari aktivitas yang kamu lakukan hari ini',
   )

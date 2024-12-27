@@ -57,5 +57,23 @@ class AuthServices {
     }
   }
 
+  Future<Response> postOtpCheck({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postOtpCheck,
+        data: {
+          'email': email,
+          'otp': otp,
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
 
 }

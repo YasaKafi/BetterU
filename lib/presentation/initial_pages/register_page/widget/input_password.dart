@@ -93,7 +93,7 @@ Widget buildPasswordCreationPage(double screenWidth, double screenHeight, Regist
 
             CommonButton(
               text: 'Selanjutnya',
-              onPressed: controller.nextPage,
+              onPressed: controller.validateAndProceed,
               width: screenWidth,
               height: 60,
               borderRadius: 10,

@@ -66,6 +66,8 @@ Widget buildBbTbInputPage(double screenWidth, double screenHeight, RegisterContr
                   child: CustomTextFieldAuth(
                     title: "Enter your weight body",
                     controller: controller.weightController,
+                    isNumeric: true,
+                    maxDigits: 3,
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                     borderFocusRadius: BorderRadius.all(Radius.circular(12)),
                   ),
@@ -104,6 +106,8 @@ Widget buildBbTbInputPage(double screenWidth, double screenHeight, RegisterContr
                   child: CustomTextFieldAuth(
                     title: "Enter your height body",
                     controller: controller.heightController,
+                    isNumeric: true,
+                    maxDigits: 3,
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                     borderFocusRadius: BorderRadius.all(Radius.circular(12)),
                   ),

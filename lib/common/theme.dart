@@ -20,7 +20,7 @@ const Color primaryColor40 = Color.fromRGBO(252, 197, 72, 0.4);
 const Color navyColor = Color(0xFF324A59);
 const Color primaryColor10 = Color(0xFFFEFF04);
 const Color primaryColor80 = Color(0xFFFFFFB4);
-const Color primaryColor2 = Color(0xFFFEF3DA);
+const Color primaryColor2 = Color(0xFFF7F7FC);
 const Color blackColor = Color(0xFF0F0F0F);
 const Color transparent30 = Color.fromRGBO(0, 0, 0, 0.3);
 const Color transparentWhite70 = Color.fromRGBO(255, 255, 255, 0.7);
@@ -33,6 +33,8 @@ const Color blackColor90 = Color(0xFFCFCFCF);
 const Color greyWarning = Color(0xFFEBEBEB);
 const Color greybgNote = Color(0xFFF8F8F9);
 const Color greytxtNote = Color(0xFFABB3BD);
+const Color linearBegin = Color(0xFF48D1CC);
+const Color linearEnd = Color(0xFF5ED8EB);
 
 // ********** UPDATE TEXT STYLE  **********
 

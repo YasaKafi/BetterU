@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:better_u/data/api/service/ai_service.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../data/api/auth/model/daily_nutrition_model.dart';
 import '../../../../route/app_pages.dart';
 
 class RegisterController extends GetxController {
@@ -164,6 +166,10 @@ class RegisterController extends GetxController {
     nextPage();
   }
 
+  void goToHomePage() {
+    Get.offNamed(Routes.BOTTOM_NAVBAR);
+  }
+
   void selectGender(String gender) {
     selectedGender.value = gender;
   }
@@ -194,7 +200,12 @@ class RegisterController extends GetxController {
     Get.snackbar("Success", "Akun berhasil dibuat!");
   }
 
+  String formatGender(String gender) {
+    return gender.toLowerCase().replaceAll('-', ' ');
+  }
+
   final AuthServices authServices = AuthServices();
+  final AiServices aiServices = AiServices();
 
   Future<void> postRegister() async {
     validateTbBb();
@@ -225,7 +236,7 @@ class RegisterController extends GetxController {
           prefs.setString('token', response.data['token']);
           Get.snackbar("Login Success", "Welcome to Better U",
               snackPosition: SnackPosition.TOP);
-          Get.offNamed(Routes.ONBOARDING_FINAL_SCREEN);
+          nextPage();
 
       } else {
         Get.snackbar(
@@ -236,6 +247,44 @@ class RegisterController extends GetxController {
       print('Error placing order: $e');
     }
   }
+
+  Future<void> postCalculateNutrition() async {
+    try {
+      if (heightController.text.isNotEmpty &&
+          weightController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
+          emailController.text.isNotEmpty &&
+          birthDateController.text.isNotEmpty &&
+          usernameController.text.isNotEmpty &&
+          selectedGoal.value.isNotEmpty &&
+          selectedGender.value.isNotEmpty &&
+          selectedActivity.value.isNotEmpty
+      ) {
+          final response = await aiServices.postCalculateNutrition(
+            dateOfBirth: birthDateController.text,
+            goals: selectedGoal.value,
+            gender: formatGender(selectedGender.value),
+            activityLevel: selectedActivity.value,
+            weight: weightController.text,
+            height: heightController.text,
+          );
+
+          final nutritionData = NutritionInformation.fromJson(response.data);
+
+          // Contoh penggunaan data
+          print("Jenis Kelamin: ${nutritionData.profile?.jenisKelamin}");
+          print("Total Kalori: ${nutritionData.dailyNutrition?.totalKalori}");
+
+      } else {
+        Get.snackbar(
+            "Please fill in all required fields", "Please checking your field",
+            snackPosition: SnackPosition.TOP);
+      }
+    } catch (e) {
+      print('Error placing order: $e');
+    }
+  }
+
 
   String? createdAt;
   String? expiredAt;

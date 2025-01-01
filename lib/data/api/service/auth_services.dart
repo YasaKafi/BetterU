@@ -7,6 +7,19 @@ import '../dio_instance.dart';
 class AuthServices {
   final DioInstance _dioInstance = DioInstance();
 
+  Future<Response> showCurrentUser() async {
+    try {
+      final response = await _dioInstance.getRequest(
+          endpoint: BetterUApiRepository.getCurrentUser,
+          isAuthorize: true
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Response> postRegister({
     required String name,
     required String email,

@@ -1,8 +1,8 @@
-import 'package:better_u/presentation/pages/food_recommendation_page/widget/card_food_recommendation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../common/dimensions.dart';
 import '../../../../../../common/theme.dart';
+import '../widget/card_food_recommendation.dart';
 
 class ListviewFoodRecommendation extends StatelessWidget {
   const ListviewFoodRecommendation({

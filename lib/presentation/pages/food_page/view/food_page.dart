@@ -1,16 +1,14 @@
 import 'package:better_u/presentation/global_components/custom_search_bar.dart';
-import 'package:better_u/presentation/pages/food_recommendation_page/widget/listview_food_popular.dart';
-import 'package:better_u/presentation/pages/food_recommendation_page/widget/listview_food_recommendation.dart';
-import 'package:better_u/presentation/pages/food_recommendation_page/widget/card_food_popular.dart';
-import 'package:better_u/presentation/pages/food_recommendation_page/widget/card_food_recommendation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../common/theme.dart';
-import '../controller/food_recommendation_controller.dart';
+import '../controller/food_controller.dart';
+import '../widget/listview_food_recommendation.dart';
+import '../widget/listview_food_popular.dart';
 
-class FoodRecommendationPage extends GetView<FoodRecommendationController> {
-  const FoodRecommendationPage({Key? key}) : super(key: key);
+class FoodPage extends GetView<FoodController> {
+  const FoodPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

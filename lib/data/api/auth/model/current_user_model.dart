@@ -4,11 +4,11 @@ class ShowCurrentUserResponse {
   ShowCurrentUserResponse({this.data});
 
   ShowCurrentUserResponse.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new DataUser.fromJson(json['data']) : null;
+    data = json['data'] != null ? DataUser.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -18,31 +18,55 @@ class ShowCurrentUserResponse {
 
 class DataUser {
   int? id;
-  String? email;
   String? name;
-  String? avatar;
+  String? email;
+  String? dateOfBirth;
+  int? age; // Ubah tipe data ke int
   String? gender;
-  String? role;
+  String? goals;
+  double? weight; // Ubah tipe data ke double
+  double? height; // Ubah tipe data ke double
+  String? activityLevel;
 
-  DataUser({this.id, this.email, this.name, this.avatar, this.gender, this.role});
+  DataUser({
+    this.id,
+    this.name,
+    this.email,
+    this.dateOfBirth,
+    this.age,
+    this.gender,
+    this.goals,
+    this.weight,
+    this.height,
+    this.activityLevel,
+  });
 
   DataUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    email = json['email'];
     name = json['name'];
-    avatar = json['avatar'];
+    email = json['email'];
+    dateOfBirth = json['date_of_birth'];
+    age = json['age'] != null ? int.tryParse(json['age'].toString()) : null; // Konversi ke int
     gender = json['gender'];
-    role = json['role'];
+    goals = json['goals'];
+    weight = json['weight'] != null ? double.tryParse(json['weight'].toString()) : null; // Konversi ke double
+    height = json['height'] != null ? double.tryParse(json['height'].toString()) : null; // Konversi ke double
+    activityLevel = json['activity_level'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     data['id'] = this.id;
-    data['email'] = this.email;
     data['name'] = this.name;
-    data['avatar'] = this.avatar;
+    data['email'] = this.email;
+    data['date_of_birth'] = this.dateOfBirth;
+    data['age'] = this.age;
     data['gender'] = this.gender;
-    data['role'] = this.role;
+    data['goals'] = this.goals;
+    data['weight'] = this.weight;
+    data['height'] = this.height;
+    data['activity_level'] = this.activityLevel;
     return data;
   }
 }
+

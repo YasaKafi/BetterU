@@ -157,8 +157,16 @@ Widget buildBbTbInputPage(double screenWidth, double screenHeight, RegisterContr
               ),
               SizedBox(width: 25,),
               Expanded(
-                child: CommonButton(
+                child:CommonButton(
                   text: 'Selesai',
+                  // onPressed: () async {
+                  //   try {
+                  //     await controller.postRegister();
+                  //     await controller.postCalculateNutrition();
+                  //   } catch (e) {
+                  //     print('Error: $e');
+                  //   }
+                  // },
                   onPressed: () => controller.postRegister(),
                   height: 60,
                   borderRadius: 80,

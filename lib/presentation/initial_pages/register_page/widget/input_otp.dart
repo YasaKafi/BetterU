@@ -116,53 +116,7 @@ Widget buildOtpVerificationPage(
                       ),
                       submittedPinTheme: defaultPinTheme),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Obx(() {
-                  final time = controller.timeRemaining.value;
-                  return Center(
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: time > 0
-                          ? TextSpan(
-                              text: "Kirim ulang kode setelah ",
-                              style: txtSecondaryTitle.copyWith(
-                                fontWeight: FontWeight.w500,
-                                color: blackColor,
-                              ),
-                              children: [
-                                  TextSpan(
-                                    text: " ${time} detik",
-                                    style: txtSecondaryTitle.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: primaryColor,
-                                    ),
-                                  ),
-                                ])
-                          : TextSpan(
-                              text: "Tidak menerima kode?",
-                              style: txtSecondaryTitle.copyWith(
-                                fontWeight: FontWeight.w500,
-                                color: blackColor,
-                              ),
-                              children: [
-                                  WidgetSpan(
-                                    child: InkWell(
-                                      onTap: () => controller.resendOtpCode(),
-                                      child: Text(
-                                        " Kirim Ulang",
-                                        style: txtSecondaryTitle.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          color: primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                    ),
-                  );
-                }),
+
                 SizedBox(height: 20),
                 CommonButton(
                   text: 'Selanjutnya',
@@ -181,6 +135,53 @@ Widget buildOtpVerificationPage(
                     size: 40,
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Obx(() {
+                  final time = controller.timeRemaining.value;
+                  return Center(
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: time > 0
+                          ? TextSpan(
+                          text: "Kirim ulang kode setelah ",
+                          style: txtSecondaryTitle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: blackColor,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: " ${time} detik",
+                              style: txtSecondaryTitle.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: primaryColor,
+                              ),
+                            ),
+                          ])
+                          : TextSpan(
+                          text: "Tidak menerima kode?",
+                          style: txtSecondaryTitle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: blackColor,
+                          ),
+                          children: [
+                            WidgetSpan(
+                              child: InkWell(
+                                onTap: () => controller.resendOtpCode(),
+                                child: Text(
+                                  " Kirim Ulang",
+                                  style: txtSecondaryTitle.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
+                    ),
+                  );
+                }),
 
               ],
             ),

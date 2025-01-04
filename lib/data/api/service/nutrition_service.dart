@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
@@ -82,9 +84,69 @@ class NutritionServices {
 
   /// POST ///
 
+  Future<Response> postDailyActivity({
+    required String category,
+    required String name,
+    required String kalori,
+    required String lemak,
+    required String protein,
+    required String karbohidrat,
+    required String note,
+  }) async {
+    try {
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postDailyActivity,
+        data: {
+          'category': category,
+          'name': name,
+          'kalori': kalori,
+          "lemak": lemak,
+          "protein": protein,
+          "karbohidrat": karbohidrat,
+          "note": note,
+        },
+        isAuthorize: true,
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+
+  Future<Response> postPredict({
+    required File file,
+  }) async {
+    try {
+      // Buat FormData dengan file dan data lainnya
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        ),
+      });
+
+      // Kirim request POST dengan FormData
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postPredictFood,
+        data: formData,
+        isAuthorize: true,
+        isMultipart: true,
+      );
+
+      return response;
+    } catch (e) {
+      print("Error posting file: $e");
+      throw Exception(e);
+    }
+  }
+
 
 
   /// DELETE ///
+
+
   Future<Response> deleteDailyActivity(int dailyActivityID) async {
     try {
       final response = await _dioInstance.deleteRequest(

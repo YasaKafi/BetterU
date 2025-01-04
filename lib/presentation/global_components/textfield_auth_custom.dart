@@ -14,6 +14,8 @@ class CustomTextFieldAuth extends StatelessWidget {
   final Function()? onTap;
   final bool isNumeric;
   final int? maxDigits;
+  final int? maxLines;
+  final BorderSide? borderSide;
 
   const CustomTextFieldAuth({
     super.key,
@@ -26,64 +28,46 @@ class CustomTextFieldAuth extends StatelessWidget {
     this.readOnly,
     this.isNumeric = false,
     this.maxDigits,
+    this.maxLines = 1,
+    this.borderSide,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Create a ValueNotifier to manage the obscureText state
-    final ValueNotifier<bool> _obscureTextNotifier = ValueNotifier<bool>(
-      title == "Enter your password" || title == "Enter your confirm password",
-    );
-
-    return ValueListenableBuilder<bool>(
-      valueListenable: _obscureTextNotifier,
-      builder: (context, _obscureText, child) {
-        return TextField(
-          controller: controller,
-          style: txtSecondaryTitle.copyWith(
-              fontWeight: FontWeight.w600, color: blackColor),
-          obscureText: _obscureText,
-          onChanged: onChanged,
-          onTap: onTap,
-          readOnly: readOnly ?? false,
-          keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
-          inputFormatters: isNumeric
-              ? [
-                  FilteringTextInputFormatter.digitsOnly,
-                  if (maxDigits != null)
-                    LengthLimitingTextInputFormatter(maxDigits),
-                ]
-              : null,
-          decoration: InputDecoration(
-            hintText: title,
-            hintStyle: txtSecondaryTitle.copyWith(
-                fontWeight: FontWeight.w600, color: grey),
-            focusedBorder: OutlineInputBorder(
-              borderRadius:
-                  borderFocusRadius ?? BorderRadius.all(Radius.circular(20.0)),
-              borderSide: BorderSide(
-                  width: 2, color: primaryColor, style: BorderStyle.solid),
-            ),
-            border: OutlineInputBorder(
-              borderRadius:
-                  borderRadius ?? BorderRadius.all(Radius.circular(20.0)),
-              borderSide:
-                  BorderSide(width: 2, color: grey, style: BorderStyle.solid),
-            ),
-            suffixIcon: (title == "Enter your password" ||
-                    title == "Enter your confirm password")
-                ? IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      _obscureTextNotifier.value = !_obscureTextNotifier.value;
-                    },
-                  )
-                : null,
-          ),
-        );
-      },
+    return TextField(
+      controller: controller,
+      style: txtSecondaryTitle.copyWith(
+          fontWeight: FontWeight.w600, color: blackColor),
+      onChanged: onChanged,
+      onTap: onTap,
+      readOnly: readOnly ?? false,
+      keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+      inputFormatters: isNumeric
+          ? [
+        FilteringTextInputFormatter.digitsOnly,
+        if (maxDigits != null)
+          LengthLimitingTextInputFormatter(maxDigits),
+      ]
+          : null,
+      maxLines: maxLines, // Properti ini memungkinkan textarea
+      decoration: InputDecoration(
+        hintText: title,
+        hintStyle: txtSecondaryTitle.copyWith(
+            fontWeight: FontWeight.w600, color: grey),
+        focusedBorder: OutlineInputBorder(
+          borderRadius:
+          borderFocusRadius ?? BorderRadius.all(Radius.circular(20.0)),
+          borderSide: borderSide ?? BorderSide(
+              width: 2, color: primaryColor, style: BorderStyle.solid),
+        ),
+        border: OutlineInputBorder(
+          borderRadius:
+          borderRadius ?? BorderRadius.all(Radius.circular(20.0)),
+          borderSide: borderSide ??
+          BorderSide(width: 2, color: grey, style: BorderStyle.solid),
+        ),
+      ),
     );
   }
 }
+

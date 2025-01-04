@@ -7,6 +7,7 @@ class BetterUApiRepository {
   // AI & ML API
   static String postPredict = '$mainUrlAi/predict';
   static String postCalculateNutrition = '$mainUrlAi/calculate-nutrition';
+  static String postPredictFood = '$mainUrlAi/predict';
 
 
   static String getCurrentUser = '$mainUrl/api/users/show-current';
@@ -20,4 +21,6 @@ class BetterUApiRepository {
   static String postRegister = '$mainUrl/api/users/register';
   static String postOtpCode = '$mainUrl/api/otp/store';
   static String postOtpCheck = '$mainUrl/api/otp/check';
+  static String postDailyActivity = '$mainUrl/api/daily-activity/store';
+
 }

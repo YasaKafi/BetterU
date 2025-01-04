@@ -8,6 +8,7 @@ abstract class Routes {
   static const ONBOARDING_SCREEN = _Paths.ONBOARDING_SCREEN;
   static const ONBOARDING_FINAL_SCREEN = _Paths.ONBOARDING_FINAL_SCREEN;
   static const REGISTER_PAGE = _Paths.REGISTER_PAGE;
+  static const LOGIN_PAGE = _Paths.LOGIN_PAGE;
 }
 
 abstract class _Paths {
@@ -18,6 +19,7 @@ abstract class _Paths {
   static const ONBOARDING_SCREEN = '/onboarding-screen';
   static const ONBOARDING_FINAL_SCREEN = '/onboarding-final-screen';
   static const REGISTER_PAGE = '/register-page';
+  static const LOGIN_PAGE = '/login-page';
 
 
 }

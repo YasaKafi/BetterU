@@ -20,6 +20,24 @@ class AuthServices {
     }
   }
 
+  Future<Response> postLogin({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postLogin,
+        data: {
+          'email': email,
+          'password': password,
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Response> postRegister({
     required String name,
     required String email,
@@ -69,6 +87,8 @@ class AuthServices {
       throw Exception(e);
     }
   }
+
+
 
   Future<Response> postOtpCheck({
     required String email,

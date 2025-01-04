@@ -9,6 +9,7 @@ String gifHealtyEffect = '${gif}healty_effect.png';
 String gifHealtyFood = '${gif}healty_food.png';
 String gifHappyTogether = '${gif}happy_together.png';
 String gifSuccessRegister = '${gif}success_register.png';
+String gifSearchLoading = '${gif}search_loading.png';
 
 
 
@@ -21,6 +22,7 @@ String icKalori = '${svgImages}ic_kalori.svg';
 String icKarbo = '${svgImages}ic_karbo.svg';
 String icLemak = '${svgImages}ic_lemak.svg';
 String icProtein = '${svgImages}ic_protein.svg';
+String icCamera = '${svgImages}ic_camera.svg';
 String icEatActivity = '${svgImages}eat_activity.svg';
 String icSportActivity = '${svgImages}sport_activity.svg';
 String icHomeActive = '${svgImages}home_active.svg';

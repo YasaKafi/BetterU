@@ -43,7 +43,7 @@ Widget buildGoalsInputPage(double screenWidth, double screenHeight, RegisterCont
           children: [
             Row(
               children: [
-                Text('Hai, Nares', style: txtPrimaryTitle.copyWith(fontWeight: FontWeight.w700, color: blackColor),),
+                Text('Hai, ${controller.usernameController.text}', style: txtPrimaryTitle.copyWith(fontWeight: FontWeight.w700, color: blackColor),),
                 SizedBox(width: 5,),
                 SvgPicture.asset(
                   icWavingHand,

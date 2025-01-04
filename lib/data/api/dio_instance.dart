@@ -14,10 +14,8 @@ class DioInstance {
         baseUrl: GlobalVariables.baseUrl,
       ),
     );
-
     initializeInterceptors();
   }
-
 
   // All Method of Requests
   Future<Response> getRequest({required String endpoint, bool? isAuthorize, Map<String, dynamic>? queryParameters}) async {
@@ -41,7 +39,7 @@ class DioInstance {
     return response;
   }
 
-  Future<Response> postRequest({required String endpoint, bool? isAuthorize, Object? data, Map<String, dynamic>? queryParameters}) async {
+  Future<Response> postRequest({required String endpoint, bool? isAuthorize, Object? data, Map<String, dynamic>? queryParameters, bool isMultipart = false,}) async {
     Response response;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -52,11 +50,16 @@ class DioInstance {
           options: Options(
               headers: {
                 "Accept": "application/json",
+                if (isMultipart) "Content-Type": "multipart/form-data",
                 if (isAuthorize ?? false) "Authorization": "Bearer $token"
               })
       );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Data: ${response.data}');
     } on DioException catch (e) {
-      print(e.message);
+      print('DioException: ${e.message}');
+      print('DioException Response: ${e.response?.data}');
+      print('DioException Status Code: ${e.response?.statusCode}');
       throw Exception(e.message);
     }
 

@@ -1,3 +1,5 @@
+import 'package:better_u/presentation/initial_pages/login_page/binding/login_binding.dart';
+import 'package:better_u/presentation/initial_pages/login_page/view/login_page.dart';
 import 'package:better_u/presentation/initial_pages/onboarding_screen/binding/onboarding_binding.dart';
 import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboarding_final_screen.dart';
 import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboarding_screen.dart';
@@ -63,6 +65,13 @@ class AppPages {
         name: _Paths.FOOD_PAGE,
         page: () => FoodPage(),
         binding: FoodPageBinding(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 500)
+    ),
+    GetPage(
+        name: _Paths.LOGIN_PAGE,
+        page: () => LoginPage(),
+        binding: LoginBinding(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 500)
     ),

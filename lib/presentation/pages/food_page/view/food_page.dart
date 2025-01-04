@@ -48,7 +48,7 @@ class FoodPage extends GetView<FoodController> {
                 Container(
                     width: screenWidth,
                     height: screenWidth * 0.5,
-                    child: ListviewFoodRecommendation()
+                    child: ListviewFoodRecommendation(foodRecommendation: controller.foodRecommendation,)
                 ),
 
                 Container(

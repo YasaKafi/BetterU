@@ -18,7 +18,7 @@ class FoodServices {
         queryParameters: {
           'goals': goals,
         },
-        isAuthorize: true,
+        isAuthorize: false,
       );
 
       return response;
@@ -34,7 +34,7 @@ class FoodServices {
         queryParameters: {
           'sort_click_count': 'desc',
         },
-        isAuthorize: true,
+        isAuthorize: false,
       );
 
       return response;
@@ -42,6 +42,20 @@ class FoodServices {
       throw Exception(e);
     }
   }
+
+  Future<Response> showFoodById({required String id}) async {
+    try {
+      final response = await _dioInstance.getRequest(
+        endpoint: '${BetterUApiRepository.getFoodById}/$id',
+        isAuthorize: false,
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
 }
 
 

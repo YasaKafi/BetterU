@@ -14,6 +14,7 @@ class BetterUApiRepository {
   static String getCurrentTotalNutrition = '$mainUrl/api/daily-activity/show-total-nutrition';
   static String getCurrentCombo = '$mainUrl/api/daily-activity/show-current';
   static String getAllFood = '$mainUrl/api/foods/index';
+  static String getFoodById = '$mainUrl/api/foods/show';
 
   static String putDailyActivity = '$mainUrl/api/daily-activity/update';
 

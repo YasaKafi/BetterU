@@ -1,5 +1,5 @@
 import 'package:better_u/data/api/auth/model/current_user_model.dart';
-import 'package:better_u/data/api/auth/model/food_model.dart';
+import 'package:better_u/data/api/auth/model/food_list_model.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/food_service.dart';
 import 'package:get/get.dart';
@@ -12,17 +12,15 @@ class FoodController extends GetxController {
   late FoodServices foodServices;
   late ShowCurrentUserResponse userResponse;
   Rx<DataUser?> dataUser = Rx<DataUser?>(null);
-  Rx<Food> foodRecommendation = Rx<Food>(Food());
-  Rx<Food> foodPopular = Rx<Food>(Food());
+  Rx<FoodListModel> foodRecommendation = Rx<FoodListModel>(FoodListModel());
+  Rx<FoodListModel> foodPopular = Rx<FoodListModel>(FoodListModel());
 
   @override
   void onInit() {
     super.onInit();
-    // Panggil fungsi initialize() yang menampung inisialisasi
     initialize();
   }
 
-  // Fungsi inisialisasi untuk fetch data dan proses lainnya
   Future<void> initialize() async {
     userService = AuthServices();
     foodServices = FoodServices();
@@ -39,7 +37,6 @@ class FoodController extends GetxController {
     initialize();
   }
 
-  // Fetch current user and trigger postCalculateNutrition after 1 second
   Future<void> getCurrentUser() async {
     try {
       isLoadingFoodRecommendation(true);
@@ -87,7 +84,7 @@ class FoodController extends GetxController {
         print(response.data);
 
         if (response.data != null) {
-          final foodData = Food.fromJson(response.data);
+          final foodData = FoodListModel.fromJson(response.data);
           foodRecommendation.value = foodData;
         } else {
           print("Response data is null");
@@ -110,7 +107,7 @@ class FoodController extends GetxController {
       print(response.data);
 
       if (response.data != null) {
-        final foodData = Food.fromJson(response.data);
+        final foodData = FoodListModel.fromJson(response.data);
         foodPopular.value = foodData;
       } else {
         print("Response data is null");

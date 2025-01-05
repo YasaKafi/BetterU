@@ -23,7 +23,7 @@ class AppPages {
   AppPages._();
 
 
-  static const INITIAL = Routes.FOOD_DETAIL_PAGE;
+  static const INITIAL = Routes.BOTTOM_NAVBAR;
 
   static final routes = [
     GetPage(

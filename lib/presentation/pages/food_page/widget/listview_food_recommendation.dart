@@ -1,4 +1,4 @@
-import 'package:better_u/data/api/auth/model/food_model.dart';
+import 'package:better_u/data/api/auth/model/food_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +12,7 @@ class ListviewFoodRecommendation extends StatelessWidget {
     required this.foodRecommendation,
   });
 
-  final Rx<Food> foodRecommendation;
+  final Rx<FoodListModel> foodRecommendation;
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +43,23 @@ class ListviewFoodRecommendation extends StatelessWidget {
             return SizedBox(width: screenWidth * 0.05); // Ruang di akhir ListView
           }
           final item = foodRecommendationData.data![index];
-          return Container(
-            width: screenWidth * 0.4,
-            height: screenWidth * 0.5,
-            margin: EdgeInsets.only(left: screenWidth * 0.05),
-            child: CardFoodRecommendation(
-              imageUrl: item.imageUrl ?? 'https://www.pallenz.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png',
-              textTitle: item.name ?? 'Nama Makanan Tidak Diketahui',
-              textCalories: item.kalori.toString() ?? '0',
+          return InkWell(
+            onTap: () {
+              Get.toNamed('/food-detail-page',
+                arguments: {
+                  'id': item.id.toString(),
+                },
+              );
+            },
+            child: Container(
+              width: screenWidth * 0.4,
+              height: screenWidth * 0.5,
+              margin: EdgeInsets.only(left: screenWidth * 0.05),
+              child: CardFoodRecommendation(
+                imageUrl: item.imageUrl ?? 'https://www.pallenz.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png',
+                textTitle: item.name ?? 'Nama Makanan Tidak Diketahui',
+                textCalories: item.kalori.toString() ?? '0',
+              ),
             ),
           );
         },

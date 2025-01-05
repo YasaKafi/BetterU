@@ -77,8 +77,12 @@ class FoodPage extends GetView<FoodController> {
                     margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                     child: Obx(() {
                       if (controller.isLoadingFoodPopular.value) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return SizedBox(
+                          width: screenWidth,
+                          height: screenWidth * 0.5,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         );
                       } else {
                         return ListviewFoodPopular(

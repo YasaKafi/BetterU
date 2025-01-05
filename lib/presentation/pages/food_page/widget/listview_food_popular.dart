@@ -1,4 +1,4 @@
-import 'package:better_u/data/api/auth/model/food_model.dart';
+import 'package:better_u/data/api/auth/model/food_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +12,7 @@ class ListviewFoodPopular extends StatelessWidget {
     required this.foodPopular,
   });
 
-  final Rx<Food> foodPopular;
+  final Rx<FoodListModel> foodPopular;
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +50,20 @@ class ListviewFoodPopular extends StatelessWidget {
           return Container(
             width: double.infinity,
             margin: const EdgeInsets.only(bottom: 15),
-            child: CardFoodPopular(
+            child: InkWell(
+              onTap: () {
+                Get.toNamed('/food-detail-page',
+                  arguments: {
+                    'id': item.id.toString(),
+                  },
+                );
+              },
+              child: CardFoodPopular(
                 imageUrl: item.imageUrl ?? 'https://www.pallenz.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png',
                 textTitle: item.name ?? 'Nama Makanan Tidak Diketahui',
                 textCalories: item.kalori.toString() ?? '0',
                 textTime: item.time.toString() ?? '0',
+              ),
             ),
           );
         },

@@ -65,7 +65,7 @@ class CardFoodPopular extends StatelessWidget {
 
                 Row(
                   children: [
-                    const Icon(Icons.access_time_rounded, color: blackColor, size: 20),
+                    const Icon(Icons.access_time_rounded, color: blackColor, size: Dimensions.iconSizeKindDeafult),
 
                     const SizedBox(width: 5),
 

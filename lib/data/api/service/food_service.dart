@@ -26,6 +26,22 @@ class FoodServices {
       throw Exception(e);
     }
   }
+
+  Future<Response> showAllFoodByClickCountDesc() async {
+    try {
+      final response = await _dioInstance.getRequest(
+        endpoint: BetterUApiRepository.getAllFood,
+        queryParameters: {
+          'sort_click_count': 'desc',
+        },
+        isAuthorize: true,
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }
 
 

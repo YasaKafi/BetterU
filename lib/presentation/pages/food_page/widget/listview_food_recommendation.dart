@@ -37,8 +37,11 @@ class ListviewFoodRecommendation extends StatelessWidget {
 
       return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: foodRecommendationData.data!.length,
+        itemCount: foodRecommendationData.data!.length + 1, // Tambahkan 1 untuk SizedBox
         itemBuilder: (context, index) {
+          if (index == foodRecommendationData.data!.length) {
+            return SizedBox(width: screenWidth * 0.05); // Ruang di akhir ListView
+          }
           final item = foodRecommendationData.data![index];
           return Container(
             width: screenWidth * 0.4,

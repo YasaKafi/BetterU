@@ -50,7 +50,6 @@ class CardFoodRecommendation extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.transparent,
                       Color.fromRGBO(34, 34, 34, 0.7),
                     ],
                   ),
@@ -63,14 +62,29 @@ class CardFoodRecommendation extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(textTitle, style: txtPrimarySubTitle.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      )),
+                      SizedBox(
+                        width: screenWidth * 0.38,
+                        height: screenHeight * 0.1,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            textTitle,
+                            style: txtPrimarySubTitle.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
                       Text('$textCalories Kkal', style: txtThirdSubTitle.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                      )),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   )
               )

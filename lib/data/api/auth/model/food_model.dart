@@ -53,9 +53,9 @@ class Data {
     id = json['id'];
     name = json['name'];
     kalori = json['kalori'];
-    protein = json['protein'];
-    lemak = json['lemak'];
-    karbohidrat = json['karbohidrat'];
+    protein = (json['protein'] as num?)?.toDouble();
+    lemak = (json['lemak'] as num?)?.toDouble();
+    karbohidrat = (json['karbohidrat'] as num?)?.toDouble();
     note = json['note'];
     imageUrl = json['imageUrl'];
     videoUrl = json['videoUrl'];

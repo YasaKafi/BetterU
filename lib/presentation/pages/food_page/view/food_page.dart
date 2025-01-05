@@ -30,43 +30,68 @@ class FoodPage extends GetView<FoodController> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            width: screenWidth,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
-                  child: Text('Rekomendasi Makanan', style: txtPrimaryTitle.copyWith(
-                    color: blackColor,
-                    fontWeight: FontWeight.w700,
-                  )),
-                ),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            controller.refresh();
+          },
+          child: SingleChildScrollView(
+            child: Container(
+              width: screenWidth,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
+                    child: Text('Rekomendasi Makanan', style: txtPrimaryTitle.copyWith(
+                      color: blackColor,
+                      fontWeight: FontWeight.w700,
+                    )),
+                  ),
 
-                Container(
+                  Container(
                     width: screenWidth,
                     height: screenWidth * 0.5,
-                    child: ListviewFoodRecommendation(foodRecommendation: controller.foodRecommendation,)
-                ),
+                    child: Obx(() {
+                      if (controller.isLoadingFoodRecommendation.value) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListviewFoodRecommendation(
+                          foodRecommendation: controller.foodRecommendation,
+                        );
+                      }
+                    }),
+                  ),
 
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
-                  child: Text('Makanan Populer', style: txtPrimaryTitle.copyWith(
-                    color: blackColor,
-                    fontWeight: FontWeight.w700,
-                  )),
-                ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
+                    child: Text('Makanan Populer', style: txtPrimaryTitle.copyWith(
+                      color: blackColor,
+                      fontWeight: FontWeight.w700,
+                    )),
+                  ),
 
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                  child: ListviewFoodPopular(),
-                )
-              ],
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                    child: Obx(() {
+                      if (controller.isLoadingFoodPopular.value) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListviewFoodPopular(
+                          foodPopular: controller.foodPopular,
+                        );
+                      }
+                    }),
+                  )
+                ],
+              ),
             ),
           ),
-        )
+        ),
       ),
     );
   }

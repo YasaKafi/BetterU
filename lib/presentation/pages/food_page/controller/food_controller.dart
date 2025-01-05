@@ -6,12 +6,14 @@ import 'package:get/get.dart';
 
 class FoodController extends GetxController {
 
-  RxBool isLoadingRecommendationFood = false.obs;
+  RxBool isLoadingFoodRecommendation = false.obs;
+  RxBool isLoadingFoodPopular = false.obs;
   late AuthServices userService;
   late FoodServices foodServices;
   late ShowCurrentUserResponse userResponse;
   Rx<DataUser?> dataUser = Rx<DataUser?>(null);
   Rx<Food> foodRecommendation = Rx<Food>(Food());
+  Rx<Food> foodPopular = Rx<Food>(Food());
 
   @override
   void onInit() {
@@ -25,20 +27,24 @@ class FoodController extends GetxController {
     userService = AuthServices();
     foodServices = FoodServices();
 
-    // Memanggil getCurrentUser untuk mendapatkan data user
     await getCurrentUser();
+    await getAllFoodPopular();
 
-    // Jika sudah mendapatkan data user, maka lakukan perhitungan dan ambil data terkait
     if (dataUser.value != null) {
-      await getAllFoodByGoals();
-
+      await getAllFoodRecommendation();
     }
+  }
+
+  void refresh() {
+    initialize();
   }
 
   // Fetch current user and trigger postCalculateNutrition after 1 second
   Future<void> getCurrentUser() async {
     try {
-      isLoadingRecommendationFood(true);
+      isLoadingFoodRecommendation(true);
+      isLoadingFoodPopular(true);
+
       final response = await userService.showCurrentUser();
       print("CHECK CURRENT RESPONSE");
       print(response.data);
@@ -59,7 +65,7 @@ class FoodController extends GetxController {
     }
   }
 
-  Future<void> getAllFoodByGoals() async {
+  Future<void> getAllFoodRecommendation() async {
     try {
       if (dataUser.value != null) {
         final currentUser = dataUser.value!;
@@ -77,7 +83,7 @@ class FoodController extends GetxController {
           goals: goals,
         );
 
-        print("CHECK FOOD RESPONSE");
+        print("CHECK FOOD RECOMMENDATION RESPONSE");
         print(response.data);
 
         if (response.data != null) {
@@ -90,10 +96,29 @@ class FoodController extends GetxController {
         print("User data is not available for food recommendation");
       }
     } catch (e) {
-      print('Error fetching food data: $e');
+      print('Error fetching food recommendation data: $e');
     } finally {
-      isLoadingRecommendationFood(false);
+      isLoadingFoodRecommendation(false);
     }
   }
 
+  Future<void> getAllFoodPopular() async {
+    try {
+      final response = await foodServices.showAllFoodByClickCountDesc();
+
+      print("CHECK FOOD POPULAR RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+        final foodData = Food.fromJson(response.data);
+        foodPopular.value = foodData;
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching food popular data: $e');
+    } finally {
+      isLoadingFoodPopular(false);
+    }
+  }
 }

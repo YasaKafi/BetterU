@@ -73,23 +73,6 @@ class HomeController extends GetxController {
     initialize();
   }
 
-  String getGreeting() {
-    final jakartaTimeZone = Duration(hours: 7); // WIB adalah UTC +7
-    final nowInJakarta = DateTime.now().toUtc().add(jakartaTimeZone);
-
-    final hour = nowInJakarta.hour;
-
-    if (hour >= 5 && hour < 10) {
-      return 'Selamat Pagi';
-    } else if (hour >= 10 && hour < 15) {
-      return 'Selamat Siang';
-    } else if (hour >= 15 && hour < 18) {
-      return 'Selamat Sore';
-    } else {
-      return 'Selamat Malam';
-    }
-  }
-
   Future<void> initialize() async {
     userService = AuthServices();
     aiService = AiServices();
@@ -111,46 +94,6 @@ class HomeController extends GetxController {
   Rxn<XFile> selectedImage = Rxn<XFile>(); // Untuk menyimpan gambar yang dipilih
 
 
-  Future<void> postPredictFood() async {
-    if (selectedImage.value == null) {
-      Get.snackbar('Error', 'Tidak ada gambar yang dipilih.');
-      return;
-    }
-
-    try {
-      isLoading(true); // Tampilkan loading
-      final File file = File(selectedImage.value!.path);
-
-      // Panggil `postPredict` dari `nutritionServices`
-      final response = await nutritionServices.postPredict(file: file);
-
-      print("CHECK PREDICT FOOD RESPONSE");
-      print(response.data);
-
-      if (response.data != null) {
-
-         currentPrediction.value = ShowPrediction.fromJson(response.data);
-
-        print("Prediction: ${currentPrediction.value.prediction}");
-
-        responsePredict.value = currentPrediction.value.prediction ?? '';
-
-        Get.snackbar(
-          "Berhasil",
-          "Prediksi makanan berhasil dikirim",
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      } else {
-        Get.snackbar('Error', 'Response data is null.');
-      }
-    } catch (e) {
-      print('Error posting predict food: $e');
-      Get.snackbar('Error', 'Gagal memposting prediksi makanan.');
-    } finally {
-      isLoading(false); // Sembunyikan loading
-    }
-  }
   Future<void> pickImageFromCamera() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.camera);
@@ -173,6 +116,50 @@ class HomeController extends GetxController {
     }
   }
 
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Row(
+            children: [
+              Image.asset(
+                gifSearchLoading,
+                width: 50,
+                height: 50,
+              ),
+              SizedBox(width: 20),
+              Text("Processing..."),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  String formatGender(String gender) {
+    return gender.toLowerCase().replaceAll('-', ' ');
+  }
+
+  String getGreeting() {
+    final jakartaTimeZone = Duration(hours: 7); // WIB adalah UTC +7
+    final nowInJakarta = DateTime.now().toUtc().add(jakartaTimeZone);
+
+    final hour = nowInJakarta.hour;
+
+    if (hour >= 5 && hour < 10) {
+      return 'Selamat Pagi';
+    } else if (hour >= 10 && hour < 15) {
+      return 'Selamat Siang';
+    } else if (hour >= 15 && hour < 18) {
+      return 'Selamat Sore';
+    } else {
+      return 'Selamat Malam';
+    }
+  }
+
+
+  /// POST ///
 
   Future<void> postPredictAndAnalyzeFood(BuildContext context) async {
     if (selectedImage.value == null) {
@@ -216,32 +203,46 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> postPredictFood() async {
+    if (selectedImage.value == null) {
+      Get.snackbar('Error', 'Tidak ada gambar yang dipilih.');
+      return;
+    }
 
+    try {
+      isLoading(true); // Tampilkan loading
+      final File file = File(selectedImage.value!.path);
 
-  void showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Row(
-            children: [
-              Image.asset(
-                gifSearchLoading,
-                width: 50,
-                height: 50,
-              ),
-              SizedBox(width: 20),
-              Text("Processing..."),
-            ],
-          ),
+      // Panggil `postPredict` dari `nutritionServices`
+      final response = await nutritionServices.postPredict(file: file);
+
+      print("CHECK PREDICT FOOD RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+
+        currentPrediction.value = ShowPrediction.fromJson(response.data);
+
+        print("Prediction: ${currentPrediction.value.prediction}");
+
+        responsePredict.value = currentPrediction.value.prediction ?? '';
+
+        Get.snackbar(
+          "Berhasil",
+          "Prediksi makanan berhasil dikirim",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
         );
-      },
-    );
+      } else {
+        Get.snackbar('Error', 'Response data is null.');
+      }
+    } catch (e) {
+      print('Error posting predict food: $e');
+      Get.snackbar('Error', 'Gagal memposting prediksi makanan.');
+    } finally {
+      isLoading(false); // Sembunyikan loading
+    }
   }
-
-
-
-
 
   Future<void> postChatModelAnalisisFood(BuildContext context, {bool? isPredict = false}) async {
     try {
@@ -384,6 +385,33 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+  Future<void> postCalculateNutrition() async {
+    try {
+      if (dataUser.value != null) {
+        final currentUser = dataUser.value!;
+        final response = await aiService.postCalculateNutrition(
+          dateOfBirth: currentUser.dateOfBirth ?? '',
+          goals: currentUser.goals ?? '',
+          gender: formatGender(currentUser.gender ?? ''),
+          activityLevel: currentUser.activityLevel ?? '',
+          weight: currentUser.weight.toString() ?? '',
+          height: currentUser.height.toString() ?? '',
+        );
+
+        nutritionInformation.value =
+            NutritionInformation.fromJson(response.data);
+        print(
+            "Jenis Kelamin: ${nutritionInformation.value.profile?.jenisKelamin}");
+        print(
+            "Total Kalori: ${nutritionInformation.value.dailyNutrition?.totalKalori}");
+      } else {
+        print("User data is not available for nutrition calculation");
+      }
+    } catch (e) {
+      print('Error posting nutrition data: $e');
+    }
+  }
+
 // Fungsi untuk mem-parsing response AI ke dalam Map
   Map<String, dynamic> parseAiResponseAnalisisFood(String response) {
     try {
@@ -447,6 +475,9 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
     return {}; // Jika parsing gagal, kembalikan Map kosong
   }
+
+
+  /// GET ///
 
   // Fetch current user and trigger postCalculateNutrition after 1 second
   Future<void> getCurrentUser() async {
@@ -516,9 +547,8 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
-  String formatGender(String gender) {
-    return gender.toLowerCase().replaceAll('-', ' ');
-  }
+
+  /// DELETE ///
 
   Future<void> deleteDailyActivity(int dailyActivityID) async {
     try {
@@ -580,6 +610,9 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+
+  /// PUT ///
+
   Future<void> postDailyActivity(
       {required category,
       required String name,
@@ -626,32 +659,7 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
-  Future<void> postCalculateNutrition() async {
-    try {
-      if (dataUser.value != null) {
-        final currentUser = dataUser.value!;
-        final response = await aiService.postCalculateNutrition(
-          dateOfBirth: currentUser.dateOfBirth ?? '',
-          goals: currentUser.goals ?? '',
-          gender: formatGender(currentUser.gender ?? ''),
-          activityLevel: currentUser.activityLevel ?? '',
-          weight: currentUser.weight.toString() ?? '',
-          height: currentUser.height.toString() ?? '',
-        );
 
-        nutritionInformation.value =
-            NutritionInformation.fromJson(response.data);
-        print(
-            "Jenis Kelamin: ${nutritionInformation.value.profile?.jenisKelamin}");
-        print(
-            "Total Kalori: ${nutritionInformation.value.dailyNutrition?.totalKalori}");
-      } else {
-        print("User data is not available for nutrition calculation");
-      }
-    } catch (e) {
-      print('Error posting nutrition data: $e');
-    }
-  }
 
   void refresh() {
     initialize();

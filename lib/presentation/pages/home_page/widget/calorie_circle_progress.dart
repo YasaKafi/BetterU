@@ -4,7 +4,7 @@ import '../../../../common/theme.dart';
 
 class CalorieProgressWidget extends StatelessWidget {
   final double currentCalories;
-  final double totalCalories;
+  final int totalCalories;
   final double size;
 
   const CalorieProgressWidget({

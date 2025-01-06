@@ -2,9 +2,9 @@ class CurrentTotalNutrition {
   int? totalKaloriMakan;
   int? totalKaloriAktivitas;
   int? totalKaloriSekarang;
-  double? totalLemak;
-  double? totalProtein;
-  double? totalKarbohidrat;
+  int? totalLemak;
+  int? totalProtein;
+  int? totalKarbohidrat;
 
   CurrentTotalNutrition(
       {this.totalKaloriMakan,

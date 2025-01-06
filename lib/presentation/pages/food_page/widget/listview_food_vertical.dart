@@ -4,15 +4,15 @@ import 'package:get/get.dart';
 
 import '../../../../../../common/dimensions.dart';
 import '../../../../../../common/theme.dart';
-import '../widget/card_food_popular.dart';
+import '../widget/card_food_vertical.dart';
 
-class ListviewFoodPopular extends StatelessWidget {
-  const ListviewFoodPopular({
+class ListviewFoodVertical extends StatelessWidget {
+  const ListviewFoodVertical({
     super.key,
-    required this.foodPopular,
+    required this.foodList,
   });
 
-  final Rx<FoodListModel> foodPopular;
+  final Rx<FoodListModel> foodList;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class ListviewFoodPopular extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Obx(() {
-      final foodPopularData = foodPopular.value;
+      final foodPopularData = foodList.value;
 
       if (foodPopularData.data == null || foodPopularData.data!.isEmpty) {
         return SizedBox(
@@ -57,7 +57,7 @@ class ListviewFoodPopular extends StatelessWidget {
                   },
                 );
               },
-              child: CardFoodPopular(
+              child: CardFoodVertical(
                 imageUrl: item.imageUrl ?? 'https://www.pallenz.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png',
                 textTitle: item.name ?? 'Nama Makanan Tidak Diketahui',
                 textCalories: item.kalori.toString() ?? '0',

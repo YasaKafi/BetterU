@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../common/theme.dart';
 import '../controller/food_controller.dart';
-import '../widget/listview_food_recommendation.dart';
-import '../widget/listview_food_popular.dart';
+import '../widget/listview_food_horizontal.dart';
+import '../widget/listview_food_vertical.dart';
 
 class FoodPage extends GetView<FoodController> {
   const FoodPage({Key? key}) : super(key: key);
@@ -68,9 +68,7 @@ class FoodPage extends GetView<FoodController> {
                           )),
                           const SizedBox(height: 20),
 
-                          ListviewFoodPopular(
-                            foodPopular: controller.foodSearch,
-                          ),
+                          ListviewFoodVertical(foodList: controller.foodSearch),
                         ],
                       ),
                     ),
@@ -103,9 +101,7 @@ class FoodPage extends GetView<FoodController> {
                                   child: CircularProgressIndicator(),
                                 );
                               } else {
-                                return ListviewFoodRecommendation(
-                                  foodRecommendation: controller.foodRecommendation,
-                                );
+                                return ListviewFoodHorizontal(foodList: controller.foodRecommendation);
                               }
                             }),
                           ),
@@ -130,9 +126,7 @@ class FoodPage extends GetView<FoodController> {
                                   ),
                                 );
                               } else {
-                                return ListviewFoodPopular(
-                                  foodPopular: controller.foodPopular,
-                                );
+                                return ListviewFoodVertical(foodList: controller.foodPopular);
                               }
                             }),
                           )

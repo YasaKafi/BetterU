@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../common/dimensions.dart';
 import '../../../../common/theme.dart';
 
-class CardFoodPopular extends StatelessWidget {
-  CardFoodPopular({
+class CardFoodVertical extends StatelessWidget {
+  CardFoodVertical({
     super.key,
     required this.imageUrl,
     required this.textTitle,

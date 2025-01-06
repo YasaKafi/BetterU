@@ -4,15 +4,15 @@ import 'package:get/get.dart';
 
 import '../../../../../../common/dimensions.dart';
 import '../../../../../../common/theme.dart';
-import '../widget/card_food_recommendation.dart';
+import '../widget/card_food_horizontal.dart';
 
-class ListviewFoodRecommendation extends StatelessWidget {
-  const ListviewFoodRecommendation({
+class ListviewFoodHorizontal extends StatelessWidget {
+  const ListviewFoodHorizontal({
     super.key,
-    required this.foodRecommendation,
+    required this.foodList,
   });
 
-  final Rx<FoodListModel> foodRecommendation;
+  final Rx<FoodListModel> foodList;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class ListviewFoodRecommendation extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Obx(() {
-      final foodRecommendationData = foodRecommendation.value;
+      final foodRecommendationData = foodList.value;
 
       if (foodRecommendationData.data == null || foodRecommendationData.data!.isEmpty) {
         return SizedBox(
@@ -55,7 +55,7 @@ class ListviewFoodRecommendation extends StatelessWidget {
               width: screenWidth * 0.4,
               height: screenWidth * 0.5,
               margin: EdgeInsets.only(left: screenWidth * 0.05),
-              child: CardFoodRecommendation(
+              child: CardFoodHorizontal(
                 imageUrl: item.imageUrl ?? 'https://www.pallenz.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png',
                 textTitle: item.name ?? 'Nama Makanan Tidak Diketahui',
                 textCalories: item.kalori.toString() ?? '0',

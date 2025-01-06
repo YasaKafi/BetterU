@@ -90,9 +90,6 @@ class RegisterController extends GetxController {
     });
   }
 
-
-
-
   void validatePassword() {
     final text = passwordController.text;
     isMinLength.value = text.length >= 8;

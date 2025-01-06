@@ -122,18 +122,18 @@ class HomePage extends GetView<HomeController> {
                     }
 
                     // Nilai-nilai untuk progress bars
-                    double currentLemak =
+                    int currentLemak =
                         totalLemak ?? 0; // Contoh nilai saat ini
                     double progressLemak =
                         (currentLemak / dailyNutrition.lemak!).clamp(0.0, 1.0);
 
-                    double currentProtein =
+                    int currentProtein =
                         totalProtein ?? 0; // Contoh nilai saat ini
                     double progressProtein =
                         (currentProtein / dailyNutrition.protein!)
                             .clamp(0.0, 1.0);
 
-                    double currentKarbo =
+                    int currentKarbo =
                         totalKarbohidrat ?? 0; // Contoh nilai saat ini
                     double progressKarbo =
                         (currentKarbo / dailyNutrition.karbohidrat!)
@@ -233,7 +233,7 @@ class HomePage extends GetView<HomeController> {
                                         height: 5,
                                       ),
                                       Text(
-                                        '${formatDoubleToRoundedInt(totalLemak ?? 0)} g / ${formatDoubleToRoundedInt(dailyNutrition.lemak!)} g',
+                                        '${totalLemak ?? 0} g / ${dailyNutrition.lemak} g',
                                         style: txtPrimarySubTitle.copyWith(
                                           fontWeight: FontWeight.w500,
                                           color: baseColor,
@@ -277,7 +277,7 @@ class HomePage extends GetView<HomeController> {
                                         height: 5,
                                       ),
                                       Text(
-                                        '${formatDoubleToRoundedInt(totalProtein ?? 0)} g / ${formatDoubleToRoundedInt(dailyNutrition.protein!)} g',
+                                        '${totalProtein ?? 0} g / ${dailyNutrition.protein} g',
                                         style: txtPrimarySubTitle.copyWith(
                                           fontWeight: FontWeight.w500,
                                           color: baseColor,
@@ -321,7 +321,7 @@ class HomePage extends GetView<HomeController> {
                                         height: 5,
                                       ),
                                       Text(
-                                        '${formatDoubleToRoundedInt(totalKarbohidrat ?? 0)} g / ${formatDoubleToRoundedInt(dailyNutrition.karbohidrat!)} g',
+                                        '${totalKarbohidrat ?? 0} g / ${dailyNutrition.karbohidrat} g',
                                         style: txtPrimarySubTitle.copyWith(
                                           fontWeight: FontWeight.w500,
                                           color: baseColor,

@@ -9,7 +9,10 @@ import 'package:better_u/data/api/auth/model/prediction_ai_model.dart';
 import 'package:better_u/data/api/service/ai_service.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/nutrition_service.dart';
+import 'package:better_u/presentation/global_components/common_button.dart';
 import 'package:better_u/presentation/pages/home_page/widget/bottom_sheet_eat.dart';
+import 'package:better_u/presentation/pages/home_page/widget/result_scan.dart';
+import 'package:better_u/presentation/pages/home_page/widget/show_recommendation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,10 +22,14 @@ import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
 import '../../../../data/api/auth/model/current_user_model.dart';
 import '../../../../data/api/auth/model/daily_nutrition_model.dart';
+import '../../../../data/api/auth/model/data_recommendation_food.dart';
+import '../../../../data/api/auth/model/show_recommendation_model.dart';
+import '../../../../route/app_pages.dart';
 import '../widget/bottom_sheet_sport.dart';
 
 class HomeController extends GetxController {
   RxBool isLoading = false.obs;
+  bool isCancelled = false;
   late AuthServices userService;
   late NutritionServices nutritionServices;
   late AiServices aiService;
@@ -30,6 +37,13 @@ class HomeController extends GetxController {
   late OpenRouterAPI openRouterAPI;
   Rx<DataUser?> dataUser = Rx<DataUser?>(null);
   RxString responsePredict = ''.obs;
+  String imageUrl = '';
+  var selectedFood = ''.obs;
+
+  void selectFood(String food) {
+    selectedFood.value = food;
+  }
+
 
 
   TextEditingController foodController = TextEditingController();
@@ -73,23 +87,6 @@ class HomeController extends GetxController {
     initialize();
   }
 
-  String getGreeting() {
-    final jakartaTimeZone = Duration(hours: 7); // WIB adalah UTC +7
-    final nowInJakarta = DateTime.now().toUtc().add(jakartaTimeZone);
-
-    final hour = nowInJakarta.hour;
-
-    if (hour >= 5 && hour < 10) {
-      return 'Selamat Pagi';
-    } else if (hour >= 10 && hour < 15) {
-      return 'Selamat Siang';
-    } else if (hour >= 15 && hour < 18) {
-      return 'Selamat Sore';
-    } else {
-      return 'Selamat Malam';
-    }
-  }
-
   Future<void> initialize() async {
     userService = AuthServices();
     aiService = AiServices();
@@ -108,49 +105,9 @@ class HomeController extends GetxController {
   }
 
   final ImagePicker _picker = ImagePicker();
-  Rxn<XFile> selectedImage = Rxn<XFile>(); // Untuk menyimpan gambar yang dipilih
+  Rxn<XFile> selectedImage =
+      Rxn<XFile>();
 
-
-  Future<void> postPredictFood() async {
-    if (selectedImage.value == null) {
-      Get.snackbar('Error', 'Tidak ada gambar yang dipilih.');
-      return;
-    }
-
-    try {
-      isLoading(true); // Tampilkan loading
-      final File file = File(selectedImage.value!.path);
-
-      // Panggil `postPredict` dari `nutritionServices`
-      final response = await nutritionServices.postPredict(file: file);
-
-      print("CHECK PREDICT FOOD RESPONSE");
-      print(response.data);
-
-      if (response.data != null) {
-
-         currentPrediction.value = ShowPrediction.fromJson(response.data);
-
-        print("Prediction: ${currentPrediction.value.prediction}");
-
-        responsePredict.value = currentPrediction.value.prediction ?? '';
-
-        Get.snackbar(
-          "Berhasil",
-          "Prediksi makanan berhasil dikirim",
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      } else {
-        Get.snackbar('Error', 'Response data is null.');
-      }
-    } catch (e) {
-      print('Error posting predict food: $e');
-      Get.snackbar('Error', 'Gagal memposting prediksi makanan.');
-    } finally {
-      isLoading(false); // Sembunyikan loading
-    }
-  }
   Future<void> pickImageFromCamera() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.camera);
@@ -173,6 +130,138 @@ class HomeController extends GetxController {
     }
   }
 
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          backgroundColor: baseColor,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                gifSearchLoading,
+                width: 250,
+                height: 250,
+              ),
+              SizedBox(width: 20),
+              Center(
+                  child: Text(
+                      "Tunggu ya kami sedang menganalisis kegiatan kamu... ",
+                      textAlign: TextAlign.center,
+                      style: txtSecondaryTitle.copyWith(fontWeight: FontWeight.w400, color: blackColor),)),
+
+              SizedBox(height: 20),
+              CommonButton(
+                  text: 'Batalkan',
+                  width: MediaQuery.of(context).size.width,
+                  style: txtButton.copyWith(
+                      fontWeight: FontWeight.w600, color: primaryColor),
+                  onPressed: () {
+                    isCancelled = true;
+                    Get.back();
+                  },
+                  borderRadius: 10,
+                  height: 60,
+                  border: BorderSide(
+                    color: primaryColor,
+                    width: 2,
+                  ),
+                  backgroundColor: baseColor),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  String formatGender(String gender) {
+    return gender.toLowerCase().replaceAll('-', ' ');
+  }
+
+  String getGreeting() {
+    final jakartaTimeZone = Duration(hours: 7); // WIB adalah UTC +7
+    final nowInJakarta = DateTime.now().toUtc().add(jakartaTimeZone);
+
+    final hour = nowInJakarta.hour;
+
+    if (hour >= 5 && hour < 10) {
+      return 'Selamat Pagi';
+    } else if (hour >= 10 && hour < 15) {
+      return 'Selamat Siang';
+    } else if (hour >= 15 && hour < 18) {
+      return 'Selamat Sore';
+    } else {
+      return 'Selamat Malam';
+    }
+  }
+
+  /// POST ///
+
+
+  Future<void> postImageToURL () async {
+    try {
+      isLoading(true);
+      final response = await nutritionServices.postImageToUrl(file: File(selectedImage.value!.path));
+
+      print("CHECK POST IMAGE TO URL RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+
+        imageUrl = response.data['data']['image'] ;
+
+        print("Image URL: $imageUrl");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching recommendation food: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> postRecommendationFood () async {
+    try {
+      isLoading(true);
+      final response = await aiService.postRecommendationFood(imageUrl: imageUrl);
+
+      print("CHECK RECOMMENDATION FOOD RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+        final recommendationData = ShowRecommendationFood.fromJson(response.data);
+        final contentString = recommendationData.choices!.first.message!.content;
+        print("Recommendation Data: $contentString");
+
+        final parsedContent = RecommendationContent.fromJson(
+          jsonDecode(contentString!),
+        );
+
+        print("Parsed Recommendation Data:");
+        print("Makanan One: ${parsedContent.makananOne}");
+        print("Makanan Two: ${parsedContent.makananTwo}");
+        print("Makanan Three: ${parsedContent.makananThree}");
+        print("Makanan Four: ${parsedContent.makananFour}");
+
+
+        Get.to(
+            () => ShowRecommendation(recommendationContent: parsedContent, imagePath: selectedImage.value!.path)
+        );
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching recommendation food: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
 
   Future<void> postPredictAndAnalyzeFood(BuildContext context) async {
     if (selectedImage.value == null) {
@@ -181,11 +270,17 @@ class HomeController extends GetxController {
     }
 
     try {
+      isCancelled = false; // Reset flag sebelum mulai proses
       showLoadingDialog(context);
 
       // Step 1: Prediksi makanan
       final File file = File(selectedImage.value!.path);
       final response = await nutritionServices.postPredict(file: file);
+
+      if (isCancelled) {
+        print('Proses dibatalkan saat prediksi makanan.');
+        return; // Hentikan eksekusi jika dibatalkan
+      }
 
       print("CHECK PREDICT FOOD RESPONSE");
       print(response.data);
@@ -204,50 +299,80 @@ class HomeController extends GetxController {
         );
 
         // Step 2: Analisis nutrisi berdasarkan prediksi
-        await postChatModelAnalisisFood(context, isPredict: true);
-
+        if (!isCancelled) {
+          await postChatModelAnalisisFood(context, isPredict: true);
+        } else {
+          print('Proses dibatalkan sebelum analisis nutrisi.');
+        }
       } else {
         Get.snackbar('Error', 'Response data is null.');
       }
     } catch (e, stackTrace) {
-      print('Error: $e');
-      print('Stack trace: $stackTrace');
-      Get.snackbar('Error', 'Gagal memproses makanan.');
+      if (isCancelled) {
+        print('Proses dibatalkan: $e');
+      } else {
+        print('Error: $e');
+        print('Stack trace: $stackTrace');
+        Get.snackbar('Error', 'Gagal memproses makanan.');
+      }
     }
   }
 
+  Future<void> postPredictFood() async {
+    if (selectedImage.value == null) {
+      Get.snackbar('Error', 'Tidak ada gambar yang dipilih.');
+      return;
+    }
 
+    try {
+      isLoading(true); // Tampilkan loading
+      final File file = File(selectedImage.value!.path);
 
-  void showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Row(
-            children: [
-              Image.asset(
-                gifSearchLoading,
-                width: 50,
-                height: 50,
-              ),
-              SizedBox(width: 20),
-              Text("Processing..."),
-            ],
-          ),
+      // Panggil `postPredict` dari `nutritionServices`
+      final response = await nutritionServices.postPredict(file: file);
+
+      print("CHECK PREDICT FOOD RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+        currentPrediction.value = ShowPrediction.fromJson(response.data);
+
+        print("Prediction: ${currentPrediction.value.prediction}");
+
+        responsePredict.value = currentPrediction.value.prediction ?? '';
+
+        Get.snackbar(
+          "Berhasil",
+          "Prediksi makanan berhasil dikirim",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
         );
-      },
-    );
+      } else {
+        Get.snackbar('Error', 'Response data is null.');
+      }
+    } catch (e) {
+      print('Error posting predict food: $e');
+      Get.snackbar('Error', 'Gagal memposting prediksi makanan.');
+    } finally {
+      isLoading(false); // Sembunyikan loading
+    }
   }
 
-
-
-
-
-  Future<void> postChatModelAnalisisFood(BuildContext context, {bool? isPredict = false}) async {
+  Future<void> postChatModelAnalisisFood(BuildContext context,
+      {bool? isPredict = false, bool? isFromRecommendation = false, bool? isFromInputManual = false}) async {
     try {
       // Nama makanan dari user input
 
-      final String userMessage = isPredict == true ? responsePredict.value : userMessageController.text.trim();
+       String userMessage = '';
+
+      if (isPredict == true) {
+         userMessage = responsePredict.value;
+      } else if (isFromRecommendation == true) {
+         userMessage = selectedFood.value;
+      } else {
+        userMessage = userMessageController.text.trim();
+      }
+
 
       // Prompt yang digunakan untuk AI
       String prompt = '''
@@ -292,27 +417,41 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
           );
 
           // Debug output
-          print('Nutrition Data Kalori: ${nutritionInformationFromAI.value.kalori}');
-          print('Nutrition Data Name: ${nutritionInformationFromAI.value.name}');
-          print('Nutrition Data Lemak: ${nutritionInformationFromAI.value.lemak}');
-          print('Nutrition Data Karbo: ${nutritionInformationFromAI.value.karbohidrat}');
-          print('Nutrition Data Protein: ${nutritionInformationFromAI.value.protein}');
-          print('Nutrition Data Note: ${nutritionInformationFromAI.value.catatan}');
+          print(
+              'Nutrition Data Kalori: ${nutritionInformationFromAI.value.kalori}');
+          print(
+              'Nutrition Data Name: ${nutritionInformationFromAI.value.name}');
+          print(
+              'Nutrition Data Lemak: ${nutritionInformationFromAI.value.lemak}');
+          print(
+              'Nutrition Data Karbo: ${nutritionInformationFromAI.value.karbohidrat}');
+          print(
+              'Nutrition Data Protein: ${nutritionInformationFromAI.value.protein}');
+          print(
+              'Nutrition Data Note: ${nutritionInformationFromAI.value.catatan}');
 
           if (isPredict == true) {
-          Navigator.pop(context);
+            Navigator.pop(context);
           }
 
           // Tampilkan hasil ke Bottom Sheet
+
+          if (isPredict == true) {
+            Get.to(() => ResultScan(item: nutritionInformationFromAI.value,
+              imagePath: selectedImage.value!.path,
+            ));
+          } else {
+
           Get.bottomSheet(
             Builder(
               builder: (BuildContext context) {
-                return buildBottomSheetContentEat(context, nutritionInformationFromAI.value);
+                return buildBottomSheetContentEat(
+                    context, nutritionInformationFromAI.value, isFromRecommendation, isFromInputManual);
               },
             ),
             isScrollControlled: true,
           );
-
+          }
         } else {
           print('Data dari AI tidak sesuai atau kosong.');
         }
@@ -336,7 +475,7 @@ Formatkan respons Anda dalam JSON dengan struktur berikut:
   "kalori": "Jumlah kalori terbakar dalam Kkal",
   "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk , berupa 1 paragraf",
 }
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan tolong tambahkan tag penutup -> }.
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }.
 '''
           .trim();
 
@@ -384,6 +523,33 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+  Future<void> postCalculateNutrition() async {
+    try {
+      if (dataUser.value != null) {
+        final currentUser = dataUser.value!;
+        final response = await aiService.postCalculateNutrition(
+          dateOfBirth: currentUser.dateOfBirth ?? '',
+          goals: currentUser.goals ?? '',
+          gender: formatGender(currentUser.gender ?? ''),
+          activityLevel: currentUser.activityLevel ?? '',
+          weight: currentUser.weight.toString() ?? '',
+          height: currentUser.height.toString() ?? '',
+        );
+
+        nutritionInformation.value =
+            NutritionInformation.fromJson(response.data);
+        print(
+            "Jenis Kelamin: ${nutritionInformation.value.profile?.jenisKelamin}");
+        print(
+            "Total Kalori: ${nutritionInformation.value.dailyNutrition?.totalKalori}");
+      } else {
+        print("User data is not available for nutrition calculation");
+      }
+    } catch (e) {
+      print('Error posting nutrition data: $e');
+    }
+  }
+
 // Fungsi untuk mem-parsing response AI ke dalam Map
   Map<String, dynamic> parseAiResponseAnalisisFood(String response) {
     try {
@@ -419,34 +585,44 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
   Map<String, dynamic> parseAiResponseAnalisisActivity(String response) {
     try {
-      // Parsing respons utama dari AI
-      final parsedResponse = jsonDecode(response) as Map<String, dynamic>;
+      // Cari posisi tag penutup `}` terakhir
+      final endIndex = response.lastIndexOf('}');
+      if (endIndex != -1) {
+        final validJson = response.substring(0, endIndex + 1);
 
-      // Fungsi untuk menghitung rata-rata dari rentang string
-      int parseRange(String? value) {
-        if (value == null) return 0; // Nilai default jika data null
-        final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
-        if (match != null) {
-          final min = int.parse(match.group(1)!);
-          final max = int.parse(match.group(2)!);
-          return ((min + max) / 2)
-              .round(); // Hitung rata-rata dan bulatkan ke int
+        // Parsing JSON yang valid
+        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
+
+        // Fungsi untuk menghitung rata-rata dari rentang string
+        int parseRange(String? value) {
+          if (value == null) return 0; // Nilai default jika data null
+          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
+          if (match != null) {
+            final min = int.parse(match.group(1)!);
+            final max = int.parse(match.group(2)!);
+            return ((min + max) / 2).round(); // Rata-rata dan bulatkan
+          }
+          // Jika tidak ada rentang, coba parsing angka langsung
+          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
         }
-        // Jika tidak ada rentang, coba parsing angka langsung
-        return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
-      }
 
-      // Kembalikan hasil parsing
-      return {
-        'kalori': parseRange(parsedResponse['kalori']),
-        'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
-      };
+        // Kembalikan hasil parsing
+        return {
+          'kalori': parseRange(parsedResponse['kalori']),
+          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
+        };
+      } else {
+        print('Tag penutup JSON tidak ditemukan.');
+      }
     } catch (e) {
       print('Error parsing AI response: $e');
     }
 
     return {}; // Jika parsing gagal, kembalikan Map kosong
   }
+
+
+  /// GET ///
 
   // Fetch current user and trigger postCalculateNutrition after 1 second
   Future<void> getCurrentUser() async {
@@ -516,9 +692,7 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
-  String formatGender(String gender) {
-    return gender.toLowerCase().replaceAll('-', ' ');
-  }
+  /// DELETE ///
 
   Future<void> deleteDailyActivity(int dailyActivityID) async {
     try {
@@ -542,15 +716,82 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+
+
+  /// PUT ///
+
+  Future<void> postDailyActivity(
+      {required category,
+      required String name,
+      required String kalori,
+      String? lemak,
+      String? protein,
+      String? karbohidrat,
+      required String note, bool? isFromRecommendation = false, bool? isFromResultScan = false, bool? isInputManual = false}) async {
+    try {
+      isLoading(true);
+      final response = await nutritionServices.postDailyActivity(
+        name: name,
+        category: category,
+        kalori: kalori,
+        lemak: lemak ?? '0',
+        protein: protein ?? '0',
+        karbohidrat: karbohidrat ?? '0',
+        note: note ?? '',
+      );
+
+      print("CHECK PUT DAILY ACTIVITY RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+        print("Daily activity added successfully");
+
+        if (isFromRecommendation == true) {
+          Get.back();
+          Get.offNamedUntil(Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        if (isFromResultScan == true) {
+          Get.back();
+          Get.offNamedUntil(Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        if (isInputManual == true) {
+          Get.back();
+          Get.offNamedUntil(Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+
+        Get.back();
+        Get.back();
+        Get.snackbar(
+          "Berhasil",
+          "Makanan berhasil ditambahkan",
+          backgroundColor: primaryColor,
+          colorText: baseColor,
+        );
+        refresh();
+        userMessageController.clear();
+        userMessageActivityController.clear();
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error adding daily activity: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
   Future<void> putDailyActivity(
-    int dailyActivityID,
-    String name,
-    String category,
-    String kalori,
-    String? lemak,
-    String? protein,
-    String? karbohidrat,
-  ) async {
+      int dailyActivityID,
+      String name,
+      String category,
+      String kalori,
+      String? lemak,
+      String? protein,
+      String? karbohidrat,
+      ) async {
     try {
       isLoading(true);
       final response = await nutritionServices.putDailyActivity(
@@ -577,79 +818,6 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       print('Error adding daily activity: $e');
     } finally {
       isLoading(false);
-    }
-  }
-
-  Future<void> postDailyActivity(
-      {required category,
-      required String name,
-      required String kalori,
-       String? lemak,
-       String? protein,
-       String? karbohidrat,
-      required String note}) async {
-    try {
-      isLoading(true);
-      final response = await nutritionServices.postDailyActivity(
-        name: name,
-        category: category,
-        kalori: kalori,
-        lemak: lemak ?? '0',
-        protein: protein ?? '0',
-        karbohidrat: karbohidrat ?? '0',
-        note: note ?? '',
-      );
-
-      print("CHECK PUT DAILY ACTIVITY RESPONSE");
-      print(response.data);
-
-      if (response.data != null) {
-        print("Daily activity added successfully");
-        Get.back();
-        Get.back();
-        Get.snackbar(
-          "Berhasil",
-          "Makanan berhasil ditambahkan",
-          backgroundColor: primaryColor,
-          colorText: baseColor,
-        );
-        refresh();
-        userMessageController.clear();
-        userMessageActivityController.clear();
-      } else {
-        print("Response data is null");
-      }
-    } catch (e) {
-      print('Error adding daily activity: $e');
-    } finally {
-      isLoading(false);
-    }
-  }
-
-  Future<void> postCalculateNutrition() async {
-    try {
-      if (dataUser.value != null) {
-        final currentUser = dataUser.value!;
-        final response = await aiService.postCalculateNutrition(
-          dateOfBirth: currentUser.dateOfBirth ?? '',
-          goals: currentUser.goals ?? '',
-          gender: formatGender(currentUser.gender ?? ''),
-          activityLevel: currentUser.activityLevel ?? '',
-          weight: currentUser.weight.toString() ?? '',
-          height: currentUser.height.toString() ?? '',
-        );
-
-        nutritionInformation.value =
-            NutritionInformation.fromJson(response.data);
-        print(
-            "Jenis Kelamin: ${nutritionInformation.value.profile?.jenisKelamin}");
-        print(
-            "Total Kalori: ${nutritionInformation.value.dailyNutrition?.totalKalori}");
-      } else {
-        print("User data is not available for nutrition calculation");
-      }
-    } catch (e) {
-      print('Error posting nutrition data: $e');
     }
   }
 

@@ -31,6 +31,23 @@ class NutritionServices {
     }
   }
 
+  Future<Response> showHistoryTotalNutrition({String? filterDate}) async {
+    try {
+
+      final response = await _dioInstance.getRequest(
+        endpoint: BetterUApiRepository.getHistoryTotalNutrition,
+        queryParameters: {
+          'days': filterDate,
+        },
+        isAuthorize: true,
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Response> showCurrentCombo() async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -130,6 +147,34 @@ class NutritionServices {
       // Kirim request POST dengan FormData
       final response = await _dioInstance.postRequest(
         endpoint: BetterUApiRepository.postPredictFood,
+        data: formData,
+        isAuthorize: true,
+        isMultipart: true,
+      );
+
+      return response;
+    } catch (e) {
+      print("Error posting file: $e");
+      throw Exception(e);
+    }
+  }
+
+
+  Future<Response> postImageToUrl({
+    required File file,
+  }) async {
+    try {
+      // Buat FormData dengan file dan data lainnya
+      FormData formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        ),
+      });
+
+      // Kirim request POST dengan FormData
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postImageToUrl,
         data: formData,
         isAuthorize: true,
         isMultipart: true,

@@ -82,7 +82,9 @@ class OnboardingFinalScreen extends StatelessWidget {
                 children: [
                   CommonButton(text: 'Buat Akun Baru', onPressed: () => Get.offAllNamed(Routes.REGISTER_PAGE), width: screenWidth, height: 60, borderRadius: 10,),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.offAllNamed(Routes.LOGIN_PAGE);
+                    },
                     child: Center(
                       child: RichText(
                         text: TextSpan(

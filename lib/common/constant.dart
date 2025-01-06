@@ -3,6 +3,9 @@ String gif = 'assets/gif/';
 String svgImages = 'assets/svg/';
 
 
+//CONSTANT IMAGE
+String imgExFood = '${images}example_food.png';
+
 //CONSTANT GIF
 String gifListDiet = '${gif}diet_list.png';
 String gifHealtyEffect = '${gif}healty_effect.png';
@@ -10,6 +13,8 @@ String gifHealtyFood = '${gif}healty_food.png';
 String gifHappyTogether = '${gif}happy_together.png';
 String gifSuccessRegister = '${gif}success_register.png';
 String gifSearchLoading = '${gif}search_loading.png';
+String gifMaleAvatar = '${gif}male_profile.png';
+String gifFemaleAvatar = '${gif}woman_profile.png';
 
 
 
@@ -17,6 +22,10 @@ String gifSearchLoading = '${gif}search_loading.png';
 String icLogoPrimary = '${svgImages}logo_betteru.svg';
 String icWavingHand = '${svgImages}waving_hand.svg';
 String icGoogle = '${svgImages}ic_google.svg';
+String icHistory = '${svgImages}history.svg';
+String icEdit = '${svgImages}edit.svg';
+String icCalendar = '${svgImages}calnder_outline.svg.svg';
+String icLogout = '${svgImages}logout.svg';
 String icScanner = '${svgImages}scanner.svg';
 String icKalori = '${svgImages}ic_kalori.svg';
 String icKarbo = '${svgImages}ic_karbo.svg';

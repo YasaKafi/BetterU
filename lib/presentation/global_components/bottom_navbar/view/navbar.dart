@@ -1,4 +1,5 @@
 import 'package:better_u/common/constant.dart';
+import 'package:better_u/presentation/pages/home_page/controller/home_controller.dart';
 import 'package:better_u/presentation/pages/sport_page/view/sport_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,11 +13,13 @@ import '../controller/navbar_controller.dart';
 
 class BottomNavigationBarCustom extends StatelessWidget {
   final BottomNavigationController controller =
-      Get.put(BottomNavigationController());
+  Get.put(BottomNavigationController());
+
 
   final List<Widget> pages = [
     HomePage(),
     FoodPage(),
+    Placeholder(),
     SportPage(),
     ProfilePage(),
   ];
@@ -26,12 +29,20 @@ class BottomNavigationBarCustom extends StatelessWidget {
     return Scaffold(
       body: Obx(() => pages[controller.currentIndex.value]),
       bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
+            () => BottomNavigationBar(
           backgroundColor: baseColor,
           currentIndex: controller.currentIndex.value,
-          onTap: controller.changePage,
-          unselectedLabelStyle: txtSecondarySubTitle.copyWith(fontWeight: FontWeight.w600, color: primaryColor),
-          selectedLabelStyle: txtSecondarySubTitle.copyWith(fontWeight: FontWeight.w600, color: grey),
+          onTap: (index) {
+            if (index == 2) {
+              _openCamera(context);
+            } else {
+              controller.changePage(index);
+            }
+          },
+          unselectedLabelStyle: txtSecondarySubTitle.copyWith(
+              fontWeight: FontWeight.w600, color: primaryColor),
+          selectedLabelStyle: txtSecondarySubTitle.copyWith(
+              fontWeight: FontWeight.w600, color: grey),
           unselectedItemColor: grey,
           selectedItemColor: primaryColor,
           type: BottomNavigationBarType.fixed,
@@ -64,16 +75,16 @@ class BottomNavigationBarCustom extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: Container(
-                width: 56, // Lebih besar dari ikon biasa
+                width: 56,
                 height: 56,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: primaryColor.withOpacity(0.1), // Background warna
+                  color: primaryColor.withOpacity(0.1),
                 ),
                 child: Center(
                   child: SvgPicture.asset(
                     icScanner,
-                    width: 56, // Ukuran ikon yang lebih besar
+                    width: 56,
                     height: 56,
                   ),
                 ),
@@ -111,4 +122,15 @@ class BottomNavigationBarCustom extends StatelessWidget {
       ),
     );
   }
+
+  void _openCamera(BuildContext context) {
+    final HomeController controller = Get.find();
+
+    controller.pickImageFromCamera().then((_) {
+      if (controller.selectedImage.value != null) {
+        controller.postPredictAndAnalyzeFood(context);
+      }
+    });
+  }
 }
+

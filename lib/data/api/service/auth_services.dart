@@ -20,6 +20,19 @@ class AuthServices {
     }
   }
 
+  Future<Response> deleteTokenUser() async {
+    try {
+      final response = await _dioInstance.deleteRequest(
+          endpoint: BetterUApiRepository.deleteTokenUser,
+          isAuthorize: true
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Response> postLogin({
     required String email,
     required String password,
@@ -68,6 +81,38 @@ class AuthServices {
       return response;
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  Future<Response> putEditUser({
+    required String userID,
+    required String dateOfBirth,
+    required String goals,
+    required String activityLevel,
+    required String weight,
+    required String height,
+    required String name,
+    required String gender,
+  }) async {
+    try {
+      final response = await _dioInstance.putRequest(
+        isAuthorize: true,
+        endpoint: '${BetterUApiRepository.putEditUser}/$userID',
+        data: {
+          'name': name,
+          'gender': gender,
+          'date_of_birth': dateOfBirth,
+          'goals': goals,
+          'activity_level': activityLevel,
+          'weight': weight,
+          'height': height,
+        },
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+
     }
   }
 

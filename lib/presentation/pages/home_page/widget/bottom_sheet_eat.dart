@@ -9,7 +9,7 @@ import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
 
-Widget buildBottomSheetContentEat(BuildContext context, NutritionInformationFromAI item, ) {
+Widget buildBottomSheetContentEat(BuildContext context, NutritionInformationFromAI item, bool? isFromRecommendation, bool? isInputManual ) {
   final controller = Get.find<HomeController>();
 
   return Container(
@@ -257,6 +257,8 @@ Widget buildBottomSheetContentEat(BuildContext context, NutritionInformationFrom
                             protein: item.protein.toString(),
                             karbohidrat: item.karbohidrat.toString(),
                             note: item.catatan,
+                            isFromRecommendation: isFromRecommendation,
+                              isInputManual: isInputManual
                           );
 
                         },

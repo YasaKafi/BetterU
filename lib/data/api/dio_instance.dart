@@ -39,10 +39,13 @@ class DioInstance {
     return response;
   }
 
-  Future<Response> postRequest({required String endpoint, bool? isAuthorize, Object? data, Map<String, dynamic>? queryParameters, bool isMultipart = false,}) async {
+  Future<Response> postRequest({required String endpoint, bool? isAuthorize,bool? isMetaToken, Object? data, Map<String, dynamic>? queryParameters, bool isMultipart = false,}) async {
     Response response;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    String? token = '';
+
+    isMetaToken == true ?  token = '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' : token = prefs.getString('token');
+
     try {
       response = await _dio.post(
           endpoint,

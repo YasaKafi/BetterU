@@ -205,34 +205,6 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     SizedBox(height: 30),
 
-                    // Tombol Edit
-                    // CommonButton(
-                    //   text: 'Edit',
-                    //   onPressed: () {
-                    //
-                    //     final birthOfDateUser = widget.item.dateOfBirth ?? '';
-                    //     final convertedDate = DateTime.parse(birthOfDateUser);
-                    //
-                    //     print('Date of birth month: ${convertedDate.month}');
-                    //
-                    //     final age = int.tryParse(ageController.text) ?? 0;
-                    //     final calculatedDateOfBirth = calculateDateOfBirth(age);
-                    //
-                    //     widget.controller.putEditProfile(
-                    //       birthDateController: calculatedDateOfBirth,
-                    //       weightController: weightController,
-                    //       heightController: heightController,
-                    //       selectedGoal: selectedGoal ?? widget.item.goals ?? '',
-                    //       selectedActivity: selectedActivityLevel ?? widget.item.activityLevel ?? '',
-                    //     );
-                    //     Get.back();
-                    //
-                    //   },
-                    //   height: 60,
-                    //   borderRadius: 15,
-                    //   width: screenWidth,
-                    // ),
-
                     CommonButton(
                       text: 'Edit',
                       onPressed: () {

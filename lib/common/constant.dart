@@ -3,6 +3,9 @@ String gif = 'assets/gif/';
 String svgImages = 'assets/svg/';
 
 
+//CONSTANT IMAGE
+String imgExFood = '${images}example_food.png';
+
 //CONSTANT GIF
 String gifListDiet = '${gif}diet_list.png';
 String gifHealtyEffect = '${gif}healty_effect.png';
@@ -21,6 +24,7 @@ String icWavingHand = '${svgImages}waving_hand.svg';
 String icGoogle = '${svgImages}ic_google.svg';
 String icHistory = '${svgImages}history.svg';
 String icEdit = '${svgImages}edit.svg';
+String icCalendar = '${svgImages}calnder_outline.svg.svg';
 String icLogout = '${svgImages}logout.svg';
 String icScanner = '${svgImages}scanner.svg';
 String icKalori = '${svgImages}ic_kalori.svg';

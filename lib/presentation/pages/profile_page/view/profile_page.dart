@@ -9,6 +9,7 @@ import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
 import '../controller/profile_controller.dart';
 import '../widget/edit_profile.dart';
+import '../widget/history_activities.dart';
 
 class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({Key? key}) : super(key: key);
@@ -90,7 +91,9 @@ class ProfilePage extends GetView<ProfileController> {
                       ),
                     ),
                     text: '',
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => HistoryActivities());
+                    },
                     height: 60,
                     width: screenwWidth,
                     borderRadius: 10,

@@ -14,9 +14,11 @@ class BetterUApiRepository {
   static String getCurrentUser = '$mainUrl/api/users/show-current';
   static String getCurrentTotalNutrition = '$mainUrl/api/daily-activity/show-total-nutrition';
   static String getCurrentCombo = '$mainUrl/api/daily-activity/show-current';
+  static String getHistoryTotalNutrition = '$mainUrl/api/daily-activity/show-history-total-nutrition';
   static String getAllFood = '$mainUrl/api/foods/index';
   static String getFoodById = '$mainUrl/api/foods/show';
-  static String getHistoryTotalNutrition = '$mainUrl/api/daily-activity/show-history-total-nutrition';
+  static String getAllSportCategory = '$mainUrl/api/sport-categories/index';
+  static String getAllSport = '$mainUrl/api/sports/index';
 
   static String putDailyActivity = '$mainUrl/api/daily-activity/update';
   static String putEditUser = '$mainUrl/api/users/update';

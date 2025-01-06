@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 class FoodController extends GetxController {
 
+  RxBool isLoadingMain = false.obs;
   RxBool isLoadingFoodRecommendation = false.obs;
   RxBool isLoadingFoodPopular = false.obs;
   RxBool isLoadingFoodSearch = false.obs;
@@ -29,6 +30,10 @@ class FoodController extends GetxController {
     userService = AuthServices();
     foodServices = FoodServices();
 
+    isLoadingMain(true);
+    isLoadingFoodRecommendation(true);
+    isLoadingFoodPopular(true);
+
     await getCurrentUser();
     getAllFoodPopular();
 
@@ -43,9 +48,7 @@ class FoodController extends GetxController {
 
   Future<void> getCurrentUser() async {
     try {
-      isLoadingFoodRecommendation(true);
-      isLoadingFoodPopular(true);
-
+      isLoadingMain(false);
       final response = await userService.showCurrentUser();
       print("CHECK CURRENT RESPONSE");
       print(response.data);
@@ -70,6 +73,7 @@ class FoodController extends GetxController {
 
   Future<void> getAllFoodRecommendation() async {
     try {
+      isLoadingMain(false);
       if (dataUser.value != null) {
         final currentUser = dataUser.value!;
 
@@ -107,6 +111,7 @@ class FoodController extends GetxController {
 
   Future<void> getAllFoodPopular() async {
     try {
+      isLoadingMain(false);
       final response = await foodServices.showAllFoodByClickCountDesc();
 
       print("CHECK FOOD POPULAR RESPONSE");
@@ -127,6 +132,7 @@ class FoodController extends GetxController {
 
   Future<void> getAllFoodSearch() async {
     try {
+      isLoadingMain(false);
       isLoadingFoodSearch(true);
 
       final response = await foodServices.showAllFoodBySearch(

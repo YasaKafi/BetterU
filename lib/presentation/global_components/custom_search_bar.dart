@@ -37,8 +37,10 @@ class CustomSearchBar extends StatelessWidget {
               margin: const EdgeInsets.only(
                 top: Dimensions.paddingSizeExtraSmall,
               ),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.paddingSizeLarge),
+              padding: const EdgeInsets.only(
+                left: Dimensions.paddingSizeLarge,
+                right: Dimensions.paddingSizeMedium,
+              ),
               decoration: BoxDecoration(
                   border: Border.all(
                       color: Colors.white,

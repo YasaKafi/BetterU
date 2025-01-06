@@ -20,22 +20,30 @@ class FoodPage extends GetView<FoodController> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: grey2,
-        flexibleSpace: CustomSearchBar(
-          hintName: 'Cari makanan favoritmu',
-          screenHeight: screenHeight,
-          screenWidth: screenWidth,
-          onSearch: (query) {
-            if (query.isNotEmpty) {
-              controller.getAllFoodSearch();
-            }
-          },
-          onClearSearch: () {
-            controller.foodSearch.value.data?.clear();
-            controller.isLoadingFoodSearch.value = true;
-            controller.refresh();
-          },
-          searchController: controller.searchController,
-        ),
+        flexibleSpace: Obx(() {
+          if (controller.isLoadingMain.value) {
+            return const Center(child: CircularProgressIndicator(color: grey2));
+          } else {
+            return CustomSearchBar(
+              hintName: 'Cari makanan favoritmu',
+              screenHeight: screenHeight,
+              screenWidth: screenWidth,
+              onSearch: (query) {
+                if (query.isNotEmpty) {
+                  controller.isLoadingMain.value = true;
+                  controller.getAllFoodSearch();
+                }
+              },
+              onClearSearch: () {
+                controller.foodSearch.value.data?.clear();
+                controller.isLoadingFoodSearch.value = true;
+                controller.refresh();
+              },
+              searchController: controller.searchController,
+            );
+          }
+        }),
+
       ),
         body: SafeArea(
           child: RefreshIndicator(

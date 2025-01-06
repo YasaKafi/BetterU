@@ -32,7 +32,7 @@ class CardNutrition extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SvgPicture.asset(icon, width: 35, height: 35),
+          SvgPicture.asset(icon, width: screenWidth * 0.09, height: screenWidth * 0.09),
           const SizedBox(width: 10),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

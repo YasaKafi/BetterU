@@ -43,6 +43,22 @@ class FoodServices {
     }
   }
 
+  Future<Response> showAllFoodBySearch({required String search}) async {
+    try {
+      final response = await _dioInstance.getRequest(
+        endpoint: BetterUApiRepository.getAllFood,
+        queryParameters: {
+          'search': search,
+        },
+        isAuthorize: false,
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Response> showFoodById({required String id}) async {
     try {
       final response = await _dioInstance.getRequest(

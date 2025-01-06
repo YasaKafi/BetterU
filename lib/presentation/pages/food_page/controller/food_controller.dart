@@ -2,18 +2,22 @@ import 'package:better_u/data/api/auth/model/current_user_model.dart';
 import 'package:better_u/data/api/auth/model/food_list_model.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/food_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class FoodController extends GetxController {
 
   RxBool isLoadingFoodRecommendation = false.obs;
   RxBool isLoadingFoodPopular = false.obs;
+  RxBool isLoadingFoodSearch = false.obs;
   late AuthServices userService;
   late FoodServices foodServices;
   late ShowCurrentUserResponse userResponse;
   Rx<DataUser?> dataUser = Rx<DataUser?>(null);
   Rx<FoodListModel> foodRecommendation = Rx<FoodListModel>(FoodListModel());
   Rx<FoodListModel> foodPopular = Rx<FoodListModel>(FoodListModel());
+  Rx<FoodListModel> foodSearch = Rx<FoodListModel>(FoodListModel());
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void onInit() {
@@ -26,7 +30,7 @@ class FoodController extends GetxController {
     foodServices = FoodServices();
 
     await getCurrentUser();
-    await getAllFoodPopular();
+    getAllFoodPopular();
 
     if (dataUser.value != null) {
       await getAllFoodRecommendation();
@@ -59,6 +63,8 @@ class FoodController extends GetxController {
       }
     } catch (e) {
       print('Error fetching user data: $e');
+    } finally {
+      isLoadingFoodSearch(false);
     }
   }
 
@@ -116,6 +122,30 @@ class FoodController extends GetxController {
       print('Error fetching food popular data: $e');
     } finally {
       isLoadingFoodPopular(false);
+    }
+  }
+
+  Future<void> getAllFoodSearch() async {
+    try {
+      isLoadingFoodSearch(true);
+
+      final response = await foodServices.showAllFoodBySearch(
+        search: searchController.text,
+      );
+
+      print("CHECK FOOD SEARCH RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+        final foodData = FoodListModel.fromJson(response.data);
+        foodSearch.value = foodData;
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching food search data: $e');
+    } finally {
+      isLoadingFoodSearch(false);
     }
   }
 }

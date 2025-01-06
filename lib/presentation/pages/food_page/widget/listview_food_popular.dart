@@ -22,11 +22,10 @@ class ListviewFoodPopular extends StatelessWidget {
     return Obx(() {
       final foodPopularData = foodPopular.value;
 
-      if (foodPopularData.data == null ||
-          foodPopularData.data!.isEmpty) {
+      if (foodPopularData.data == null || foodPopularData.data!.isEmpty) {
         return SizedBox(
-          width: screenWidth * 0.4,
-          height: screenWidth * 0.2,
+          width: screenWidth,
+          height: screenHeight * 0.5,
           child: const Center(
             child: Text(
               "Tidak ada data makanan.",

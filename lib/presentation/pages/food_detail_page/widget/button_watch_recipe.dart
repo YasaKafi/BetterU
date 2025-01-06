@@ -34,7 +34,7 @@ class ButtonWatchRecipe extends StatelessWidget {
             },
             child: Container(
               width: double.infinity,
-              height: double.infinity,
+              height: 100,
               decoration: BoxDecoration(
                 color: primaryColor,
                 borderRadius: BorderRadius.circular(10),
@@ -43,7 +43,7 @@ class ButtonWatchRecipe extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.play_circle, color: Colors.white),
+                  Icon(Icons.play_circle, color: Colors.white, size: screenWidth * 0.07),
 
                   SizedBox(width: screenWidth * 0.025),
 

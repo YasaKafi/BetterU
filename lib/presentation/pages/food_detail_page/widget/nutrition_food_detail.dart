@@ -39,7 +39,7 @@ class NutritionFoodDetail extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,9 +76,9 @@ class NutritionFoodDetail extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
           const Divider(color: grey, thickness: 1, height: 5),
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
 
           GridView.count(
             crossAxisCount: 2,
@@ -95,9 +95,9 @@ class NutritionFoodDetail extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
           const Divider(color: grey, thickness: 1, height: 5),
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
 
           Column(
             mainAxisAlignment: MainAxisAlignment.start,

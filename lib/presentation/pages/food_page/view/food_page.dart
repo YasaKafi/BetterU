@@ -24,79 +24,127 @@ class FoodPage extends GetView<FoodController> {
           hintName: 'Cari makanan favoritmu',
           screenHeight: screenHeight,
           screenWidth: screenWidth,
-          // onSearch: controller.onSearch,
-          // onClearSearch: controller.onClearSearch,
-          // searchController: controller.searchController,
-        ),
-      ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
+          onSearch: (query) {
+            if (query.isNotEmpty) {
+              controller.getAllFoodSearch();
+            }
+          },
+          onClearSearch: () {
+            controller.foodSearch.value.data?.clear();
+            controller.isLoadingFoodSearch.value = true;
             controller.refresh();
           },
-          child: SingleChildScrollView(
-            child: Container(
-              width: screenWidth,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
-                    child: Text('Rekomendasi Makanan', style: txtPrimaryTitle.copyWith(
-                      color: blackColor,
-                      fontWeight: FontWeight.w700,
-                    )),
-                  ),
-
-                  Container(
-                    width: screenWidth,
-                    height: screenWidth * 0.5,
-                    child: Obx(() {
-                      if (controller.isLoadingFoodRecommendation.value) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return ListviewFoodRecommendation(
-                          foodRecommendation: controller.foodRecommendation,
-                        );
-                      }
-                    }),
-                  ),
-
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
-                    child: Text('Makanan Populer', style: txtPrimaryTitle.copyWith(
-                      color: blackColor,
-                      fontWeight: FontWeight.w700,
-                    )),
-                  ),
-
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                    child: Obx(() {
-                      if (controller.isLoadingFoodPopular.value) {
-                        return SizedBox(
-                          width: screenWidth,
-                          height: screenWidth * 0.5,
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      } else {
-                        return ListviewFoodPopular(
-                          foodPopular: controller.foodPopular,
-                        );
-                      }
-                    }),
-                  )
-                ],
-              ),
-            ),
-          ),
+          searchController: controller.searchController,
         ),
       ),
+        body: SafeArea(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              controller.refresh();
+            },
+            child: Obx(() {
+              // ** Kondisi Search Food ** //
+              if (controller.isLoadingFoodSearch.value) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+
+              } else {
+                // ** UI Search Food ** //
+                if (controller.searchController.text.isNotEmpty) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      width: screenWidth,
+                      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const SizedBox(height: 20),
+                          Text('Hasil dari "${controller.searchController.text}"', style: txtPrimaryTitle.copyWith(
+                            color: blackColor,
+                            fontWeight: FontWeight.w700,
+                          )),
+                          const SizedBox(height: 20),
+
+                          ListviewFoodPopular(
+                            foodPopular: controller.foodSearch,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+
+                // ** UI Food Recommendation & Popular ** //
+                } else {
+                  return SingleChildScrollView(
+                    child: Container(
+                      width: screenWidth,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          // ** Rekomendasi Makanan ** //
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
+                            child: Text('Rekomendasi Makanan', style: txtPrimaryTitle.copyWith(
+                              color: blackColor,
+                              fontWeight: FontWeight.w700,
+                            )),
+                          ),
+                          Container(
+                            width: screenWidth,
+                            height: screenWidth * 0.5,
+                            child: Obx(() {
+                              if (controller.isLoadingFoodRecommendation.value) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else {
+                                return ListviewFoodRecommendation(
+                                  foodRecommendation: controller.foodRecommendation,
+                                );
+                              }
+                            }),
+                          ),
+
+                          // ** Makanan Populer ** //
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
+                            child: Text('Makanan Populer', style: txtPrimaryTitle.copyWith(
+                              color: blackColor,
+                              fontWeight: FontWeight.w700,
+                            )),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                            child: Obx(() {
+                              if (controller.isLoadingFoodPopular.value) {
+                                return SizedBox(
+                                  width: screenWidth,
+                                  height: screenWidth * 0.5,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              } else {
+                                return ListviewFoodPopular(
+                                  foodPopular: controller.foodPopular,
+                                );
+                              }
+                            }),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              }
+            }),
+          ),
+        )
     );
   }
 }

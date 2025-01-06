@@ -44,30 +44,31 @@ class FoodDetailPage extends GetView<FoodDetailController> {
           return Stack(
             children: [
               SingleChildScrollView(
-                child: SizedBox(
-                  width: screenWidth,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ImageFoodDetail(imageUrl: foodData.data!.imageUrl ?? 'https://www.pallenz.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png'),
-
-                      NutritionFoodDetail(
-                        textTitle: foodData.data!.name ?? 'nama makanan',
-                        textCalories: foodData.data!.kalori.toString() ?? '0',
-                        textTime: foodData.data!.time.toString() ?? '0',
-                        textProtein: foodData.data!.protein.toString() ?? '0',
-                        textKarbo: foodData.data!.karbohidrat.toString() ?? '0',
-                        textLemak: foodData.data!.lemak.toString() ?? '0',
-                        textCatatan: foodData.data!.note ?? 'Tidak ada catatan',
-                      ),
-
-                      ButtonWatchRecipe(videoUrl: Uri.parse(foodData.data!.videoUrl ?? 'https://www.youtube.com/watch?v=QwievZ1Tx-8'))
-                    ],
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: screenHeight,
+                  ),
+                  child: SizedBox(
+                    width: screenWidth,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ImageFoodDetail(imageUrl: foodData.data!.imageUrl ?? 'https://www.pallenz.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png'),
+                        NutritionFoodDetail(
+                          textTitle: foodData.data!.name ?? 'nama makanan',
+                          textCalories: foodData.data!.kalori.toString() ?? '0',
+                          textTime: foodData.data!.time.toString() ?? '0',
+                          textProtein: foodData.data!.protein.toString() ?? '0',
+                          textKarbo: foodData.data!.karbohidrat.toString() ?? '0',
+                          textLemak: foodData.data!.lemak.toString() ?? '0',
+                          textCatatan: foodData.data!.note ?? 'Tidak ada catatan',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-
               ButtonWatchRecipe(videoUrl: Uri.parse(foodData.data!.videoUrl ?? 'https://www.youtube.com/watch?v=QwievZ1Tx-8'))
             ],
           );

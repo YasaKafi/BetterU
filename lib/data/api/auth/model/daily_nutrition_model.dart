@@ -62,10 +62,10 @@ class Profile {
 }
 
 class DailyNutrition {
-  double? totalKalori;
-  double? protein;
-  double? lemak;
-  double? karbohidrat;
+  int? totalKalori;
+  int? protein;
+  int? lemak;
+  int? karbohidrat;
 
   DailyNutrition(
       {this.totalKalori, this.protein, this.lemak, this.karbohidrat});

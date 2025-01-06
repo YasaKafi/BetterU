@@ -24,8 +24,8 @@ class DataUser {
   int? age; // Ubah tipe data ke int
   String? gender;
   String? goals;
-  double? weight; // Ubah tipe data ke double
-  double? height; // Ubah tipe data ke double
+  int? weight; // Ubah tipe data ke double
+  int? height; // Ubah tipe data ke double
   String? activityLevel;
 
   DataUser({
@@ -49,8 +49,8 @@ class DataUser {
     age = json['age'] != null ? int.tryParse(json['age'].toString()) : null; // Konversi ke int
     gender = json['gender'];
     goals = json['goals'];
-    weight = json['weight'] != null ? double.tryParse(json['weight'].toString()) : null; // Konversi ke double
-    height = json['height'] != null ? double.tryParse(json['height'].toString()) : null; // Konversi ke double
+    weight = json['weight'] != null ? int.tryParse(json['weight'].toString()) : null; // Konversi ke int
+    height = json['height'] != null ? int.tryParse(json['height'].toString()) : null; // Konversi ke int
     activityLevel = json['activity_level'];
   }
 

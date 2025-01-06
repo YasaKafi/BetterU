@@ -15,8 +15,10 @@ class BetterUApiRepository {
   static String getCurrentCombo = '$mainUrl/api/daily-activity/show-current';
 
   static String putDailyActivity = '$mainUrl/api/daily-activity/update';
+  static String putEditUser = '$mainUrl/api/users/update';
 
   static String deleteDailyActivity = '$mainUrl/api/daily-activity/delete';
+  static String deleteTokenUser = '$mainUrl/api/users/logout';
 
   static String postRegister = '$mainUrl/api/users/register';
   static String postLogin = '$mainUrl/api/users/login';

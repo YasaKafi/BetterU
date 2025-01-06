@@ -124,8 +124,12 @@ class DioInstance {
                 if (isAuthorize ?? false) "Authorization": "Bearer $token"
               })
       );
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Data: ${response.data}');
     } on DioException catch (e) {
-      print(e.message);
+      print('DioException: ${e.message}');
+      print('DioException Response: ${e.response?.data}');
+      print('DioException Status Code: ${e.response?.statusCode}');
       throw Exception(e.message);
     }
 

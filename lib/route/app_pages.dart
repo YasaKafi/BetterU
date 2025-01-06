@@ -20,7 +20,7 @@ class AppPages {
   AppPages._();
 
 
-  static const INITIAL = Routes.LOGIN_PAGE;
+  static const INITIAL = Routes.BOTTOM_NAVBAR;
 
   static final routes = [
     GetPage(

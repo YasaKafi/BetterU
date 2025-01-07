@@ -1,4 +1,5 @@
 import 'package:better_u/presentation/global_components/custom_search_bar.dart';
+import 'package:better_u/presentation/global_components/shimmer_widget.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -105,9 +106,7 @@ class FoodPage extends GetView<FoodController> {
                             height: screenWidth * 0.5,
                             child: Obx(() {
                               if (controller.isLoadingFoodRecommendation.value) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
+                                return ShimmerWidgets.shimmerHorizontalFoodCard(screenWidth: MediaQuery.of(context).size.width, screenHeight: MediaQuery.of(context).size.height);
                               } else {
                                 return ListviewFoodHorizontal(foodList: controller.foodRecommendation);
                               }
@@ -126,13 +125,7 @@ class FoodPage extends GetView<FoodController> {
                             margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                             child: Obx(() {
                               if (controller.isLoadingFoodPopular.value) {
-                                return SizedBox(
-                                  width: screenWidth,
-                                  height: screenWidth * 0.5,
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
+                                return ShimmerWidgets.shimmerVerticalFoodCard(screenWidth: MediaQuery.of(context).size.width, screenHeight: MediaQuery.of(context).size.height);
                               } else {
                                 return ListviewFoodVertical(foodList: controller.foodPopular);
                               }

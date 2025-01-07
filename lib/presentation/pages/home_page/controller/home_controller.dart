@@ -40,6 +40,9 @@ class HomeController extends GetxController {
   String imageUrl = '';
   var selectedFood = ''.obs;
 
+  final ImagePicker _picker = ImagePicker();
+  Rxn<XFile> selectedImage = Rxn<XFile>();
+
   void selectFood(String food) {
     selectedFood.value = food;
   }
@@ -96,19 +99,14 @@ class HomeController extends GetxController {
     nutritionServices = NutritionServices();
     openRouterAPI = OpenRouterAPI();
 
-    // Memanggil getCurrentUser untuk mendapatkan data user
     await getCurrentUser();
 
-    // Jika sudah mendapatkan data user, maka lakukan perhitungan dan ambil data terkait
     if (dataUser.value != null) {
       await postCalculateNutrition();
       await getCurrentTotalNutrition();
       await getCurrentCombo();
     }
   }
-
-  final ImagePicker _picker = ImagePicker();
-  Rxn<XFile> selectedImage = Rxn<XFile>();
 
   Future<void> pickImageFromCamera() async {
     try {
@@ -546,6 +544,7 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
   Future<void> postCalculateNutrition() async {
     try {
+      isLoading(true);
       if (dataUser.value != null) {
         final currentUser = dataUser.value!;
         final response = await aiService.postCalculateNutrition(
@@ -568,9 +567,10 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       }
     } catch (e) {
       print('Error posting nutrition data: $e');
+    } finally {
+      isLoading(false);
     }
   }
-
 
   Future<void> postChatModelAnalisisFoodManual(BuildContext context) async {
     try {
@@ -684,47 +684,6 @@ Tolong lengkapi data yang hilang dalam format JSON seperti berikut:
     }
   }
 
-  Map<String, dynamic> parseAiResponseAnalisisFoodManual(String response) {
-    try {
-      // Cari posisi awal dan akhir JSON menggunakan regex
-      final match = RegExp(r'\{.*\}', dotAll: true).firstMatch(response);
-      if (match != null) {
-        final validJson = match.group(0)!; // Ekstrak bagian JSON
-
-        // Decode JSON menjadi Map
-        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
-
-        // Fungsi untuk menghitung rata-rata dari rentang string
-        int parseRange(String? value) {
-          if (value == null) return 0; // Nilai default jika data null
-          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
-          if (match != null) {
-            final min = int.parse(match.group(1)!);
-            final max = int.parse(match.group(2)!);
-            return ((min + max) / 2).round(); // Hitung rata-rata dan bulatkan ke int
-          }
-          // Jika tidak ada rentang, coba parsing angka langsung
-          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
-        }
-
-        return {
-          'kalori': parseRange(parsedResponse['kalori']),
-          'protein': parseRange(parsedResponse['protein']),
-          'lemak': parseRange(parsedResponse['lemak']),
-          'karbohidrat': parseRange(parsedResponse['karbohidrat']),
-          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
-        };
-      } else {
-        print('JSON tidak ditemukan dalam respons.');
-      }
-    } catch (e) {
-      print('Error parsing AI response: $e');
-    }
-
-    return {}; // Jika parsing gagal, kembalikan Map kosong
-  }
-
-
   Future<void> postChatModelAnalisisActivityManual(BuildContext context) async {
     try {
       // Nama aktivitas dari user input
@@ -807,46 +766,9 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
-  Map<String, dynamic> parseAiResponseAnalisisActivityManual(String response) {
-    try {
-      // Cari posisi tag penutup `}` terakhir
-      final endIndex = response.lastIndexOf('}');
-      if (endIndex != -1) {
-        final validJson = response.substring(0, endIndex + 1).trim();
-
-        // Parsing JSON yang valid
-        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
-
-        // Fungsi untuk menghitung rata-rata dari rentang string
-        int parseRange(String? value) {
-          if (value == null) return 0; // Nilai default jika data null
-          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
-          if (match != null) {
-            final min = int.parse(match.group(1)!);
-            final max = int.parse(match.group(2)!);
-            return ((min + max) / 2).round(); // Rata-rata dan bulatkan
-          }
-          // Jika tidak ada rentang, coba parsing angka langsung
-          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
-        }
-
-        // Kembalikan hasil parsing
-        return {
-          'kalori': parseRange(parsedResponse['kalori']),
-          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
-        };
-      } else {
-        print('Tag penutup JSON tidak ditemukan.');
-      }
-    } catch (e) {
-      print('Error parsing AI response: $e');
-    }
-
-    return {}; // Jika parsing gagal, kembalikan Map kosong
-  }
 
 
-
+  /// PARSE RESPONSE AI ///
 
 // Fungsi untuk mem-parsing response AI ke dalam Map
   Map<String, dynamic> parseAiResponseAnalisisFood(String response) {
@@ -925,6 +847,85 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
     return {}; // Jika parsing gagal, kembalikan Map kosong
   }
+
+  Map<String, dynamic> parseAiResponseAnalisisActivityManual(String response) {
+    try {
+      // Cari posisi tag penutup `}` terakhir
+      final endIndex = response.lastIndexOf('}');
+      if (endIndex != -1) {
+        final validJson = response.substring(0, endIndex + 1).trim();
+
+        // Parsing JSON yang valid
+        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
+
+        // Fungsi untuk menghitung rata-rata dari rentang string
+        int parseRange(String? value) {
+          if (value == null) return 0; // Nilai default jika data null
+          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
+          if (match != null) {
+            final min = int.parse(match.group(1)!);
+            final max = int.parse(match.group(2)!);
+            return ((min + max) / 2).round(); // Rata-rata dan bulatkan
+          }
+          // Jika tidak ada rentang, coba parsing angka langsung
+          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
+        }
+
+        // Kembalikan hasil parsing
+        return {
+          'kalori': parseRange(parsedResponse['kalori']),
+          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
+        };
+      } else {
+        print('Tag penutup JSON tidak ditemukan.');
+      }
+    } catch (e) {
+      print('Error parsing AI response: $e');
+    }
+
+    return {}; // Jika parsing gagal, kembalikan Map kosong
+  }
+
+  Map<String, dynamic> parseAiResponseAnalisisFoodManual(String response) {
+    try {
+      // Cari posisi awal dan akhir JSON menggunakan regex
+      final match = RegExp(r'\{.*\}', dotAll: true).firstMatch(response);
+      if (match != null) {
+        final validJson = match.group(0)!; // Ekstrak bagian JSON
+
+        // Decode JSON menjadi Map
+        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
+
+        // Fungsi untuk menghitung rata-rata dari rentang string
+        int parseRange(String? value) {
+          if (value == null) return 0; // Nilai default jika data null
+          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
+          if (match != null) {
+            final min = int.parse(match.group(1)!);
+            final max = int.parse(match.group(2)!);
+            return ((min + max) / 2).round(); // Hitung rata-rata dan bulatkan ke int
+          }
+          // Jika tidak ada rentang, coba parsing angka langsung
+          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
+        }
+
+        return {
+          'kalori': parseRange(parsedResponse['kalori']),
+          'protein': parseRange(parsedResponse['protein']),
+          'lemak': parseRange(parsedResponse['lemak']),
+          'karbohidrat': parseRange(parsedResponse['karbohidrat']),
+          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
+        };
+      } else {
+        print('JSON tidak ditemukan dalam respons.');
+      }
+    } catch (e) {
+      print('Error parsing AI response: $e');
+    }
+
+    return {}; // Jika parsing gagal, kembalikan Map kosong
+  }
+
 
   /// GET ///
 

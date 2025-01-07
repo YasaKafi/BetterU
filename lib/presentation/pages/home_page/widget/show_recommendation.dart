@@ -135,6 +135,7 @@ class ShowRecommendation extends StatelessWidget {
                                     children: [
                                       Obx(() {
                                         return CommonButton(
+                                          textAlign: TextAlign.center,
                                           text: capitalize(recommendationContent.makananOne ?? "Food 1") ,
                                           style: txtButton.copyWith(
                                             fontWeight: FontWeight.w600,
@@ -160,6 +161,7 @@ class ShowRecommendation extends StatelessWidget {
                                       SizedBox(height: 20),
                                       Obx(() {
                                         return CommonButton(
+                                          textAlign: TextAlign.center,
                                           text: capitalize(recommendationContent.makananTwo ?? "Food 2") ,
                                           style: txtButton.copyWith(
                                             fontWeight: FontWeight.w600,
@@ -193,6 +195,7 @@ class ShowRecommendation extends StatelessWidget {
                                     children: [
                                       Obx(() {
                                         return CommonButton(
+                                          textAlign: TextAlign.center,
                                           text: capitalize(recommendationContent.makananThree ?? "Food 3") ,
                                           style: txtButton.copyWith(
                                             fontWeight: FontWeight.w600,
@@ -218,6 +221,7 @@ class ShowRecommendation extends StatelessWidget {
                                       SizedBox(height: 20),
                                       Obx(() {
                                         return CommonButton(
+                                          textAlign: TextAlign.center,
                                           text: capitalize(recommendationContent.makananFour ?? "Food 4") ,
                                           style: txtButton.copyWith(
                                             fontWeight: FontWeight.w600,

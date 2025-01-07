@@ -15,6 +15,7 @@ String gifSuccessRegister = '${gif}success_register.png';
 String gifSearchLoading = '${gif}search_loading.png';
 String gifMaleAvatar = '${gif}male_profile.png';
 String gifFemaleAvatar = '${gif}woman_profile.png';
+String gifLazyPerson = '${gif}lazy_boy.png';
 
 
 
@@ -24,7 +25,7 @@ String icWavingHand = '${svgImages}waving_hand.svg';
 String icGoogle = '${svgImages}ic_google.svg';
 String icHistory = '${svgImages}history.svg';
 String icEdit = '${svgImages}edit.svg';
-String icCalendar = '${svgImages}calnder_outline.svg.svg';
+String icCalendar = '${svgImages}calnder_outline.svg';
 String icLogout = '${svgImages}logout.svg';
 String icScanner = '${svgImages}scanner.svg';
 String icKalori = '${svgImages}ic_kalori.svg';
@@ -34,6 +35,8 @@ String icLemak = '${svgImages}ic_lemak.svg';
 String icProtein = '${svgImages}ic_protein.svg';
 String icCamera = '${svgImages}ic_camera.svg';
 String icEatActivity = '${svgImages}eat_activity.svg';
+String icCaloriesBurned = '${svgImages}kalori_terbakar.svg';
+String icCaloriesAte = '${svgImages}kalori_dimakan.svg';
 String icSportActivity = '${svgImages}sport_activity.svg';
 String icHomeActive = '${svgImages}home_active.svg';
 String icHomeUnactive = '${svgImages}home_unactive.svg';

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
 import '../../../global_components/textfield_auth_custom.dart';
 import '../controller/home_controller.dart';
+import 'manual_input_nutrition.dart';
 
 class AddActivity extends StatelessWidget {
   const AddActivity({super.key});
@@ -201,6 +203,10 @@ class AddActivityForm extends StatelessWidget {
                       fontWeight: FontWeight.w500, color: blackColor),
                   children: [
                     TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = ()  {
+                          Get.to(() => ManualInputNutrition());
+                        },
                       text: ' Disini',
                       style: txtSecondaryTitle.copyWith(
                           fontWeight: FontWeight.w700, color: primaryColor),
@@ -323,6 +329,10 @@ class AddFoodForm extends StatelessWidget {
                         fontWeight: FontWeight.w500, color: blackColor),
                     children: [
                       TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = ()  {
+                            Get.to(() => ManualInputNutrition());
+                          },
                         text: ' Disini',
                         style: txtSecondaryTitle.copyWith(
                             fontWeight: FontWeight.w700, color: primaryColor),

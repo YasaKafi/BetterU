@@ -28,9 +28,9 @@ class ProfilePage extends GetView<ProfileController> {
             );
           } else {
             String gif() {
-              final String gender = controller.dataUser.value!.gender!;
+              final String gender = controller.dataUser.value?.gender ?? 'laki laki';
 
-              if (gender == 'Laki Laki') {
+              if (gender == 'laki laki') {
                 return gifMaleAvatar;
               } else {
                 return gifFemaleAvatar;

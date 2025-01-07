@@ -64,7 +64,7 @@ class ResultScan extends StatelessWidget {
                   Container(
                     width: screenWidth,
                     decoration: BoxDecoration(
-                      color: baseColor,
+                      color: primaryColor2,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

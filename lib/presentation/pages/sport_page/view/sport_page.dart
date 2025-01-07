@@ -1,5 +1,6 @@
 import 'package:better_u/common/dimensions.dart';
 import 'package:better_u/presentation/global_components/custom_search_bar.dart';
+import 'package:better_u/presentation/global_components/shimmer_widget.dart';
 import 'package:better_u/presentation/pages/food_page/controller/food_controller.dart';
 import 'package:better_u/presentation/pages/sport_page/controller/sport_controller.dart';
 import 'package:better_u/presentation/pages/sport_page/widget/card_sport_vertical.dart';
@@ -108,9 +109,7 @@ class SportPage extends GetView<SportController> {
                             height: screenWidth * 0.3,
                             child: Obx(() {
                               if (controller.isLoadingSportCategory.value) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
+                                return ShimmerWidgets.shimmerHorizontalSportCard(screenWidth: screenWidth, screenHeight: screenHeight);
                               } else {
                                 return ListviewSportHorizontal(
                                   sportCategory: controller.sportCategory,
@@ -136,13 +135,7 @@ class SportPage extends GetView<SportController> {
                             margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                             child: Obx(() {
                               if (controller.isLoadingSportRecommendation.value) {
-                                return SizedBox(
-                                  width: screenWidth,
-                                  height: screenWidth * 0.5,
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
+                                return ShimmerWidgets.shimmerVerticalSportCard(screenWidth: screenWidth, screenHeight: screenHeight);
                               } else {
                                 return ListviewSportVertical(sport: controller.sportRecommendation,);
                               }

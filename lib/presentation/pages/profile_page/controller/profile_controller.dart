@@ -38,11 +38,19 @@ class ProfileController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    initialize();
+  }
+
+  Future<void> initialize() async {
     userService = AuthServices();
     aiService = AiServices();
     nutritionServices = NutritionServices();
     getCurrentUser();
     getHistoryTotalNutrition(filterDate: '');
+  }
+
+  void refresh () {
+    initialize();
   }
 
 

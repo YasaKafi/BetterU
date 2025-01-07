@@ -1,3 +1,4 @@
+import 'package:better_u/presentation/global_components/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -12,52 +13,60 @@ import 'edit_activity.dart';
 
 class FoodListView extends StatelessWidget {
   final Rx<ShowCurrentCombo> currentCombo;
+  HomeController controller = Get.find();
 
-  const FoodListView({Key? key, required this.currentCombo}) : super(key: key);
+   FoodListView({Key? key, required this.currentCombo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       final comboData = currentCombo.value;
 
-      if (comboData.data == null || comboData.data!.isEmpty) {
-        return Center(
-          child: Text(
-            "Tidak ada data makanan.",
-            style: TextStyle(color: Colors.grey),
+
+      return Obx(() {
+        return controller.isLoading.value
+            ? ShimmerWidgets.shimmerCard()
+            : comboData.data == null || comboData.data!.isEmpty
+                ? Center(
+                    child: Text(
+                      "Tidak ada data makanan.",
+                      style: txtPrimarySubTitle.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: blackColor80,
+                      ),
+                    ),
+                  )
+                :
+          Column(
+          children: List.generate(
+            comboData.data!.length,
+                (index) {
+              final item = comboData.data![index];
+              return ActivityItemCard(
+                category: item.category ?? "Kategori Tidak Diketahui",
+                name: item.name ?? "Nama Tidak Diketahui",
+                icon: item.category == "Makan"
+                    ? icEatActivity
+                    : item.category == "Aktivitas"
+                    ? icSportActivity
+                    : icEatActivity,
+                kalori: item.kalori ?? 0,
+                item: item,
+                onTap: () {
+                  showMaterialModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) =>
+                    item.category == "Makan"
+                        ? _buildBottomSheetContentEat(context, item)
+                        : _buildBottomSheetContentSport(context, item),
+                  );
+                },
+              );
+            },
           ),
         );
-      }
-
-      return Column(
-        children: List.generate(
-          comboData.data!.length,
-              (index) {
-            final item = comboData.data![index];
-            return ActivityItemCard(
-              category: item.category ?? "Kategori Tidak Diketahui",
-              name: item.name ?? "Nama Tidak Diketahui",
-              icon: item.category == "Makan"
-                  ? icEatActivity
-                  : item.category == "Aktivitas"
-                  ? icSportActivity
-                  : icEatActivity,
-              kalori: item.kalori ?? 0,
-              item: item,
-              onTap: () {
-                showMaterialModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) => item.category == "Makan"
-                      ? _buildBottomSheetContentEat(context, item)
-                      : _buildBottomSheetContentSport(context, item),
-                );
-              },
-            );
-          },
-        ),
-      );
-
+      });
     });
   }
 
@@ -92,13 +101,19 @@ class FoodListView extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             margin: const EdgeInsets.only(top: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -284,7 +299,10 @@ class FoodListView extends StatelessWidget {
                     onPressed: () => Get.back(),
                     height: 60,
                     borderRadius: 10,
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     border: BorderSide(
                       color: primaryColor,
                       width: 2,
@@ -297,6 +315,7 @@ class FoodListView extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildBottomSheetContentSport(BuildContext context, DataCombo item) {
     return Container(
       padding: const EdgeInsets.only(top: 12, bottom: 40, right: 25, left: 25),
@@ -328,7 +347,10 @@ class FoodListView extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             margin: const EdgeInsets.only(top: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,7 +435,10 @@ class FoodListView extends StatelessWidget {
                     onPressed: () => Get.back(),
                     height: 60,
                     borderRadius: 10,
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     border: BorderSide(
                       color: primaryColor,
                       width: 2,
@@ -514,12 +539,14 @@ class ActivityItemCard extends StatelessWidget {
                         confirmTextColor: Colors.white,
                         onConfirm: () {
                           Get.back();
-                          Get.find<HomeController>().deleteDailyActivity(item.id ?? 0);
+                          Get.find<HomeController>().deleteDailyActivity(item
+                              .id ?? 0);
                         },
                       );
                     }
                   },
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<String>>[
                     PopupMenuItem<String>(
                       value: 'edit',
                       child: Row(

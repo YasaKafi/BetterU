@@ -1,4 +1,6 @@
 import 'package:better_u/presentation/pages/home_page/controller/home_controller.dart';
+import 'package:better_u/presentation/pages/home_page/widget/manual_input_nutrition.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +17,7 @@ class ManualInputFromScanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: primaryColor2,
       body: SafeArea(
         child: Column(
           children: [
@@ -93,21 +96,25 @@ class ManualInputFromScanner extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 20),
-                  // RichText(
-                  //   textAlign: TextAlign.center,
-                  //   text: TextSpan(
-                  //     text: 'Merasa kurang puas dengan hasilnya? yuk isi manual',
-                  //     style: txtSecondaryTitle.copyWith(
-                  //         fontWeight: FontWeight.w500, color: blackColor),
-                  //     children: [
-                  //       TextSpan(
-                  //         text: ' Disini',
-                  //         style: txtSecondaryTitle.copyWith(
-                  //             fontWeight: FontWeight.w700, color: primaryColor),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: 'Merasa kurang puas dengan hasilnya? yuk isi manual',
+                      style: txtSecondaryTitle.copyWith(
+                          fontWeight: FontWeight.w500, color: blackColor),
+                      children: [
+                        TextSpan(
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = ()  {
+                              Get.to(() => ManualInputNutrition());
+                            },
+                          text: ' Disini',
+                          style: txtSecondaryTitle.copyWith(
+                              fontWeight: FontWeight.w700, color: primaryColor),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

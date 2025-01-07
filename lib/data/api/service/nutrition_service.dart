@@ -13,14 +13,14 @@ class NutritionServices {
 
   /// GET ///
 
-  Future<Response> showCurrentTotalNutrition() async {
+  Future<Response> showCurrentTotalNutrition({bool? isHistory = false, String? date}) async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
       final response = await _dioInstance.getRequest(
         endpoint: BetterUApiRepository.getCurrentTotalNutrition,
         queryParameters: {
-          'date': formattedDate,
+          'date': isHistory == false ? formattedDate : date,
         },
         isAuthorize: true,
       );
@@ -37,7 +37,7 @@ class NutritionServices {
       final response = await _dioInstance.getRequest(
         endpoint: BetterUApiRepository.getHistoryTotalNutrition,
         queryParameters: {
-          'days': filterDate,
+          'days': filterDate ?? '',
         },
         isAuthorize: true,
       );
@@ -48,14 +48,14 @@ class NutritionServices {
     }
   }
 
-  Future<Response> showCurrentCombo() async {
+  Future<Response> showCurrentCombo({bool? isHistory = false, String? date}) async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
       final response = await _dioInstance.getRequest(
         endpoint: BetterUApiRepository.getCurrentCombo,
         queryParameters: {
-          'date': formattedDate,
+          'date': isHistory == false ? formattedDate : date,
         },
         isAuthorize: true,
       );

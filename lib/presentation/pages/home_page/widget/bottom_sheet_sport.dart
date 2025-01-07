@@ -9,7 +9,7 @@ import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
 
-Widget buildBottomSheetContentActivity(BuildContext context, NutritionInformationFromAI item, ) {
+Widget buildBottomSheetContentActivity(BuildContext context, NutritionInformationFromAI item, bool? isInputManual ) {
   final controller = Get.find<HomeController>();
 
   return Container(
@@ -147,6 +147,7 @@ Widget buildBottomSheetContentActivity(BuildContext context, NutritionInformatio
                             name: item.name,
                             kalori: item.kalori.toString(),
                             note: item.catatan,
+                            isInputManual: isInputManual,
                           );
 
                         },

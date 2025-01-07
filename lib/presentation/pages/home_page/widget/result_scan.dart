@@ -22,324 +22,324 @@ class ResultScan extends StatelessWidget {
   HomeController homeController = Get.find();
 
 
+
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: primaryColor2,
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: screenWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 40),
-              // Header
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    Text(
-                      'Hasil Scan',
-                      style: txtSecondaryHeader.copyWith(
-                          fontWeight: FontWeight.w700, color: blackColor),
-                    ),
-                    SizedBox(width: 40),
-                  ],
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 40),
+            // Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Text(
+                    'Hasil Scan',
+                    style: txtSecondaryHeader.copyWith(
+                        fontWeight: FontWeight.w700, color: blackColor),
+                  ),
+                  SizedBox(width: 40),
+                ],
               ),
-              SizedBox(height: 30),
+            ),
+            SizedBox(height: 30),
 
-              // Result Scan
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                        color: baseColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Image
-                          imagePath != null
-                              ? Container(
-                            width: screenWidth,
-                            height: 300,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.file(
-                                File(imagePath!),
-                                fit: BoxFit.cover,
-                              )
-                            ),
-                          )
-                              : Container(
-                            width: screenWidth,
-                            height: 300,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                imgExFood,
-                                fit: BoxFit.cover,
-                              ),
+            // Result Scan
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                      color: baseColor,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Image
+                        imagePath != null
+                            ? Container(
+                          width: screenWidth,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.file(
+                              File(imagePath!),
+                              fit: BoxFit.cover,
+                            )
+                          ),
+                        )
+                            : Container(
+                          width: screenWidth,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              imgExFood,
+                              fit: BoxFit.cover,
                             ),
                           ),
+                        ),
 
-                          const SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-                            width: screenWidth,
-                            decoration: BoxDecoration(
-                              color: primaryColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.info_outline, size: 24, color: primaryColor,
-                                ),
-                                SizedBox(width: 10,),
-                                Flexible(
-                                  child: RichText(
-                                    textAlign: TextAlign.start,
-                                    text: TextSpan(
-                                      text: 'Bukan makananmu? Anda bisa mencari makanan yang relevan dengan foto mu',
-                                      style: txtPrimarySubTitle.copyWith(
-                                          fontWeight: FontWeight.w400, color: primaryColor),
-                                      children: [
-                                        TextSpan(
-                                          text: ' Disini',
-                                          style: txtPrimarySubTitle.copyWith(
-                                              fontWeight: FontWeight.w700, color: primaryColor),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () async {
-                                            await homeController.postImageToURL();
-                                            await homeController.postRecommendationFood();
-                                            },
-                                        ),
-                                      ],
-                                    ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                          width: screenWidth,
+                          decoration: BoxDecoration(
+                            color: primaryColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.info_outline, size: 24, color: primaryColor,
+                              ),
+                              SizedBox(width: 10,),
+                              Flexible(
+                                child: RichText(
+                                  textAlign: TextAlign.start,
+                                  text: TextSpan(
+                                    text: 'Bukan makananmu? Anda bisa mencari makanan yang relevan dengan foto mu',
+                                    style: txtPrimarySubTitle.copyWith(
+                                        fontWeight: FontWeight.w400, color: primaryColor),
+                                    children: [
+                                      TextSpan(
+                                        text: ' Disini',
+                                        style: txtPrimarySubTitle.copyWith(
+                                            fontWeight: FontWeight.w700, color: primaryColor),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                          await homeController.postImageToURL(context);
+                                          await homeController.postRecommendationFood(context);
+                                          },
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-
-                            ),
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${item.name}",
-                                style: txtPrimaryTitle.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: blackColor,
-                                ),
-                              ),
-                              const SizedBox(height: 3),
-                              Text(
-                                "${item.kalori} kkal",
-                                style: txtPrimarySubTitle.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: blackColor80,
-                                ),
                               ),
                             ],
-                          ),
-                          const SizedBox(height: 30),
 
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          icProtein,
-                                          width: 46,
-                                          height: 46,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Protein",
-                                              style: txtSecondaryTitle.copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${item.protein ?? 0} gram",
-                                              style: txtPrimaryTitle.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 30),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          icKarbo,
-                                          width: 46,
-                                          height: 46,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Karbohidrat",
-                                              style: txtSecondaryTitle.copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${item.karbohidrat ?? 0} gram",
-                                              style: txtPrimaryTitle.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(width: 40),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          icLemak,
-                                          width: 46,
-                                          height: 46,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Lemak",
-                                              style: txtSecondaryTitle.copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${item.lemak ?? 0} gram",
-                                              style: txtPrimaryTitle.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 30),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          icKalori,
-                                          width: 46,
-                                          height: 46,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Kalori",
-                                              style: txtSecondaryTitle.copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${item.kalori ?? 0} kkal",
-                                              style: txtPrimaryTitle.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: blackColor,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${item.name}",
+                              style: txtPrimaryTitle.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: blackColor,
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 3),
+                            Text(
+                              "${item.kalori} kkal",
+                              style: txtPrimarySubTitle.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: blackColor80,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
 
-                          const SizedBox(height: 30),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(
-                                "Catatan",
-                                style: txtPrimaryTitle.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: blackColor,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        icProtein,
+                                        width: 46,
+                                        height: 46,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Protein",
+                                            style: txtSecondaryTitle.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${item.protein ?? 0} gram",
+                                            style: txtPrimaryTitle.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        icKarbo,
+                                        width: 46,
+                                        height: 46,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Karbohidrat",
+                                            style: txtSecondaryTitle.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${item.karbohidrat ?? 0} gram",
+                                            style: txtPrimaryTitle.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 3),
-                              Text(
-                                "${item.catatan}",
-                                style: txtPrimarySubTitle.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: blackColor80,
-                                ),
-                              ),
+                              SizedBox(width: 40),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        icLemak,
+                                        width: 46,
+                                        height: 46,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Lemak",
+                                            style: txtSecondaryTitle.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${item.lemak ?? 0} gram",
+                                            style: txtPrimaryTitle.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        icKalori,
+                                        width: 46,
+                                        height: 46,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Kalori",
+                                            style: txtSecondaryTitle.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${item.kalori ?? 0} kkal",
+                                            style: txtPrimaryTitle.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: blackColor,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              )
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+
+                        const SizedBox(height: 30),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Catatan",
+                              style: txtPrimaryTitle.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: blackColor,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              "${item.catatan}",
+                              style: txtPrimarySubTitle.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: blackColor80,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 150),
+
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: Padding(

@@ -44,10 +44,9 @@ class HomeController extends GetxController {
     selectedFood.value = food;
   }
 
-
-
   TextEditingController foodController = TextEditingController();
   TextEditingController kaloriController = TextEditingController();
+  TextEditingController kaloriTerbakarController = TextEditingController();
   TextEditingController proteinController = TextEditingController();
   TextEditingController lemakController = TextEditingController();
   TextEditingController karboController = TextEditingController();
@@ -79,6 +78,10 @@ class HomeController extends GetxController {
     karboController.dispose();
     userMessageController.dispose();
     userMessageController.clear();
+    userMessageActivityController.dispose();
+    userMessageActivityController.clear();
+    kaloriController.clear();
+
   }
 
   @override
@@ -105,8 +108,7 @@ class HomeController extends GetxController {
   }
 
   final ImagePicker _picker = ImagePicker();
-  Rxn<XFile> selectedImage =
-      Rxn<XFile>();
+  Rxn<XFile> selectedImage = Rxn<XFile>();
 
   Future<void> pickImageFromCamera() async {
     try {
@@ -135,7 +137,6 @@ class HomeController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -151,10 +152,11 @@ class HomeController extends GetxController {
               SizedBox(width: 20),
               Center(
                   child: Text(
-                      "Tunggu ya kami sedang menganalisis kegiatan kamu... ",
-                      textAlign: TextAlign.center,
-                      style: txtSecondaryTitle.copyWith(fontWeight: FontWeight.w400, color: blackColor),)),
-
+                "Tunggu ya kami sedang menganalisis kegiatan kamu... ",
+                textAlign: TextAlign.center,
+                style: txtSecondaryTitle.copyWith(
+                    fontWeight: FontWeight.w400, color: blackColor),
+              )),
               SizedBox(height: 20),
               CommonButton(
                   text: 'Batalkan',
@@ -202,18 +204,26 @@ class HomeController extends GetxController {
 
   /// POST ///
 
-
-  Future<void> postImageToURL () async {
+  Future<void> postImageToURL(BuildContext context) async {
     try {
-      isLoading(true);
-      final response = await nutritionServices.postImageToUrl(file: File(selectedImage.value!.path));
+      isCancelled = false; // Reset flag sebelum mulai proses
+      showLoadingDialog(context);
+
+      final response = await nutritionServices.postImageToUrl(
+          file: File(selectedImage.value!.path));
+
+      if (isCancelled) {
+        print('Proses dibatalkan saat prediksi makanan.');
+        return; // Hentikan eksekusi jika dibatalkan
+      }
 
       print("CHECK POST IMAGE TO URL RESPONSE");
       print(response.data);
 
       if (response.data != null) {
+        imageUrl = response.data['data']['image'];
 
-        imageUrl = response.data['data']['image'] ;
+        Get.back();
 
         print("Image URL: $imageUrl");
       } else {
@@ -221,22 +231,30 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print('Error fetching recommendation food: $e');
-    } finally {
-      isLoading(false);
     }
   }
 
-  Future<void> postRecommendationFood () async {
+  Future<void> postRecommendationFood(BuildContext context) async {
     try {
-      isLoading(true);
-      final response = await aiService.postRecommendationFood(imageUrl: imageUrl);
+      isCancelled = false; // Reset flag sebelum mulai proses
+      showLoadingDialog(context);
+
+      final response =
+          await aiService.postRecommendationFood(imageUrl: imageUrl);
+
+      if (isCancelled) {
+        print('Proses dibatalkan saat prediksi makanan.');
+        return; // Hentikan eksekusi jika dibatalkan
+      }
 
       print("CHECK RECOMMENDATION FOOD RESPONSE");
       print(response.data);
 
       if (response.data != null) {
-        final recommendationData = ShowRecommendationFood.fromJson(response.data);
-        final contentString = recommendationData.choices!.first.message!.content;
+        final recommendationData =
+            ShowRecommendationFood.fromJson(response.data);
+        final contentString =
+            recommendationData.choices!.first.message!.content;
         print("Recommendation Data: $contentString");
 
         final parsedContent = RecommendationContent.fromJson(
@@ -249,17 +267,16 @@ class HomeController extends GetxController {
         print("Makanan Three: ${parsedContent.makananThree}");
         print("Makanan Four: ${parsedContent.makananFour}");
 
+        Get.back();
 
-        Get.to(
-            () => ShowRecommendation(recommendationContent: parsedContent, imagePath: selectedImage.value!.path)
-        );
+        Get.to(() => ShowRecommendation(
+            recommendationContent: parsedContent,
+            imagePath: selectedImage.value!.path));
       } else {
         print("Response data is null");
       }
     } catch (e) {
       print('Error fetching recommendation food: $e');
-    } finally {
-      isLoading(false);
     }
   }
 
@@ -359,20 +376,21 @@ class HomeController extends GetxController {
   }
 
   Future<void> postChatModelAnalisisFood(BuildContext context,
-      {bool? isPredict = false, bool? isFromRecommendation = false, bool? isFromInputManual = false}) async {
+      {bool? isPredict = false,
+      bool? isFromRecommendation = false,
+      bool? isFromInputManual = false}) async {
     try {
       // Nama makanan dari user input
 
-       String userMessage = '';
+      String userMessage = '';
 
       if (isPredict == true) {
-         userMessage = responsePredict.value;
+        userMessage = responsePredict.value;
       } else if (isFromRecommendation == true) {
-         userMessage = selectedFood.value;
+        userMessage = selectedFood.value;
       } else {
         userMessage = userMessageController.text.trim();
       }
-
 
       // Prompt yang digunakan untuk AI
       String prompt = '''
@@ -385,7 +403,7 @@ Formatkan respons Anda dalam JSON dengan struktur berikut:
   "karbohidrat": "Jumlah karbohidrat dalam gram",
   "catatan": "Saran kesehatan untuk makanan ini dan sebutkan efek bagi tubuh jika makanan ini menurut kesehatan ini tidak baik , berupa 1 paragraf"
 }
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan.
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }.
 '''
           .trim();
 
@@ -437,20 +455,23 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
           // Tampilkan hasil ke Bottom Sheet
 
           if (isPredict == true) {
-            Get.to(() => ResultScan(item: nutritionInformationFromAI.value,
-              imagePath: selectedImage.value!.path,
-            ));
+            Get.to(() => ResultScan(
+                  item: nutritionInformationFromAI.value,
+                  imagePath: selectedImage.value!.path,
+                ));
           } else {
-
-          Get.bottomSheet(
-            Builder(
-              builder: (BuildContext context) {
-                return buildBottomSheetContentEat(
-                    context, nutritionInformationFromAI.value, isFromRecommendation, isFromInputManual);
-              },
-            ),
-            isScrollControlled: true,
-          );
+            Get.bottomSheet(
+              Builder(
+                builder: (BuildContext context) {
+                  return buildBottomSheetContentEat(
+                      context,
+                      nutritionInformationFromAI.value,
+                      isFromRecommendation,
+                      isFromInputManual);
+                },
+              ),
+              isScrollControlled: true,
+            );
           }
         } else {
           print('Data dari AI tidak sesuai atau kosong.');
@@ -475,7 +496,7 @@ Formatkan respons Anda dalam JSON dengan struktur berikut:
   "kalori": "Jumlah kalori terbakar dalam Kkal",
   "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk , berupa 1 paragraf",
 }
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }.
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> } jika response anda tidak terdapat tag penutup -> } sebelumnya.
 '''
           .trim();
 
@@ -511,7 +532,7 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
           Get.bottomSheet(
             isScrollControlled: true,
             buildBottomSheetContentActivity(
-                context, nutritionInformationFromAI.value),
+                context, nutritionInformationFromAI.value, false),
           );
         } else {
           print('Data dari AI tidak sesuai atau kosong.');
@@ -550,32 +571,316 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+
+  Future<void> postChatModelAnalisisFoodManual(BuildContext context) async {
+    try {
+      // Nama makanan dari user input
+
+      String userMessage = foodController.text.trim();
+
+      String generatePrompt(String userMessage,
+          {String? kalori, String? protein, String? lemak, String? karbohidrat}) {
+        // Buat list untuk field yang kosong
+        List<String> missingFields = [];
+
+        if (kalori == null || kalori == '') missingFields.add('kalori');
+        if (protein == null || protein == '') missingFields.add('protein');
+        if (lemak == null || lemak == '') missingFields.add('lemak');
+        if (karbohidrat == null || karbohidrat == '')
+          missingFields.add('karbohidrat');
+
+        // Jika semua field terisi
+        if (missingFields.isEmpty) {
+          return '''
+Semua data nutrisi untuk "$userMessage" sudah lengkap.
+Tolong masukkan data ke dalam format JSON seperti berikut:
+{
+  "kalori": "$kalori",
+  "protein": "$protein",
+  "lemak": "$lemak",
+  "karbohidrat": "$karbohidrat",
+  "catatan": "Saran kesehatan untuk makanan ini dan efek bagi tubuh jika makanan ini tidak baik, berupa 1 paragraf"
+}
+'''
+              .trim();
+        }
+
+        // Jika ada field yang kosong, minta AI melengkapi data
+        String prompt = '''
+Nama makanan: "$userMessage".
+Data berikut belum diketahui: ${missingFields.join(', ')}.
+Tolong lengkapi data yang hilang dalam format JSON seperti berikut:
+{
+  ${missingFields.contains('kalori') ? '"kalori": "Jumlah kalori dalam Kkal",' : '"kalori": "$kalori",'}
+  ${missingFields.contains('protein') ? '"protein": "Jumlah protein dalam gram",' : '"protein": "$protein",'}
+  ${missingFields.contains('lemak') ? '"lemak": "Jumlah lemak dalam gram",' : '"lemak": "$lemak",'}
+  ${missingFields.contains('karbohidrat') ? '"karbohidrat": "Jumlah karbohidrat dalam gram",' : '"karbohidrat": "$karbohidrat",'}
+  "catatan": "Saran kesehatan untuk makanan ini dan efek bagi tubuh jika makanan ini tidak baik, berupa 1 paragraf"
+}
+'''
+            .trim();
+
+        return prompt;
+      }
+
+      // Panggil API untuk mendapatkan hasil dari prompt
+      final response =
+          await openRouterAPI.callChatModel(generatePrompt(userMessage, kalori: kaloriController.text, protein: proteinController.text, lemak: lemakController.text, karbohidrat: karboController.text));
+
+      // Validasi response dan parsing data
+      if (response != null && response.isNotEmpty) {
+        print('Raw AI Response: $response');
+
+        final Map<String, dynamic> parsedData =
+        parseAiResponseAnalisisFoodManual(response);
+
+        String capitalizeEachWord(String input) {
+          return input.split(' ').map((word) {
+            return toBeginningOfSentenceCase(word.toLowerCase()) ?? word;
+          }).join(' ');
+        }
+
+        if (parsedData.isNotEmpty) {
+          // Simpan data ke dalam model
+          nutritionInformationFromAI.value = NutritionInformationFromAI(
+            name: capitalizeEachWord(userMessage),
+            kalori: parsedData['kalori'] ?? 0,
+            protein: parsedData['protein'] ?? 0,
+            lemak: parsedData['lemak'] ?? 0,
+            karbohidrat: parsedData['karbohidrat'] ?? 0,
+            catatan: parsedData['catatan'] ?? 'Tidak ada catatan.',
+          );
+
+          // Debug output
+          print(
+              'Nutrition Data Kalori: ${nutritionInformationFromAI.value.kalori}');
+          print(
+              'Nutrition Data Name: ${nutritionInformationFromAI.value.name}');
+          print(
+              'Nutrition Data Lemak: ${nutritionInformationFromAI.value.lemak}');
+          print(
+              'Nutrition Data Karbo: ${nutritionInformationFromAI.value.karbohidrat}');
+          print(
+              'Nutrition Data Protein: ${nutritionInformationFromAI.value.protein}');
+          print(
+              'Nutrition Data Note: ${nutritionInformationFromAI.value.catatan}');
+
+          Get.bottomSheet(
+            Builder(
+              builder: (BuildContext context) {
+                return buildBottomSheetContentEat(
+                    context, nutritionInformationFromAI.value, false, true);
+              },
+            ),
+            isScrollControlled: true,
+          );
+        } else {
+          print('Data dari AI tidak sesuai atau kosong.');
+        }
+      }
+    } catch (e, stackTrace) {
+      print('Error: $e');
+      print('Stack trace: $stackTrace');
+    }
+  }
+
+  Map<String, dynamic> parseAiResponseAnalisisFoodManual(String response) {
+    try {
+      // Cari posisi awal dan akhir JSON menggunakan regex
+      final match = RegExp(r'\{.*\}', dotAll: true).firstMatch(response);
+      if (match != null) {
+        final validJson = match.group(0)!; // Ekstrak bagian JSON
+
+        // Decode JSON menjadi Map
+        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
+
+        // Fungsi untuk menghitung rata-rata dari rentang string
+        int parseRange(String? value) {
+          if (value == null) return 0; // Nilai default jika data null
+          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
+          if (match != null) {
+            final min = int.parse(match.group(1)!);
+            final max = int.parse(match.group(2)!);
+            return ((min + max) / 2).round(); // Hitung rata-rata dan bulatkan ke int
+          }
+          // Jika tidak ada rentang, coba parsing angka langsung
+          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
+        }
+
+        return {
+          'kalori': parseRange(parsedResponse['kalori']),
+          'protein': parseRange(parsedResponse['protein']),
+          'lemak': parseRange(parsedResponse['lemak']),
+          'karbohidrat': parseRange(parsedResponse['karbohidrat']),
+          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
+        };
+      } else {
+        print('JSON tidak ditemukan dalam respons.');
+      }
+    } catch (e) {
+      print('Error parsing AI response: $e');
+    }
+
+    return {}; // Jika parsing gagal, kembalikan Map kosong
+  }
+
+
+  Future<void> postChatModelAnalisisActivityManual(BuildContext context) async {
+    try {
+      // Nama aktivitas dari user input
+      final String userMessage = userMessageActivityController.text.trim();
+
+      // Prompt generator
+      String generatePrompt(String userMessage, {String? kalori}) {
+        if (kalori != null && kalori != '') {
+          // Jika kalori sudah diisi, berikan respons langsung
+          return '''
+Semua data untuk aktivitas "$userMessage" sudah lengkap.
+Kalori yang terbakar: $kalori Kkal.
+Formatkan respons Anda dalam JSON dengan struktur berikut:
+{
+  "kalori": "$kalori",
+  "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk, berupa 1 paragraf"
+}
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }  jika response anda tidak terdapat tag penutup -> } sebelumnya.
+'''
+              .trim();
+        }
+
+        // Jika kalori belum diisi, minta AI melengkapi
+        return '''
+Berikan informasi tentang komposisi aktivitas olahraga berikut: "$userMessage". 
+Formatkan respons Anda dalam JSON dengan struktur berikut:
+{
+  "kalori": "Jumlah kalori terbakar dalam Kkal",
+  "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk, berupa 1 paragraf"
+}
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }  jika response anda tidak terdapat tag penutup -> } sebelumnya.
+'''
+            .trim();
+      }
+
+      // Generate prompt
+      String prompt = generatePrompt(userMessage, kalori: kaloriTerbakarController.value.text);
+
+      // Panggil API untuk mendapatkan hasil dari prompt
+      final response = await openRouterAPI.callChatModel(prompt);
+
+      // Validasi response dan parsing data
+      if (response != null && response.isNotEmpty) {
+        print('Raw AI Response: $response');
+
+        final Map<String, dynamic> parsedData =
+        parseAiResponseAnalisisActivityManual(response);
+
+        String capitalizeEachWord(String input) {
+          return input.split(' ').map((word) {
+            return toBeginningOfSentenceCase(word.toLowerCase()) ?? word;
+          }).join(' ');
+        }
+
+        if (parsedData.isNotEmpty) {
+          // Simpan data ke dalam model
+          nutritionInformationFromAI.value = NutritionInformationFromAI(
+            name: capitalizeEachWord(userMessage),
+            kalori: parsedData['kalori'] ?? 0,
+            catatan: parsedData['catatan'] ?? 'Tidak ada catatan.',
+          );
+
+          // Debug output
+          print('Nutrition Data Kalori: ${parsedData['kalori']}');
+          print('Nutrition Data: ${nutritionInformationFromAI.value}');
+
+          // Tampilkan hasil ke Bottom Sheet
+          Get.bottomSheet(
+            isScrollControlled: true,
+            buildBottomSheetContentActivity(
+                context, nutritionInformationFromAI.value, true),
+          );
+        } else {
+          print('Data dari AI tidak sesuai atau kosong.');
+        }
+      }
+    } catch (e, s) {
+      print('Error posting chat model: $e');
+      print('Stack Trace: $s');
+    }
+  }
+
+  Map<String, dynamic> parseAiResponseAnalisisActivityManual(String response) {
+    try {
+      // Cari posisi tag penutup `}` terakhir
+      final endIndex = response.lastIndexOf('}');
+      if (endIndex != -1) {
+        final validJson = response.substring(0, endIndex + 1).trim();
+
+        // Parsing JSON yang valid
+        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
+
+        // Fungsi untuk menghitung rata-rata dari rentang string
+        int parseRange(String? value) {
+          if (value == null) return 0; // Nilai default jika data null
+          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
+          if (match != null) {
+            final min = int.parse(match.group(1)!);
+            final max = int.parse(match.group(2)!);
+            return ((min + max) / 2).round(); // Rata-rata dan bulatkan
+          }
+          // Jika tidak ada rentang, coba parsing angka langsung
+          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
+        }
+
+        // Kembalikan hasil parsing
+        return {
+          'kalori': parseRange(parsedResponse['kalori']),
+          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
+        };
+      } else {
+        print('Tag penutup JSON tidak ditemukan.');
+      }
+    } catch (e) {
+      print('Error parsing AI response: $e');
+    }
+
+    return {}; // Jika parsing gagal, kembalikan Map kosong
+  }
+
+
+
+
 // Fungsi untuk mem-parsing response AI ke dalam Map
   Map<String, dynamic> parseAiResponseAnalisisFood(String response) {
     try {
-      final parsedResponse = jsonDecode(response) as Map<String, dynamic>;
+      final endIndex = response.lastIndexOf('}');
+      if (endIndex != -1) {
+        final validJson = response.substring(0, endIndex + 1);
 
-      // Fungsi untuk menghitung rata-rata dari rentang string
-      int parseRange(String? value) {
-        if (value == null) return 0; // Nilai default jika data null
-        final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
-        if (match != null) {
-          final min = int.parse(match.group(1)!);
-          final max = int.parse(match.group(2)!);
-          return ((min + max) / 2)
-              .round(); // Hitung rata-rata dan bulatkan ke int
+        final parsedResponse = jsonDecode(validJson) as Map<String, dynamic>;
+
+        // Fungsi untuk menghitung rata-rata dari rentang string
+        int parseRange(String? value) {
+          if (value == null) return 0; // Nilai default jika data null
+          final match = RegExp(r'(\d+)-(\d+)').firstMatch(value);
+          if (match != null) {
+            final min = int.parse(match.group(1)!);
+            final max = int.parse(match.group(2)!);
+            return ((min + max) / 2)
+                .round(); // Hitung rata-rata dan bulatkan ke int
+          }
+          // Jika tidak ada rentang, coba parsing angka langsung
+          return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
         }
-        // Jika tidak ada rentang, coba parsing angka langsung
-        return int.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ?? 0;
-      }
 
-      return {
-        'kalori': parseRange(parsedResponse['kalori']),
-        'protein': parseRange(parsedResponse['protein']),
-        'lemak': parseRange(parsedResponse['lemak']),
-        'karbohidrat': parseRange(parsedResponse['karbohidrat']),
-        'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
-      };
+        return {
+          'kalori': parseRange(parsedResponse['kalori']),
+          'protein': parseRange(parsedResponse['protein']),
+          'lemak': parseRange(parsedResponse['lemak']),
+          'karbohidrat': parseRange(parsedResponse['karbohidrat']),
+          'catatan': parsedResponse['catatan'] ?? 'Tidak ada catatan.',
+        };
+      } else {
+        print('Tag penutup JSON tidak ditemukan.');
+      }
     } catch (e) {
       print('Error parsing AI response: $e');
     }
@@ -620,7 +925,6 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
     return {}; // Jika parsing gagal, kembalikan Map kosong
   }
-
 
   /// GET ///
 
@@ -716,8 +1020,6 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
-
-
   /// PUT ///
 
   Future<void> postDailyActivity(
@@ -727,7 +1029,10 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       String? lemak,
       String? protein,
       String? karbohidrat,
-      required String note, bool? isFromRecommendation = false, bool? isFromResultScan = false, bool? isInputManual = false}) async {
+      required String note,
+      bool? isFromRecommendation = false,
+      bool? isFromResultScan = false,
+      bool? isInputManual = false}) async {
     try {
       isLoading(true);
       final response = await nutritionServices.postDailyActivity(
@@ -748,19 +1053,21 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
         if (isFromRecommendation == true) {
           Get.back();
-          Get.offNamedUntil(Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
         }
 
         if (isFromResultScan == true) {
           Get.back();
-          Get.offNamedUntil(Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
         }
 
         if (isInputManual == true) {
           Get.back();
-          Get.offNamedUntil(Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
         }
-
 
         Get.back();
         Get.back();
@@ -784,14 +1091,14 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
   }
 
   Future<void> putDailyActivity(
-      int dailyActivityID,
-      String name,
-      String category,
-      String kalori,
-      String? lemak,
-      String? protein,
-      String? karbohidrat,
-      ) async {
+    int dailyActivityID,
+    String name,
+    String category,
+    String kalori,
+    String? lemak,
+    String? protein,
+    String? karbohidrat,
+  ) async {
     try {
       isLoading(true);
       final response = await nutritionServices.putDailyActivity(

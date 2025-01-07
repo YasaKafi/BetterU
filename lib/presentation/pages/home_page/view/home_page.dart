@@ -370,7 +370,6 @@ class HomePage extends GetView<HomeController> {
                 Container(
                   padding: EdgeInsets.only(bottom: 80),
                     width: screenWidth,
-                    height: 500,
                     // height: 400,
                     child: FoodListView(currentCombo: controller.currentCombo)),
               ],

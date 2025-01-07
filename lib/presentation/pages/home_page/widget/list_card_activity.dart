@@ -29,30 +29,35 @@ class FoodListView extends StatelessWidget {
         );
       }
 
-      return ListView.builder(
-        itemCount: comboData.data!.length,
-        itemBuilder: (context, index) {
-          final item = comboData.data![index];
-          return ActivityItemCard(
-            category: item.category ?? "Kategori Tidak Diketahui",
-            name: item.name ?? "Nama Tidak Diketahui",
-            icon: item.category == "Makan"
-                ? icEatActivity
-                : item.category == "Aktivitas"
-                ? icSportActivity
-                : icEatActivity,
-            kalori: item.kalori ?? 0,
-            item: item,
-            onTap: () {
-              showMaterialModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => item.category == "Makan" ?  _buildBottomSheetContentEat(context, item) : _buildBottomSheetContentSport(context, item),
-              );
-            },
-          );
-        },
+      return Column(
+        children: List.generate(
+          comboData.data!.length,
+              (index) {
+            final item = comboData.data![index];
+            return ActivityItemCard(
+              category: item.category ?? "Kategori Tidak Diketahui",
+              name: item.name ?? "Nama Tidak Diketahui",
+              icon: item.category == "Makan"
+                  ? icEatActivity
+                  : item.category == "Aktivitas"
+                  ? icSportActivity
+                  : icEatActivity,
+              kalori: item.kalori ?? 0,
+              item: item,
+              onTap: () {
+                showMaterialModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => item.category == "Makan"
+                      ? _buildBottomSheetContentEat(context, item)
+                      : _buildBottomSheetContentSport(context, item),
+                );
+              },
+            );
+          },
+        ),
       );
+
     });
   }
 
@@ -465,20 +470,24 @@ class ActivityItemCard extends StatelessWidget {
                   height: 45,
                 ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      category,
-                      style: txtPrimaryTitle.copyWith(
-                          fontWeight: FontWeight.w600, color: blackColor),
-                    ),
-                    Text(
-                      name,
-                      style: txtPrimarySubTitle.copyWith(
-                          fontWeight: FontWeight.w500, color: blackColor30),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        category,
+                        style: txtPrimaryTitle.copyWith(
+                            fontWeight: FontWeight.w600, color: blackColor),
+                      ),
+                      Text(
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        name,
+                        style: txtPrimarySubTitle.copyWith(
+                            fontWeight: FontWeight.w500, color: blackColor30),
+                      ),
+                    ],
+                  ),
                 ),
                 const Spacer(),
                 PopupMenuButton<String>(

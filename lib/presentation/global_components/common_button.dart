@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -20,6 +22,7 @@ class CommonButton extends StatelessWidget {
     this.icon,
     this.padding,
     this.border,
+    this.textAlign,
   });
 
   String text;
@@ -35,6 +38,7 @@ class CommonButton extends StatelessWidget {
   Widget? icon;
   EdgeInsets? padding;
   BorderSide? border;
+  TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +56,7 @@ class CommonButton extends StatelessWidget {
 
         ),
         child: icon ?? Text(
+          textAlign: textAlign,
           text,
           style: style ?? txtButton.copyWith(
             fontWeight: fontWeight ?? FontWeight.w600,

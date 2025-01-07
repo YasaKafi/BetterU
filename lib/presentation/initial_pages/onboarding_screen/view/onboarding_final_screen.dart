@@ -32,7 +32,7 @@ class OnboardingFinalScreen extends StatelessWidget {
                       SizedBox(height: 60),
                       Column(
                         children: [
-                          Center(child: Image.asset(gifHappyTogether)),
+                          Center(child: Image.asset(gifLazyPerson)),
                           SizedBox(height: Dimensions.marginSizeLarge),
                           Container(
                             width: screenWidth,

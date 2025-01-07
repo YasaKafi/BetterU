@@ -5,7 +5,10 @@ import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboa
 import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboarding_screen.dart';
 import 'package:better_u/presentation/initial_pages/register_page/binding/register_binding.dart';
 import 'package:better_u/presentation/initial_pages/register_page/view/register_page.dart';
+import 'package:better_u/presentation/pages/food_detail_page/binding/food_detail_binding.dart';
+import 'package:better_u/presentation/pages/food_detail_page/view/food_detail_page.dart';
 import 'package:better_u/presentation/pages/food_page/binding/food_binding.dart';
+import 'package:better_u/presentation/pages/food_page/view/food_page.dart';
 import 'package:better_u/presentation/pages/sport_page/binding/sport_binding.dart';
 import 'package:get/get.dart';
 
@@ -64,6 +67,20 @@ class AppPages {
         name: _Paths.LOGIN_PAGE,
         page: () => LoginPage(),
         binding: LoginBinding(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 500)
+    ),
+    GetPage(
+        name: _Paths.FOOD_PAGE,
+        page: () => FoodPage(),
+        binding: FoodPageBinding(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 500)
+    ),
+    GetPage(
+        name: _Paths.FOOD_DETAIL_PAGE,
+        page: () => FoodDetailPage(),
+        binding: FoodDetailPageBinding(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 500)
     ),

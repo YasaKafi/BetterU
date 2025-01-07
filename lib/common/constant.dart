@@ -28,6 +28,7 @@ String icCalendar = '${svgImages}calnder_outline.svg.svg';
 String icLogout = '${svgImages}logout.svg';
 String icScanner = '${svgImages}scanner.svg';
 String icKalori = '${svgImages}ic_kalori.svg';
+String icKaloriSport = '${svgImages}ic_kalori_sport.svg';
 String icKarbo = '${svgImages}ic_karbo.svg';
 String icLemak = '${svgImages}ic_lemak.svg';
 String icProtein = '${svgImages}ic_protein.svg';

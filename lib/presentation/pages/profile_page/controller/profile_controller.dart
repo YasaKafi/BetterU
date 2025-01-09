@@ -2,6 +2,7 @@ import 'package:better_u/data/api/auth/model/show_history_total_nutrition_model.
 import 'package:better_u/data/api/service/nutrition_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../data/api/auth/model/current_combo_model.dart';
 import '../../../../data/api/auth/model/current_total_nutrition_model.dart';
@@ -157,6 +158,8 @@ class ProfileController extends GetxController {
       final response = await userService.deleteTokenUser();
       print("Token deleted: ${response.data}");
       if (response.statusCode == 200) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('token');
         Get.offAllNamed(Routes.LOGIN_PAGE);
       }
     } catch (e) {

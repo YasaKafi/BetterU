@@ -75,9 +75,6 @@ class ShowRecommendation extends StatelessWidget {
                   children: [
                     Container(
                       width: screenWidth,
-                      decoration: BoxDecoration(
-                        color: baseColor,
-                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

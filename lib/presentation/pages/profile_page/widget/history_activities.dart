@@ -89,7 +89,8 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
           decoration: const BoxDecoration(
             color: baseColor,
           ),
-          padding: const EdgeInsets.only(top: 30, bottom: 10, left: 10, right: 10),
+          padding:
+              const EdgeInsets.only(top: 30, bottom: 10, left: 10, right: 10),
           width: MediaQuery.of(context).size.width,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -131,7 +132,7 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                       selectedValue: selectedFilterDate,
                       onChanged: (value) {
                         setState(() {
-                          String getValue ( ) {
+                          String getValue() {
                             switch (value) {
                               case '3 Hari':
                                 return '3';
@@ -145,9 +146,10 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                                 return '';
                             }
                           }
+
                           selectedFilterDate = value;
-                          widget.controller.getHistoryTotalNutrition(
-                              filterDate: getValue());
+                          widget.controller
+                              .getHistoryTotalNutrition(filterDate: getValue());
                         });
                       }),
 
@@ -159,12 +161,18 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                       final historyList =
                           widget.controller.historyTotalNutrition.value;
 
-                      totalKalori = widget.homeController.nutritionInformation.value.dailyNutrition?.totalKalori.toString();
-                      totalProtein = widget.homeController.nutritionInformation.value.dailyNutrition?.protein.toString();
-                      totalLemak = widget.homeController.nutritionInformation.value.dailyNutrition?.lemak.toString();
-                      totalKarbo = widget.homeController.nutritionInformation.value.dailyNutrition?.karbohidrat.toString();
-
-
+                      totalKalori = widget.homeController.nutritionInformation
+                          .value.dailyNutrition?.totalKalori
+                          .toString();
+                      totalProtein = widget.homeController.nutritionInformation
+                          .value.dailyNutrition?.protein
+                          .toString();
+                      totalLemak = widget.homeController.nutritionInformation
+                          .value.dailyNutrition?.lemak
+                          .toString();
+                      totalKarbo = widget.homeController.nutritionInformation
+                          .value.dailyNutrition?.karbohidrat
+                          .toString();
 
                       if (widget.controller.isLoading.value) {
                         return Center(child: CircularProgressIndicator());
@@ -201,11 +209,22 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                       }
 
                       String determineStatus(int activityValue, double? totalValue) {
-                        if (totalValue == null) return "Tercukupi"; // Default jika nilai total null
-                        if (activityValue == totalValue) return "Tercukupi";
-                        if (activityValue > totalValue) return "Berlebihan";
-                        return "Kurang";
+                        if (totalValue == null) return "Kurang"; // Default jika nilai total null
+
+                        // Hitung toleransi 10%
+                        final double tolerance = totalValue * 0.1;
+                        final double lowerBound = totalValue - tolerance;
+                        final double upperBound = totalValue + tolerance;
+
+                        if (activityValue >= lowerBound && activityValue <= upperBound) {
+                          return "Tercukupi";
+                        } else if (activityValue > upperBound) {
+                          return "Berlebihan";
+                        } else {
+                          return "Kurang";
+                        }
                       }
+
 
                       String calculateOverallStatus({
                         required String kaloriStatus,
@@ -213,11 +232,22 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                         required String proteinStatus,
                         required String karboStatus,
                       }) {
-                        final statusList = [kaloriStatus, lemakStatus, proteinStatus, karboStatus];
+                        final statusList = [
+                          kaloriStatus,
+                          lemakStatus,
+                          proteinStatus,
+                          karboStatus
+                        ];
                         final statusCount = {
-                          "Tercukupi": statusList.where((status) => status == "Tercukupi").length,
-                          "Berlebihan": statusList.where((status) => status == "Berlebihan").length,
-                          "Kurang": statusList.where((status) => status == "Kurang").length,
+                          "Tercukupi": statusList
+                              .where((status) => status == "Tercukupi")
+                              .length,
+                          "Berlebihan": statusList
+                              .where((status) => status == "Berlebihan")
+                              .length,
+                          "Kurang": statusList
+                              .where((status) => status == "Kurang")
+                              .length,
                         };
 
                         // Cari status dengan jumlah terbanyak
@@ -295,9 +325,9 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                                         color: overallStatus == 'Berlebihan'
                                             ? redMedium
                                             : overallStatus == 'Kurang'
-                                            ? grey
-                                            : greenMedium,                                        borderRadius:
-                                            BorderRadius.circular(10),
+                                                ? grey
+                                                : greenMedium,
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
                                         overallStatus,
@@ -403,9 +433,13 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                                     height: 40,
                                     borderRadius: 10,
                                     onPressed: () {
-                                      Get.to(() => DetailHistory(date: activity.date, item:  activity, dailyItem: widget.homeController.nutritionInformation.value,));
-                                    }
-                                ),
+                                      Get.to(() => DetailHistory(
+                                            date: activity.date,
+                                            item: activity,
+                                            dailyItem: widget.homeController
+                                                .nutritionInformation.value,
+                                          ));
+                                    }),
                               ],
                             ),
                           );

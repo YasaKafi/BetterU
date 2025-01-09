@@ -130,7 +130,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void showLoadingDialog(BuildContext context) {
+  void showLoadingDialog(BuildContext context, {String? message = 'makanan'}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -150,7 +150,7 @@ class HomeController extends GetxController {
               SizedBox(width: 20),
               Center(
                   child: Text(
-                "Tunggu ya kami sedang menganalisis kegiatan kamu... ",
+                "Tunggu ya kami sedang menganalisis $message kamu... ",
                 textAlign: TextAlign.center,
                 style: txtSecondaryTitle.copyWith(
                     fontWeight: FontWeight.w400, color: blackColor),
@@ -205,7 +205,7 @@ class HomeController extends GetxController {
   Future<void> postImageToURL(BuildContext context) async {
     try {
       isCancelled = false; // Reset flag sebelum mulai proses
-      showLoadingDialog(context);
+      showLoadingDialog(context, message: 'makanan');
 
       final response = await nutritionServices.postImageToUrl(
           file: File(selectedImage.value!.path));
@@ -235,7 +235,7 @@ class HomeController extends GetxController {
   Future<void> postRecommendationFood(BuildContext context) async {
     try {
       isCancelled = false; // Reset flag sebelum mulai proses
-      showLoadingDialog(context);
+      showLoadingDialog(context, message: 'makanan');
 
       final response =
           await aiService.postRecommendationFood(imageUrl: imageUrl);
@@ -286,7 +286,7 @@ class HomeController extends GetxController {
 
     try {
       isCancelled = false; // Reset flag sebelum mulai proses
-      showLoadingDialog(context);
+      showLoadingDialog(context, message: 'makanan');
 
       // Step 1: Prediksi makanan
       final File file = File(selectedImage.value!.path);
@@ -387,8 +387,14 @@ class HomeController extends GetxController {
       } else if (isFromRecommendation == true) {
         userMessage = selectedFood.value;
       } else {
+        if (userMessageController.text.isEmpty) {
+          Get.snackbar('Error', 'Tidak ada makanan yang dimasukkan.');
+          return;
+        }
         userMessage = userMessageController.text.trim();
       }
+
+      showLoadingDialog(context, message: 'makanan');
 
       // Prompt yang digunakan untuk AI
       String prompt = '''
@@ -405,11 +411,19 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 '''
           .trim();
 
+
+
       // Panggil API untuk mendapatkan hasil dari prompt
       final response = await openRouterAPI.callChatModel(prompt);
 
+
+
+
       // Validasi response dan parsing data
       if (response != null && response.isNotEmpty) {
+
+        Navigator.pop(context);
+
         print('Raw AI Response: $response');
 
         final Map<String, dynamic> parsedData =
@@ -483,6 +497,15 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
   Future<void> postChatModelAnalisisActivity(BuildContext context) async {
     try {
+
+      if (userMessageActivityController.text.isEmpty) {
+        Get.snackbar('Error', 'Tidak ada aktivitas yang dimasukkan.');
+        return;
+      }
+
+      showLoadingDialog(context, message: 'kegiatan');
+
+
       // Nama makanan dari user input
       final String userMessage = userMessageActivityController.text.trim();
 
@@ -503,6 +526,9 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
       // Validasi response dan parsing data
       if (response != null && response.isNotEmpty) {
+
+        Navigator.pop(context);
+
         print('Raw AI Response: $response');
 
         final Map<String, dynamic> parsedData =
@@ -575,6 +601,11 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
   Future<void> postChatModelAnalisisFoodManual(BuildContext context) async {
     try {
       // Nama makanan dari user input
+
+      if (foodController.text.isEmpty) {
+        Get.snackbar('Error', 'Tidak ada makanan yang dimasukkan.');
+        return;
+      }
 
       String userMessage = foodController.text.trim();
 
@@ -686,6 +717,12 @@ Tolong lengkapi data yang hilang dalam format JSON seperti berikut:
 
   Future<void> postChatModelAnalisisActivityManual(BuildContext context) async {
     try {
+
+      if (userMessageActivityController.text.isEmpty) {
+        Get.snackbar('Error', 'Tidak ada aktivitas yang dimasukkan.');
+        return;
+      }
+
       // Nama aktivitas dari user input
       final String userMessage = userMessageActivityController.text.trim();
 
@@ -931,29 +968,47 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
 
   // Fetch current user and trigger postCalculateNutrition after 1 second
   Future<void> getCurrentUser() async {
-    try {
-      isLoading(true);
-      final response = await userService.showCurrentUser();
-      print("CHECK CURRENT RESPONSE");
-      print(response.data);
+    const int maxRetries = 5; // Batas maksimal percobaan
+    int retryCount = 0; // Menghitung jumlah percobaan
+    bool isSuccess = false; // Menandakan apakah fetch berhasil
 
-      if (response.data != null) {
-        userResponse = ShowCurrentUserResponse.fromJson(response.data);
-        if (userResponse.data!.name != null) {
-          dataUser = userResponse.data!.obs;
-          print("User data fetched: ${userResponse.data!.name}");
+    while (!isSuccess && retryCount < maxRetries) {
+      try {
+        isLoading(true);
+        final response = await userService.showCurrentUser();
+        print("CHECK CURRENT RESPONSE");
+        print(response.data);
+
+        if (response.data != null) {
+          userResponse = ShowCurrentUserResponse.fromJson(response.data);
+          if (userResponse.data!.name != null) {
+            dataUser = userResponse.data!.obs;
+            print("User data fetched: ${userResponse.data!.name}");
+            isSuccess = true; // Fetch berhasil, keluar dari loop
+          } else {
+            print("User data is null");
+          }
         } else {
-          print("User data is null");
+          print("Response data is null");
         }
-      } else {
-        print("Response data is null");
+      } catch (e) {
+        print('Error fetching user data: $e');
+      } finally {
+        retryCount++;
+        isLoading(false);
+
+        if (!isSuccess && retryCount < maxRetries) {
+          print("Retrying... ($retryCount/$maxRetries)");
+          await Future.delayed(Duration(seconds: 2)); // Delay sebelum retry
+        }
       }
-    } catch (e) {
-      print('Error fetching user data: $e');
-    } finally {
-      isLoading(false);
+    }
+
+    if (!isSuccess) {
+      print("Failed to fetch user data after $maxRetries attempts.");
     }
   }
+
 
   Future<void> getCurrentTotalNutrition() async {
     try {

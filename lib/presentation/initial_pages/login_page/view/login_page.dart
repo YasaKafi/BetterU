@@ -1,6 +1,3 @@
-import 'package:better_u/presentation/initial_pages/register_page/widget/input_biodata.dart';
-import 'package:bottom_picker/bottom_picker.dart';
-import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,8 +13,17 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = Get.arguments;
+    final isFromOnboard = arguments?['isFromOnboard'] ?? 'false';
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    bool? stringToBool(String value) {
+      if (value.toLowerCase() == 'true') return true;
+      if (value.toLowerCase() == 'false') return false;
+      return null;
+    }
 
     return Scaffold(
         backgroundColor: baseColor,
@@ -27,7 +33,7 @@ class LoginPage extends GetView<LoginController> {
               index: controller.currentPage.value,
               children: [
                 buildIntroductionCreateAccountLogin(
-                    screenWidth, screenHeight, controller),
+                    screenWidth, screenHeight, controller, stringToBool(isFromOnboard)),
                 buildEmailAndPassInputPage(screenWidth, screenHeight, controller),
               ],
             );

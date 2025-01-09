@@ -1,8 +1,12 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../route/app_pages.dart';
 
 class SplashController extends GetxController {
+
+
+
   @override
   void onInit() {
     super.onInit();

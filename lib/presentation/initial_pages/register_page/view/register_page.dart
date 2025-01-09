@@ -21,8 +21,17 @@ class RegisterPage extends GetView<RegisterController> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = Get.arguments;
+    final isFromOnboard = arguments?['isFromOnboard'] ?? 'false';
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    bool? stringToBool(String value) {
+      if (value.toLowerCase() == 'true') return true;
+      if (value.toLowerCase() == 'false') return false;
+      return null;
+    }
 
     void datePicker() {
       BottomPicker.date(
@@ -56,7 +65,7 @@ class RegisterPage extends GetView<RegisterController> {
               index: controller.currentPage.value,
               children: [
                 buildIntroductionCreateAccount(
-                    screenWidth, screenHeight, controller),
+                    screenWidth, screenHeight, controller, stringToBool(isFromOnboard)),
                 buildEmailInputPage(screenWidth, screenHeight, controller),
                 buildOtpVerificationPage(screenWidth, screenHeight, controller),
                 buildPasswordCreationPage(screenWidth, screenHeight, controller),

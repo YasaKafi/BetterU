@@ -69,10 +69,12 @@ class LoginController extends GetxController {
             password: passwordController.text,
           );
 
-          prefs.setString('token', response.data['token']);
-          Get.snackbar("Login Success", "Welcome to Better U",
-              snackPosition: SnackPosition.TOP);
-          Get.offNamed(Routes.BOTTOM_NAVBAR);
+
+            prefs.setString('token', response.data['token']);
+            Get.snackbar("Login Success", "Welcome to Better U",
+                snackPosition: SnackPosition.TOP);
+            Get.offNamed(Routes.BOTTOM_NAVBAR);
+
 
       } else {
         Get.snackbar(
@@ -80,7 +82,10 @@ class LoginController extends GetxController {
             snackPosition: SnackPosition.TOP);
       }
     } catch (e) {
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
       print('Error placing order: $e');
+      Get.snackbar("Error", "$errorMessage",
+          snackPosition: SnackPosition.TOP);
     } finally {
       isLoading(false);
     }

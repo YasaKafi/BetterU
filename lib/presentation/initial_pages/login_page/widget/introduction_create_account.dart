@@ -6,11 +6,12 @@ import 'package:get/get.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
+import '../../../../route/app_pages.dart';
 import '../../../global_components/common_button.dart';
 
 
 Widget buildIntroductionCreateAccountLogin(double screenWidth,
-    double screenHeight, LoginController controller) {
+    double screenHeight, LoginController controller, bool? isFromOnboard) {
   return Container(
     height: screenHeight,
     padding: const EdgeInsets.symmetric(horizontal: 28.0),
@@ -24,26 +25,25 @@ Widget buildIntroductionCreateAccountLogin(double screenWidth,
           padding: const EdgeInsets.only(bottom: 10, right: 10),
           width: screenWidth,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: isFromOnboard == true ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
+              isFromOnboard == true ? IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () => Get.offNamed(Routes.ONBOARDING_FINAL_SCREEN)
+              ) : SizedBox.shrink(),
               Text(
                 'Masuk Ke Akun',
-                style: txtPrimaryHeader.copyWith(
+                style: txtSecondaryHeader.copyWith(
                     fontWeight: FontWeight.w700, color: blackColor),
               ),
-              Container(
+              isFromOnboard == true ? Container(
                 width: 40,
                 height: 5,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                 ),
-              )
+              ) : SizedBox.shrink(),
             ],
           ),
         ),
@@ -72,45 +72,45 @@ Widget buildIntroductionCreateAccountLogin(double screenWidth,
                   height: 60,
                   borderRadius: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    "Atau Dengan",
-                    style:
-                    txtPrimaryTitle.copyWith(fontWeight: FontWeight.w400),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                CommonButton(
-                  text: '',
-                  icon: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          icGoogle,
-                          width: 22,
-                          height: 22,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Lanjutkan Dengan Google',
-                          style: txtSecondaryTitle.copyWith(
-                              fontWeight: FontWeight.w600, color: blackColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onPressed: () {},
-                  width: screenWidth,
-                  height: 60,
-                  borderRadius: 10,
-                  backgroundColor: baseColor,
-                  border:
-                  BorderSide(color: blackColor, style: BorderStyle.solid),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 20),
+                //   child: Text(
+                //     "Atau Dengan",
+                //     style:
+                //     txtPrimaryTitle.copyWith(fontWeight: FontWeight.w400),
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
+                // CommonButton(
+                //   text: '',
+                //   icon: Center(
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         SvgPicture.asset(
+                //           icGoogle,
+                //           width: 22,
+                //           height: 22,
+                //         ),
+                //         SizedBox(
+                //           width: 10,
+                //         ),
+                //         Text(
+                //           'Lanjutkan Dengan Google',
+                //           style: txtSecondaryTitle.copyWith(
+                //               fontWeight: FontWeight.w600, color: blackColor),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                //   onPressed: () {},
+                //   width: screenWidth,
+                //   height: 60,
+                //   borderRadius: 10,
+                //   backgroundColor: baseColor,
+                //   border:
+                //   BorderSide(color: blackColor, style: BorderStyle.solid),
+                // ),
               ],
             ),
           ],

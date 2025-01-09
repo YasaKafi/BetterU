@@ -174,27 +174,16 @@ Widget buildBiodataInputPage(double screenWidth, double screenHeight, RegisterCo
         Padding(
           padding: const EdgeInsets.only(bottom: 50),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                radius: 32,
-                backgroundColor: primaryColor.withOpacity(0.2),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.chevron_left,
-                    color: primaryColor,
-                    size: 30,
-                  ),
-                ),
-              ),
-              SizedBox(width: 25,),
+
               Expanded(
                 child: CommonButton(
                   text: 'Selanjutnya',
                   onPressed: controller.validateBiodata,
                   height: 60,
                   borderRadius: 80,
+                  width: screenWidth,
                 ),
               ),
             ],

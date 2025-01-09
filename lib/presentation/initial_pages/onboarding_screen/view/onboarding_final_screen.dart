@@ -32,7 +32,7 @@ class OnboardingFinalScreen extends StatelessWidget {
                       SizedBox(height: 60),
                       Column(
                         children: [
-                          Center(child: Image.asset(gifLazyPerson)),
+                          Center(child: Image.asset(gifHappyTogether)),
                           SizedBox(height: Dimensions.marginSizeLarge),
                           Container(
                             width: screenWidth,
@@ -80,10 +80,17 @@ class OnboardingFinalScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  CommonButton(text: 'Buat Akun Baru', onPressed: () => Get.offAllNamed(Routes.REGISTER_PAGE), width: screenWidth, height: 60, borderRadius: 10,),
+                  CommonButton(text: 'Buat Akun Baru', onPressed: () => Get.offAllNamed(
+                      Routes.REGISTER_PAGE,
+                    arguments: {
+                      'isFromOnboard': 'true',
+                    },
+                  ), width: screenWidth, height: 60, borderRadius: 10,),
                   TextButton(
                     onPressed: () {
-                      Get.offAllNamed(Routes.LOGIN_PAGE);
+                      Get.offAllNamed(Routes.LOGIN_PAGE, arguments: {
+                        'isFromOnboard': 'true',
+                      },);
                     },
                     child: Center(
                       child: RichText(

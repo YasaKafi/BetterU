@@ -12,7 +12,9 @@ import '../controller/home_controller.dart';
 import 'manual_input_nutrition.dart';
 
 class AddActivity extends StatelessWidget {
-  const AddActivity({super.key});
+   AddActivity({super.key});
+
+  HomeController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,11 @@ class AddActivity extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.arrow_back_ios),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            controller.userMessageActivityController.clear();
+                            controller.userMessageController.clear();
+                            Get.back();
+                          },
                         ),
                         Text(
                           'Tambah Kegiatan',

@@ -63,7 +63,7 @@ class DioInstance {
       print('DioException: ${e.message}');
       print('DioException Response: ${e.response?.data}');
       print('DioException Status Code: ${e.response?.statusCode}');
-      throw Exception(e.message);
+      throw Exception(e.response?.data['message'] ?? e.message);
     }
 
     return response;

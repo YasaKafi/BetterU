@@ -28,13 +28,32 @@ class FoodListView extends StatelessWidget {
             ? ShimmerWidgets.shimmerCard()
             : comboData.data == null || comboData.data!.isEmpty
                 ? Center(
-                    child: Text(
-                      "Tidak ada data makanan.",
-                      style: txtPrimarySubTitle.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: blackColor80,
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            gifLazyPerson,
+                            width: 300,
+                            height: 300,
+                          ),
+                          Text(
+                            "Aktivitas Anda Kosong",
+                            style: txtPrimaryTitle.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: blackColor,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Tambahkan aktivitas harian Anda",
+                            style: txtPrimarySubTitle.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: blackColor30,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    )
                   )
                 :
           Column(

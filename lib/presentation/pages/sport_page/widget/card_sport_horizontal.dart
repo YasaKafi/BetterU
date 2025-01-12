@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../common/dimensions.dart';
 import '../../../../common/theme.dart';
 
 class CardSportHorizontal extends StatelessWidget {
@@ -16,7 +15,6 @@ class CardSportHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
         width: screenWidth * 0.3,

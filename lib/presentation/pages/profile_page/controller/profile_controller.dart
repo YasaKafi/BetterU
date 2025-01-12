@@ -1,13 +1,14 @@
-import 'package:better_u/data/api/auth/model/show_history_total_nutrition_model.dart';
 import 'package:better_u/data/api/service/nutrition_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../data/api/auth/model/current_combo_model.dart';
-import '../../../../data/api/auth/model/current_total_nutrition_model.dart';
-import '../../../../data/api/auth/model/current_user_model.dart';
-import '../../../../data/api/auth/model/daily_nutrition_model.dart';
+import '../../../../data/api/model/current_combo_model.dart';
+import '../../../../data/api/model/current_daily_water_model.dart';
+import '../../../../data/api/model/current_total_nutrition_model.dart';
+import '../../../../data/api/model/current_user_model.dart';
+import '../../../../data/api/model/daily_nutrition_model.dart';
+import '../../../../data/api/model/show_history_total_nutrition_model.dart';
 import '../../../../data/api/service/ai_service.dart';
 import '../../../../data/api/service/auth_services.dart';
 import '../../../../route/app_pages.dart';
@@ -24,6 +25,7 @@ class ProfileController extends GetxController {
   Rx<List<ShowHistoryTotalNutrition>>([]);
 
   Rx<ShowCurrentCombo> currentCombo = Rx<ShowCurrentCombo>(ShowCurrentCombo());
+  Rx<CurrentDailyWater> currentDailyWater = Rx<CurrentDailyWater>(CurrentDailyWater());
 
   Rx<CurrentTotalNutrition> currentTotalNutrition =
   Rx<CurrentTotalNutrition>(CurrentTotalNutrition());
@@ -48,12 +50,37 @@ class ProfileController extends GetxController {
     nutritionServices = NutritionServices();
     getCurrentUser();
     getHistoryTotalNutrition(filterDate: '');
+    getCurrentCombo(date: '');
   }
 
   void refresh () {
     initialize();
   }
 
+  Future<void> getCurrentDailyWater({String? date}) async {
+    try {
+      isLoading(true);
+      final response = await nutritionServices.showCurrentDailyWaterByDate(date: date ?? '');
+
+      print("CHECK CURRENT RESPONSE COMBO");
+      print(response.data);
+
+      if (response.data != null) {
+        final dailyWaterData = CurrentDailyWater.fromJson(response.data);
+        currentDailyWater.value = dailyWaterData;
+
+        final checkData = dailyWaterData.data?.amount ?? 0.0;
+
+        print("VALUE AMOUNT OF WATER : $checkData");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
 
   Future<void> getHistoryTotalNutrition({String? filterDate}) async {
     try {

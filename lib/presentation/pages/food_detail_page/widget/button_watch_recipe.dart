@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:get/get.dart';
 
-import '../../../../common/dimensions.dart';
 import '../../../../common/theme.dart';
 
 class ButtonWatchRecipe extends StatelessWidget {
@@ -17,7 +14,6 @@ class ButtonWatchRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Positioned(
         left: 0,

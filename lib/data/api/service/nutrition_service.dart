@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
-import '../auth/repository/betterU_repository.dart';
 import '../dio_instance.dart';
+import '../repository/betterU_repository.dart';
 
 
 class NutritionServices {
@@ -61,6 +61,42 @@ class NutritionServices {
       );
 
       return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Response> showCurrentDailyWater () async {
+    try {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      final response = await _dioInstance.getRequest(
+        endpoint: BetterUApiRepository.getCurrentDailyWater,
+        queryParameters: {
+          'date': formattedDate,
+        },
+        isAuthorize: true,
+      );
+
+      return response;
+
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Response> showCurrentDailyWaterByDate ({required String date}) async {
+    try {
+      final response = await _dioInstance.getRequest(
+        endpoint: BetterUApiRepository.getCurrentDailyWater,
+        queryParameters: {
+          'date': date,
+        },
+        isAuthorize: true,
+      );
+
+      return response;
+
     } catch (e) {
       throw Exception(e);
     }
@@ -183,6 +219,33 @@ class NutritionServices {
       return response;
     } catch (e) {
       print("Error posting file: $e");
+      throw Exception(e);
+    }
+  }
+
+
+  Future<Response> postDailyWaterIncrease() async {
+    try {
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postDailyWaterIncrease,
+        isAuthorize: true,
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Response> postDailyWaterDecrease() async {
+    try {
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postDailyWaterDecrease,
+        isAuthorize: true,
+      );
+
+      return response;
+    } catch (e) {
       throw Exception(e);
     }
   }

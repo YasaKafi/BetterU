@@ -6,7 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../../../data/api/auth/model/current_combo_model.dart';
+import '../../../../data/api/model/current_combo_model.dart';
 import '../../../global_components/common_button.dart';
 import '../controller/home_controller.dart';
 import 'edit_activity.dart';
@@ -569,20 +569,20 @@ class ActivityItemCard extends StatelessWidget {
                     PopupMenuItem<String>(
                       value: 'edit',
                       child: Row(
-                        children: const [
-                          Icon(Icons.edit, color: Colors.black),
+                        children:  [
+                          Icon(Icons.edit, color: primaryColor),
                           SizedBox(width: 8),
-                          Text('Edit'),
+                          Text('Edit', style: txtPrimarySubTitle.copyWith(color: primaryColor)),
                         ],
                       ),
                     ),
                     PopupMenuItem<String>(
                       value: 'delete',
                       child: Row(
-                        children: const [
-                          Icon(Icons.delete, color: Colors.red),
+                        children:  [
+                          Icon(Icons.delete, color: redMedium),
                           SizedBox(width: 8),
-                          Text('Hapus'),
+                          Text('Hapus', style: txtPrimarySubTitle.copyWith(color: redMedium)),
                         ],
                       ),
                     ),

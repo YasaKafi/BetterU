@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../data/api/auth/model/daily_nutrition_model.dart';
 import '../../../../route/app_pages.dart';
 
 class LoginController extends GetxController {
-
   var isLoading = false.obs;
+  final AuthServices authServices = AuthServices();
+  final AiServices aiServices = AiServices();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void onClose() {
@@ -21,15 +23,9 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-
-
   void goToHomePage() {
     Get.offNamed(Routes.BOTTOM_NAVBAR);
   }
-
 
   var currentPage = 0.obs;
 
@@ -53,29 +49,21 @@ class LoginController extends GetxController {
     return gender.toLowerCase().replaceAll('-', ' ');
   }
 
-  final AuthServices authServices = AuthServices();
-  final AiServices aiServices = AiServices();
-
   Future<void> postLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isLoading(true);
     try {
       if (passwordController.text.isNotEmpty &&
-          emailController.text.isNotEmpty
-      ) {
+          emailController.text.isNotEmpty) {
+        final response = await authServices.postLogin(
+          email: emailController.text,
+          password: passwordController.text,
+        );
 
-          final response = await authServices.postLogin(
-            email: emailController.text,
-            password: passwordController.text,
-          );
-
-
-            prefs.setString('token', response.data['token']);
-            Get.snackbar("Login Success", "Welcome to Better U",
-                snackPosition: SnackPosition.TOP);
-            Get.offNamed(Routes.BOTTOM_NAVBAR);
-
-
+        prefs.setString('token', response.data['token']);
+        Get.snackbar("Login Success", "Welcome to Better U",
+            snackPosition: SnackPosition.TOP);
+        Get.offNamed(Routes.BOTTOM_NAVBAR);
       } else {
         Get.snackbar(
             "Please fill in all required fields", "Please checking your field",
@@ -84,12 +72,9 @@ class LoginController extends GetxController {
     } catch (e) {
       String errorMessage = e.toString().replaceAll('Exception: ', '');
       print('Error placing order: $e');
-      Get.snackbar("Error", "$errorMessage",
-          snackPosition: SnackPosition.TOP);
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     } finally {
       isLoading(false);
     }
   }
-
-
 }

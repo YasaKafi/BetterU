@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../auth/repository/betterU_repository.dart';
 import '../dio_instance.dart';
+import '../repository/betterU_repository.dart';
 
 
 class AiServices {

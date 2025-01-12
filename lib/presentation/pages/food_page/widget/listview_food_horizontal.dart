@@ -1,9 +1,7 @@
-import 'package:better_u/data/api/auth/model/food_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../../common/dimensions.dart';
-import '../../../../../../common/theme.dart';
+import '../../../../data/api/model/food_list_model.dart';
 import '../widget/card_food_horizontal.dart';
 
 class ListviewFoodHorizontal extends StatelessWidget {
@@ -17,7 +15,6 @@ class ListviewFoodHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Obx(() {
       final foodRecommendationData = foodList.value;

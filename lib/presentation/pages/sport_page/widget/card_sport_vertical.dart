@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../common/dimensions.dart';
 import '../../../../common/theme.dart';
 
 class CardSportVertical extends StatelessWidget {
@@ -25,7 +24,6 @@ class CardSportVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
       width: double.infinity,

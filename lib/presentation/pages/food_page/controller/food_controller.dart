@@ -1,9 +1,10 @@
-import 'package:better_u/data/api/auth/model/current_user_model.dart';
-import 'package:better_u/data/api/auth/model/food_list_model.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/food_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
+import '../../../../data/api/model/current_user_model.dart';
+import '../../../../data/api/model/food_list_model.dart';
 
 class FoodController extends GetxController {
 

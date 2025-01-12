@@ -4,14 +4,12 @@ import 'package:better_u/presentation/pages/home_page/controller/home_controller
 import 'package:better_u/presentation/pages/home_page/widget/manual_input_from_scanner.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../../../data/api/auth/model/data_recommendation_food.dart';
-import '../../../../data/api/auth/model/nutrition_information.dart';
+import '../../../../data/api/model/data_recommendation_food.dart';
 import '../../../global_components/common_button.dart';
 
 class ShowRecommendation extends StatelessWidget {

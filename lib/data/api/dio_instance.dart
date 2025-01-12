@@ -1,7 +1,7 @@
+import 'package:better_u/data/api/repository/global_variabel.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'auth/repository/global_variabel.dart';
 
 
 

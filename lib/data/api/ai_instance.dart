@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class OpenRouterAPI {
   final String apiUrl = "https://openrouter.ai/api/v1/chat/completions";
-  final String apiKey = "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";
+  final String apiKey = "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";
 
   // Fungsi untuk mengirimkan permintaan POST ke API
   Future<String> callChatModel(String userMessage) async {

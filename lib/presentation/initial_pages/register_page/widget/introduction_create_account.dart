@@ -1,9 +1,7 @@
 import 'package:better_u/presentation/initial_pages/register_page/controller/register_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
 import '../../../../route/app_pages.dart';
 import '../../../global_components/common_button.dart';

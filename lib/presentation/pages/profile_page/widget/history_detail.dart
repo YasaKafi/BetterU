@@ -1,5 +1,4 @@
 import 'package:better_u/common/theme.dart';
-import 'package:better_u/data/api/auth/model/daily_nutrition_model.dart';
 import 'package:better_u/presentation/pages/home_page/controller/home_controller.dart';
 import 'package:better_u/presentation/pages/profile_page/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +7,9 @@ import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../common/constant.dart';
-import '../../../../data/api/auth/model/current_combo_model.dart';
-import '../../../../data/api/auth/model/show_history_total_nutrition_model.dart';
+import '../../../../data/api/model/current_combo_model.dart';
+import '../../../../data/api/model/daily_nutrition_model.dart';
+import '../../../../data/api/model/show_history_total_nutrition_model.dart';
 import '../../../global_components/common_button.dart';
 import '../../home_page/widget/list_card_activity.dart';
 
@@ -35,6 +35,7 @@ class _DetailHistoryState extends State<DetailHistory> {
     Future.microtask(() async {
       await controller.getCurrentCombo(date: widget.date);
       await controller.getDaysTotalNutrition(date: widget.date);
+      await controller.getCurrentDailyWater(date: widget.date);
     });
   }
 
@@ -326,6 +327,10 @@ class _DetailHistoryState extends State<DetailHistory> {
                   ),
                 ),
                 SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  child: CardHistoryDailyWater(controller: controller),
+                ),
 
                 Container(
                   width: screenWidth,
@@ -838,3 +843,77 @@ class _DetailHistoryState extends State<DetailHistory> {
   }
 }
 
+
+class CardHistoryDailyWater extends StatelessWidget {
+  final ProfileController controller;
+
+  const CardHistoryDailyWater({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return controller.isLoading.value
+          ? CircularProgressIndicator()
+          : controller.currentDailyWater.value.data == null
+          ? SizedBox.shrink()
+          : Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: baseColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Air yang diminum',
+                      style: txtPrimaryTitle.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: blackColor),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '${controller.currentDailyWater.value.data?.amount ?? 0.0}L / 2.0L',
+                      style: txtPrimarySubTitle.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: navyColor.withOpacity(0.6)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Divider(
+              color: grey,
+              thickness: 1,
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(10, (index) {
+                return SvgPicture.asset(
+                  index < (controller.currentDailyWater.value.data!.totalGlasses ?? 0)
+                      ? icGlassActive  // Gunakan ikon gelas aktif
+                      : icGlassUnactive, // Gunakan ikon gelas tidak aktif
+                  width: 32,
+                  height: 32,
+                );
+              }),
+            ),
+
+          ],
+        ),
+      );
+    });
+  }
+}

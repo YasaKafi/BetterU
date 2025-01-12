@@ -1,4 +1,4 @@
-import './global_variabel.dart';
+import 'global_variabel.dart';
 
 class BetterUApiRepository {
   static String mainUrl = GlobalVariables.baseUrl;
@@ -14,6 +14,7 @@ class BetterUApiRepository {
   static String getCurrentUser = '$mainUrl/api/users/show-current';
   static String getCurrentTotalNutrition = '$mainUrl/api/daily-activity/show-total-nutrition';
   static String getCurrentCombo = '$mainUrl/api/daily-activity/show-current';
+  static String getCurrentDailyWater= '$mainUrl/api/daily-waters/show-current';
   static String getHistoryTotalNutrition = '$mainUrl/api/daily-activity/show-history-total-nutrition';
   static String getAllFood = '$mainUrl/api/foods/index';
   static String getFoodById = '$mainUrl/api/foods/show';
@@ -33,5 +34,7 @@ class BetterUApiRepository {
   static String postOtpCode = '$mainUrl/api/otp/store';
   static String postOtpCheck = '$mainUrl/api/otp/check';
   static String postDailyActivity = '$mainUrl/api/daily-activity/store';
+  static String postDailyWaterIncrease = '$mainUrl/api/daily-waters/increase';
+  static String postDailyWaterDecrease = '$mainUrl/api/daily-waters/decrease';
 
 }

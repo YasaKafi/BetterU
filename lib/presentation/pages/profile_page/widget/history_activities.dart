@@ -68,6 +68,8 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
     );
   }
 
+
+
   @override
   void initState() {
     super.initState();
@@ -456,3 +458,5 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
     );
   }
 }
+
+

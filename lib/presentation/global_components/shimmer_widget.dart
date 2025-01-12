@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../common/dimensions.dart';
 import '../../common/theme.dart';
 
 class ShimmerWidgets {

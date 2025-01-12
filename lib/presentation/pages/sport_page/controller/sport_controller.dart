@@ -1,10 +1,11 @@
-import 'package:better_u/data/api/auth/model/current_user_model.dart';
-import 'package:better_u/data/api/auth/model/sport_category_model.dart';
-import 'package:better_u/data/api/auth/model/sport_model.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/sport_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
+import '../../../../data/api/model/current_user_model.dart';
+import '../../../../data/api/model/sport_category_model.dart';
+import '../../../../data/api/model/sport_model.dart';
 
 class SportController extends GetxController {
 

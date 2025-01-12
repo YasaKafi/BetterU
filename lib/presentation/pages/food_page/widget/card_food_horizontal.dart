@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../common/dimensions.dart';
 import '../../../../common/theme.dart';
 
 class CardFoodHorizontal extends StatelessWidget {

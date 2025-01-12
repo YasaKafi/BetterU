@@ -1,7 +1,5 @@
 import 'package:better_u/presentation/pages/food_detail_page/widget/card_nutrition.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/dimensions.dart';
@@ -30,7 +28,6 @@ class NutritionFoodDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
       width: double.infinity,

@@ -1,6 +1,7 @@
-import 'package:better_u/data/api/auth/model/food_model.dart';
 import 'package:better_u/data/api/service/food_service.dart';
 import 'package:get/get.dart';
+
+import '../../../../data/api/model/food_model.dart';
 
 class FoodDetailController extends GetxController {
 

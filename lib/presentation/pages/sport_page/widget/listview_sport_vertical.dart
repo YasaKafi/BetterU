@@ -1,11 +1,8 @@
-import 'package:better_u/data/api/auth/model/food_list_model.dart';
-import 'package:better_u/data/api/auth/model/sport_model.dart';
 import 'package:better_u/presentation/pages/sport_page/widget/card_sport_vertical.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../../common/dimensions.dart';
-import '../../../../../../common/theme.dart';
+import '../../../../data/api/model/sport_model.dart';
 
 class ListviewSportVertical extends StatelessWidget {
   const ListviewSportVertical({

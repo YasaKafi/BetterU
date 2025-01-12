@@ -1,9 +1,7 @@
-import 'package:better_u/data/api/auth/model/food_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../../common/dimensions.dart';
-import '../../../../../../common/theme.dart';
+import '../../../../data/api/model/food_list_model.dart';
 import '../widget/card_food_vertical.dart';
 
 class ListviewFoodVertical extends StatelessWidget {

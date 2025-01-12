@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
 import '../../../global_components/textfield_auth_custom.dart';

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/dimensions.dart';
-import '../../../../common/theme.dart';
 
 class ImageFoodDetail extends StatelessWidget {
   ImageFoodDetail({
@@ -14,7 +12,6 @@ class ImageFoodDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(

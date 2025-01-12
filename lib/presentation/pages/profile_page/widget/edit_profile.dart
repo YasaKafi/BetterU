@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/theme.dart';
-import '../../../../data/api/auth/model/current_user_model.dart';
+import '../../../../data/api/model/current_user_model.dart';
 import '../../../global_components/common_button.dart';
 import '../../../global_components/textfield_auth_custom.dart';
 

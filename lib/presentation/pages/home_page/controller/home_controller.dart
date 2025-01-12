@@ -2,10 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:better_u/data/api/ai_instance.dart';
-import 'package:better_u/data/api/auth/model/current_combo_model.dart';
-import 'package:better_u/data/api/auth/model/current_total_nutrition_model.dart';
-import 'package:better_u/data/api/auth/model/nutrition_information.dart';
-import 'package:better_u/data/api/auth/model/prediction_ai_model.dart';
+import 'package:better_u/data/api/model/current_daily_water_model.dart';
 import 'package:better_u/data/api/service/ai_service.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/nutrition_service.dart';
@@ -20,10 +17,14 @@ import 'package:intl/intl.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../../../data/api/auth/model/current_user_model.dart';
-import '../../../../data/api/auth/model/daily_nutrition_model.dart';
-import '../../../../data/api/auth/model/data_recommendation_food.dart';
-import '../../../../data/api/auth/model/show_recommendation_model.dart';
+import '../../../../data/api/model/current_combo_model.dart';
+import '../../../../data/api/model/current_total_nutrition_model.dart';
+import '../../../../data/api/model/current_user_model.dart';
+import '../../../../data/api/model/daily_nutrition_model.dart';
+import '../../../../data/api/model/data_recommendation_food.dart';
+import '../../../../data/api/model/nutrition_information.dart';
+import '../../../../data/api/model/prediction_ai_model.dart';
+import '../../../../data/api/model/show_recommendation_model.dart';
 import '../../../../route/app_pages.dart';
 import '../widget/bottom_sheet_sport.dart';
 
@@ -68,6 +69,8 @@ class HomeController extends GetxController {
 
   Rx<ShowCurrentCombo> currentCombo = Rx<ShowCurrentCombo>(ShowCurrentCombo());
 
+  Rx<CurrentDailyWater> currentDailyWater = Rx<CurrentDailyWater>(CurrentDailyWater());
+
   Rx<ShowPrediction> currentPrediction = Rx<ShowPrediction>(ShowPrediction());
 
   @override
@@ -104,6 +107,7 @@ class HomeController extends GetxController {
     if (dataUser.value != null) {
       await postCalculateNutrition();
       await getCurrentTotalNutrition();
+      await getCurrentDailyWater();
       await getCurrentCombo();
     }
   }
@@ -201,6 +205,45 @@ class HomeController extends GetxController {
   }
 
   /// POST ///
+
+
+  Future<void> postCurrentDailyWaterIncrease() async {
+    try {
+      final response = await nutritionServices.postDailyWaterIncrease();
+
+      if (response.data != null) {
+        final currentDailyWaterData =
+            CurrentDailyWater.fromJson(response.data);
+        currentDailyWater.value = currentDailyWaterData;
+        print("Current Daily Water: ${currentDailyWater.value}");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error posting current daily water: $e');
+    } finally {
+      initialize();
+    }
+  }
+
+  Future<void> postCurrentDailyWaterDecrease() async {
+    try {
+      final response = await nutritionServices.postDailyWaterDecrease();
+
+      if (response.data != null) {
+        final currentDailyWaterData =
+            CurrentDailyWater.fromJson(response.data);
+        currentDailyWater.value = currentDailyWaterData;
+        print("Current Daily Water: ${currentDailyWater.value}");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error posting current daily water: $e');
+    } finally {
+      initialize();
+    }
+  }
 
   Future<void> postImageToURL(BuildContext context) async {
     try {
@@ -1009,7 +1052,6 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
-
   Future<void> getCurrentTotalNutrition() async {
     try {
       isLoading(true);
@@ -1042,6 +1084,31 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       if (response.data != null) {
         final comboData = ShowCurrentCombo.fromJson(response.data);
         currentCombo.value = comboData;
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> getCurrentDailyWater() async {
+    try {
+      isLoading(true);
+      final response = await nutritionServices.showCurrentDailyWater();
+
+      print("CHECK CURRENT RESPONSE COMBO");
+      print(response.data);
+
+      if (response.data != null) {
+        final dailyWaterData = CurrentDailyWater.fromJson(response.data);
+        currentDailyWater.value = dailyWaterData;
+
+        final checkData = dailyWaterData.data?.amount ?? 0.0;
+
+        print("VALUE AMOUNT OF WATER : $checkData");
       } else {
         print("Response data is null");
       }

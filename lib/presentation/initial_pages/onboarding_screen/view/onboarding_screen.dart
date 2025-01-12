@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 
-import '../../../../common/constant.dart';
 import '../../../../common/dimensions.dart';
 import '../../../../common/theme.dart';
-import '../../../global_components/common_button.dart';
 import '../controller/onboarding_controller.dart';
 import '../model/onboard_data.dart';
 import '../widgets/item_pageview.dart';
@@ -24,10 +20,6 @@ class OnboardingScreen extends StatelessWidget {
         .of(context)
         .size
         .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
     return Scaffold(
       backgroundColor: baseColor,
       body: SafeArea(

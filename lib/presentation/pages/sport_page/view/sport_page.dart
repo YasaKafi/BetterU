@@ -1,9 +1,6 @@
-import 'package:better_u/common/dimensions.dart';
 import 'package:better_u/presentation/global_components/custom_search_bar.dart';
 import 'package:better_u/presentation/global_components/shimmer_widget.dart';
-import 'package:better_u/presentation/pages/food_page/controller/food_controller.dart';
 import 'package:better_u/presentation/pages/sport_page/controller/sport_controller.dart';
-import 'package:better_u/presentation/pages/sport_page/widget/card_sport_vertical.dart';
 import 'package:better_u/presentation/pages/sport_page/widget/listview_sport_horizontal.dart';
 import 'package:better_u/presentation/pages/sport_page/widget/listview_sport_vertical.dart';
 import 'package:flutter/material.dart';

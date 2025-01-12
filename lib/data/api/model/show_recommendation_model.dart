@@ -51,7 +51,7 @@ class ShowRecommendationFood {
 class Choices {
   int? index;
   Message? message;
-  Null? logprobs;
+  Null logprobs;
   String? finishReason;
 
   Choices({this.index, this.message, this.logprobs, this.finishReason});

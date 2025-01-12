@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/theme.dart';
-import '../../../../data/api/auth/model/current_combo_model.dart';
+import '../../../../data/api/model/current_combo_model.dart';
 import '../../../global_components/common_button.dart';
 import '../../../global_components/textfield_auth_custom.dart';
 import '../controller/home_controller.dart';

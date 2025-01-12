@@ -1,11 +1,8 @@
-import 'package:better_u/data/api/auth/model/food_list_model.dart';
-import 'package:better_u/data/api/auth/model/sport_category_model.dart';
 import 'package:better_u/presentation/pages/sport_page/widget/card_sport_horizontal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../../common/dimensions.dart';
-import '../../../../../../common/theme.dart';
+import '../../../../data/api/model/sport_category_model.dart';
 
 class ListviewSportHorizontal extends StatelessWidget {
   const ListviewSportHorizontal({
@@ -20,7 +17,6 @@ class ListviewSportHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Obx(() {
       final categoryData = sportCategory.value;

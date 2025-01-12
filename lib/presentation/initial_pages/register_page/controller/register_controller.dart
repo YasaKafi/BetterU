@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:better_u/data/api/service/ai_service.dart';
 import 'package:better_u/data/api/service/auth_services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../data/api/auth/model/daily_nutrition_model.dart';
+import '../../../../data/api/model/daily_nutrition_model.dart';
 import '../../../../route/app_pages.dart';
 
 class RegisterController extends GetxController {

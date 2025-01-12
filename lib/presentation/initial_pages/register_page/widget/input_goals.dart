@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
-import '../../../global_components/textfield_auth_custom.dart';
 import '../controller/register_controller.dart';
 
 Widget buildGoalsInputPage(double screenWidth, double screenHeight, RegisterController controller) {

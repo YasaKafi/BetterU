@@ -1,5 +1,4 @@
 
-import 'package:better_u/data/api/auth/model/nutrition_information.dart';
 import 'package:better_u/presentation/pages/home_page/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
+import '../../../../data/api/model/nutrition_information.dart';
 import '../../../global_components/common_button.dart';
 
 Widget buildBottomSheetContentEat(BuildContext context, NutritionInformationFromAI item, bool? isFromRecommendation, bool? isInputManual ) {

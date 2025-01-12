@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:better_u/presentation/global_components/common_button.dart';
 import 'package:better_u/presentation/pages/home_page/controller/home_controller.dart';
-import 'package:better_u/presentation/pages/home_page/widget/show_recommendation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,7 +9,7 @@ import 'package:get/get.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../../../data/api/auth/model/nutrition_information.dart';
+import '../../../../data/api/model/nutrition_information.dart';
 import '../../../../route/app_pages.dart';
 
 class ResultScan extends StatelessWidget {

@@ -7,6 +7,20 @@ import '../repository/betterU_repository.dart';
 class AiServices {
   final DioInstance _dioInstance = DioInstance();
 
+
+  Future<Response> showHistoryChatBot() async {
+    try {
+      final response = await _dioInstance.getRequest(
+          endpoint: BetterUApiRepository.getHistoryChatBot,
+          isAuthorize: true
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Response> postCalculateNutrition({
     required String dateOfBirth,
     required String goals,
@@ -25,6 +39,30 @@ class AiServices {
           'height': height,
           'activity_level': activityLevel,
           'goal': goals,
+        },
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Response> postChatBot({
+    required String message,
+    required String sender,
+    required String createdAt,
+
+  }) async {
+    try {
+      final response = await _dioInstance.postRequest(
+        endpoint: BetterUApiRepository.postChatBot,
+        isAuthorize: true,
+        isMetaToken: false,
+        data: {
+          'message': message,
+          'sender': sender,
+          'created_at': createdAt,
         },
       );
 

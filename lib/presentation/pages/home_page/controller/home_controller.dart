@@ -22,7 +22,7 @@ import '../../../../data/api/model/current_total_nutrition_model.dart';
 import '../../../../data/api/model/current_user_model.dart';
 import '../../../../data/api/model/daily_nutrition_model.dart';
 import '../../../../data/api/model/data_recommendation_food.dart';
-import '../../../../data/api/model/nutrition_information.dart';
+import '../../../../data/api/model/nutrition_information_model.dart';
 import '../../../../data/api/model/prediction_ai_model.dart';
 import '../../../../data/api/model/show_recommendation_model.dart';
 import '../../../../route/app_pages.dart';

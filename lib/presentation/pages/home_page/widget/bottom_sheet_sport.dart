@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../../../data/api/model/nutrition_information.dart';
+import '../../../../data/api/model/nutrition_information_model.dart';
 import '../../../global_components/common_button.dart';
 
 Widget buildBottomSheetContentActivity(BuildContext context, NutritionInformationFromAI item, bool? isInputManual ) {

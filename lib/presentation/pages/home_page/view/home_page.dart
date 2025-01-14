@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../data/api/model/current_combo_model.dart';
+import '../../../global_components/common_button.dart';
 import '../controller/home_controller.dart';
 import '../widget/add_activity.dart';
 import '../widget/calorie_circle_progress.dart';
@@ -417,9 +418,11 @@ class CardDailyWater extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Obx(() {
       return controller.isLoading.value
-          ? CircularProgressIndicator()
+          ? ShimmerWidgets.cardDailyWater(width: width, height: height)
           : controller.currentDailyWater.value.data == null
               ? SizedBox.shrink()
               : Container(
@@ -467,6 +470,7 @@ class CardDailyWater extends StatelessWidget {
                               if (value == 'tambah') {
                                 Get.dialog(
                                   Dialog(
+                                    backgroundColor: baseColor,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(20),
@@ -475,25 +479,44 @@ class CardDailyWater extends StatelessWidget {
                                         children: [
                                           Text(
                                             'Tambah Air Minum',
-                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                            style: txtPrimaryTitle.copyWith(fontWeight: FontWeight.w600, color: blackColor),
                                           ),
                                           SizedBox(height: 10),
-                                          Text('Yakin sudah meminum air 1 gelas sebesar 200ml?'),
+                                          Text('Yakin sudah meminum air 1 gelas sebesar 200ml?', textAlign: TextAlign.center, style: txtSecondaryTitle.copyWith(fontWeight: FontWeight.w400, color: blackColor),),
                                           SizedBox(height: 20),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
-                                              ElevatedButton(
-                                                onPressed: () => Get.back(),
-                                                child: Text('Batal'),
-                                                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                                              ),
-                                              ElevatedButton(
+                                              CommonButton(
+                                                  text: 'Batal',
+                                                  style: txtButton.copyWith(
+                                                      fontWeight: FontWeight.w600, color: primaryColor),
+                                                  onPressed: () => Get.back(),
+                                                  borderRadius: 10,
+                                                  border: BorderSide(
+                                                    color: primaryColor,
+                                                    width: 2,
+                                                  ),
+                                                  backgroundColor: baseColor),
+                                              CommonButton(
+                                                text: 'Tambah',
                                                 onPressed: () {
+
+                                                  if (controller.currentDailyWater.value.data!.totalGlasses! >= 10) {
+                                                    Get.snackbar(
+                                                      'Gagal',
+                                                      'Tidak bisa menambah air minum lagi',
+                                                      backgroundColor: redMedium,
+                                                      colorText: baseColor,
+                                                    );
+                                                    return;
+                                                  }
+
                                                   Get.back();
                                                   controller.postCurrentDailyWaterIncrease();
                                                 },
-                                                child: Text('Tambah'),
+                                                // height: 60,
+                                                borderRadius: 10,
                                               ),
                                             ],
                                           ),
@@ -506,6 +529,7 @@ class CardDailyWater extends StatelessWidget {
                                 // Tambahkan logika untuk opsi Delete
                                 Get.dialog(
                                   Dialog(
+                                    backgroundColor: baseColor,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(20),
@@ -514,25 +538,44 @@ class CardDailyWater extends StatelessWidget {
                                         children: [
                                           Text(
                                             'Kurangi Air Minum',
-                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                            style: txtPrimaryTitle.copyWith(fontWeight: FontWeight.w600, color: blackColor),
                                           ),
                                           SizedBox(height: 10),
-                                          Text('Yakin ingin mengurangi total air sebanyak 200ml?'),
+                                          Text('Yakin ingin mengurangi total air sebanyak 200ml?', textAlign: TextAlign.center, style: txtSecondaryTitle.copyWith(fontWeight: FontWeight.w400, color: blackColor),),
                                           SizedBox(height: 20),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
-                                              ElevatedButton(
-                                                onPressed: () => Get.back(),
-                                                child: Text('Batal'),
-                                                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                                              CommonButton(
+                                              text: 'Batal',
+                                              style: txtButton.copyWith(
+                                                  fontWeight: FontWeight.w600, color: primaryColor),
+                                              onPressed: () => Get.back(),
+                                              borderRadius: 10,
+                                              border: BorderSide(
+                                                color: primaryColor,
+                                                width: 2,
                                               ),
-                                              ElevatedButton(
+                                              backgroundColor: baseColor),
+                                              CommonButton(
+                                                text: 'Kurangi',
                                                 onPressed: () {
+
+                                                  if (controller.currentDailyWater.value.data!.totalGlasses! <= 0) {
+                                                    Get.snackbar(
+                                                      'Gagal',
+                                                      'Tidak bisa mengurangi air minum lagi',
+                                                      backgroundColor: redMedium,
+                                                      colorText: baseColor,
+                                                    );
+                                                    return;
+                                                  }
+
                                                   Get.back();
                                                   controller.postCurrentDailyWaterDecrease();
                                                 },
-                                                child: Text('Kurangi'),
+                                                // height: 60,
+                                                borderRadius: 10,
                                               ),
                                             ],
                                           ),

@@ -522,7 +522,6 @@ class ShimmerWidgets {
     );
   }
 
-
   static Widget shimmerVerticalFoodCard({screenWidth, screenHeight}) {
     return Column(
       children: [
@@ -594,7 +593,6 @@ class ShimmerWidgets {
       ],
     );
   }
-
 
   static Widget shimmerVerticalSportCard({screenWidth, screenHeight}) {
     return Column(
@@ -669,4 +667,77 @@ class ShimmerWidgets {
     );
   }
 
+  static Widget cardDailyWater({
+    required double width,
+    required double height,
+  }) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: baseColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Shimmer untuk Row dengan teks "Air yang diminum"
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Shimmer untuk teks "Air yang diminum"
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Teks pertama: "Air yang diminum"
+                    Container(
+                      width: width * 0.5, // Sesuaikan dengan panjang teks
+                      height: 20, // Ukuran tinggi untuk teks
+                      color: Colors.white,
+                    ),
+                    SizedBox(height: 10),
+                    // Teks kedua: jumlah air diminum (seperti "1.0L / 2.0L")
+                    Container(
+                      width: width * 0.3, // Sesuaikan dengan panjang teks
+                      height: 15, // Ukuran tinggi untuk teks
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                // Shimmer untuk ikon PopupMenu (tiga titik)
+                Container(
+                  width: 24,
+                  height: 24,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Divider(
+              color: grey,
+              thickness: 1,
+            ),
+            SizedBox(height: 20),
+            // Shimmer untuk 10 ikon gelas
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(10, (index) {
+                return Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                );
+              }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

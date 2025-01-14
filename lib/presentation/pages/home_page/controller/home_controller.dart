@@ -11,6 +11,7 @@ import 'package:better_u/presentation/pages/home_page/widget/bottom_sheet_eat.da
 import 'package:better_u/presentation/pages/home_page/widget/result_scan.dart';
 import 'package:better_u/presentation/pages/home_page/widget/show_recommendation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -422,6 +423,8 @@ class HomeController extends GetxController {
       bool? isFromInputManual = false}) async {
     try {
       // Nama makanan dari user input
+      await dotenv.load();
+      String promptTemplate = dotenv.env['PROMPT_TEMPLATE'] ?? '';
 
       String userMessage = '';
 
@@ -439,20 +442,7 @@ class HomeController extends GetxController {
 
       showLoadingDialog(context, message: 'makanan');
 
-      // Prompt yang digunakan untuk AI
-      String prompt = '''
-Berikan informasi tentang komposisi nutrisi makanan berikut: "$userMessage". 
-Formatkan respons Anda dalam JSON dengan struktur berikut:
-{
-  "kalori": "Jumlah kalori dalam Kkal",
-  "protein": "Jumlah protein dalam gram",
-  "lemak": "Jumlah lemak dalam gram",
-  "karbohidrat": "Jumlah karbohidrat dalam gram",
-  "catatan": "Saran kesehatan untuk makanan ini dan sebutkan efek bagi tubuh jika makanan ini menurut kesehatan ini tidak baik , berupa 1 paragraf"
-}
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }.
-'''
-          .trim();
+      String prompt = promptTemplate.replaceFirst('{userMessage}', userMessage);
 
 
 
@@ -541,6 +531,10 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
   Future<void> postChatModelAnalisisActivity(BuildContext context) async {
     try {
 
+      await dotenv.load();
+      String promptTemplateActivity = dotenv.env['PROMPT_TEMPLATE_ACTIVITY'] ?? '';
+
+
       if (userMessageActivityController.text.isEmpty) {
         Get.snackbar('Error', 'Tidak ada aktivitas yang dimasukkan.');
         return;
@@ -552,17 +546,10 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       // Nama makanan dari user input
       final String userMessage = userMessageActivityController.text.trim();
 
-      // Prompt yang digunakan untuk AI
-      String prompt = '''
-Berikan informasi tentang komposisi aktivitas olahraga berikut: "$userMessage". 
-Formatkan respons Anda dalam JSON dengan struktur berikut:
-{
-  "kalori": "Jumlah kalori terbakar dalam Kkal",
-  "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk , berupa 1 paragraf",
-}
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> } jika response anda tidak terdapat tag penutup -> } sebelumnya.
-'''
-          .trim();
+      String prompt = promptTemplateActivity.replaceFirst('{userMessage}', userMessage);
+
+
+
 
       // Panggil API untuk mendapatkan hasil dari prompt
       final response = await openRouterAPI.callChatModel(prompt);

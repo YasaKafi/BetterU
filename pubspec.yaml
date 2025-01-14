@@ -30,6 +30,7 @@ dependencies:
   http: ^1.2.2
   dropdown_button2: ^2.3.9
   shimmer: ^3.0.0
+  flutter_dotenv: ^5.2.1
 
 
 dev_dependencies:
@@ -46,6 +47,7 @@ flutter:
     - assets/svg/
     - assets/image/
     - assets/gif/
+    - .env
 
   fonts:
     - family: Montserrat

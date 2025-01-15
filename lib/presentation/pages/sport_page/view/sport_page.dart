@@ -110,11 +110,6 @@ class SportPage extends GetView<SportController> {
                               } else {
                                 return ListviewSportHorizontal(
                                   sportCategory: controller.sportCategory,
-                                  onTap: (categoryName) {
-                                    controller.isLoadingSportByCategory.value = true;
-                                    controller.currentCategory.value = categoryName;
-                                    controller.getAllSportByCategory(category: categoryName);
-                                  },
                                 );
                               }
                             }),
@@ -179,38 +174,7 @@ class SportPage extends GetView<SportController> {
                   );
                 }
 
-                // ** UI Olahraga Berdasarkan Kategori ** //
-                else if (controller.currentTypePage.value == "CATEGORY") {
-                  return SingleChildScrollView(
-                    child: Container(
-                      width: screenWidth,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // ** Olahraga Berdasarkan Kategori ** //
-                          const SizedBox(height: 15),
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                            child: Obx(() {
-                              if (controller.isLoadingSportByCategory.value) {
-                                return SizedBox(
-                                  width: screenWidth,
-                                  height: screenWidth * 0.5,
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              } else {
-                                return ListviewSportVertical(sport: controller.sportByCategory);
-                              }
-                            }),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                } else {
+                else {
                   return Center(
                     child: Text(controller.currentTypePage.value),
                   );

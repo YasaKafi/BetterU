@@ -11,6 +11,8 @@ abstract class Routes {
   static const FOOD_PAGE = _Paths.FOOD_PAGE;
   static const FOOD_DETAIL_PAGE = _Paths.FOOD_DETAIL_PAGE;
   static const LOGIN_PAGE = _Paths.LOGIN_PAGE;
+  static const SPORT_PAGE = _Paths.SPORT_PAGE;
+  static const SPORT_CATEGORY_DETAIL_PAGE = _Paths.SPORT_CATEGORY_DETAIL_PAGE;
 }
 
 abstract class _Paths {
@@ -24,4 +26,6 @@ abstract class _Paths {
   static const FOOD_PAGE = '/food-page';
   static const FOOD_DETAIL_PAGE = '/food-detail-page';
   static const LOGIN_PAGE = '/login-page';
+  static const SPORT_PAGE = '/sport-page';
+  static const SPORT_CATEGORY_DETAIL_PAGE = '/sport-category-detail-page';
 }

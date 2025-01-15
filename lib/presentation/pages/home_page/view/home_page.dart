@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../data/api/model/current_combo_model.dart';
 import '../../../global_components/common_button.dart';
+import '../../profile_page/widget/chatbot_ai.dart';
 import '../controller/home_controller.dart';
 import '../widget/add_activity.dart';
 import '../widget/calorie_circle_progress.dart';
@@ -76,6 +77,37 @@ class HomePage extends GetView<HomeController> {
               ),
             ),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(
+                () => ChatbotAi(),
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              betterAiLogo,
+              width: 28,
+              height: 28,
+            ),
+            Text(
+              'Better AI',
+              style: txtThirdSubTitle.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: primaryColor,
+                  fontSize: 8
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: baseColor,
+
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );

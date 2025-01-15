@@ -6,7 +6,9 @@ import 'package:better_u/presentation/pages/sport_page/widget/listview_sport_ver
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
+import '../../profile_page/widget/chatbot_ai.dart';
 
 class SportPage extends GetView<SportController> {
   @override
@@ -219,7 +221,38 @@ class SportPage extends GetView<SportController> {
               }
             }),
           ),
-        )
+        ),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(
+                () => ChatbotAi(),
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              betterAiLogo,
+              width: 28,
+              height: 28,
+            ),
+            Text(
+              'Better AI',
+              style: txtThirdSubTitle.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: primaryColor,
+                  fontSize: 8
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: baseColor,
+
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 }

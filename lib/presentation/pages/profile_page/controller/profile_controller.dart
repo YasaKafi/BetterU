@@ -59,6 +59,7 @@ class ProfileController extends GetxController {
     aiService = AiServices();
     nutritionServices = NutritionServices();
     openRouterAPI = OpenRouterAPI();
+    isLoading(true);
     getCurrentUser();
     getHistoryTotalNutrition(filterDate: '');
     getCurrentCombo(date: '');

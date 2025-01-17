@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:better_u/data/api/ai_instance.dart';
@@ -117,7 +118,6 @@ class HomeController extends GetxController {
       await getHistoryChatBot();
     }
   }
-
 
   Future<void> putDailyWater() async {
     try {

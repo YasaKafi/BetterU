@@ -125,15 +125,35 @@ class CardDailyWater extends StatelessWidget {
 
                                 SizedBox(height: 10),
                                 Obx(() {
+                                  final checkDataWater = controller
+                                      .currentDailyWater.value.data?.amount ??
+                                      0.0;
+
+                                  final checkDataAsDouble = checkDataWater is double
+                                      ? checkDataWater
+                                      : double.tryParse(
+                                      checkDataWater.toString()) ?? 0.0;
+
+                                  final conversionFactor = 1000.0;
+
+                                  // Mengonversi nilai dari API ke nilai slider
+                                  final convertedValue = checkDataAsDouble *
+                                      conversionFactor;
+
+                                  final calculateTotal =
+                                      controller.valuesDrink.value.end.toInt() -
+                                          convertedValue.toInt();
+
                                   return Text(
-                                    'Yakin kamu sudah minum air sebanyak ${
-                                        controller
-                                            .valuesDrink.value.end.toInt()
-                                    } ml?',
+                                    calculateTotal < 0
+                                        ? 'Yakin ingin mengurangi jumlah minummu sebanyak ${calculateTotal
+                                        .abs()} ml?'
+                                        : 'Yakin kamu sudah minum air sebanyak $calculateTotal ml?',
                                     textAlign: TextAlign.center,
                                     style: txtSecondaryTitle.copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        color: blackColor),
+                                      fontWeight: FontWeight.w400,
+                                      color: blackColor,
+                                    ),
                                   );
                                 }),
                                 SizedBox(height: 20),
@@ -141,49 +161,92 @@ class CardDailyWater extends StatelessWidget {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    CommonButton(
-                                        text: 'Belum',
-                                        style: txtButton.copyWith(
-                                            fontWeight:
-                                            FontWeight.w600,
-                                            color: primaryColor),
-                                        onPressed: () {
-                                          controller.valuesDrink.value =
-                                              initialValues;
-                                          Get.back();
-                                        },
-                                        borderRadius: 10,
-                                        border: BorderSide(
-                                          color: primaryColor,
-                                          width: 2,
-                                        ),
-                                        backgroundColor: baseColor),
-                                    CommonButton(
-                                      text: 'Sudah',
-                                      onPressed: () {
-                                        if (controller
-                                            .currentDailyWater
-                                            .value
-                                            .data!
-                                            .totalGlasses! >=
-                                            10) {
-                                          Get.snackbar(
-                                            'Gagal',
-                                            'Tidak bisa menambah air minum lagi',
-                                            backgroundColor:
-                                            redMedium,
-                                            colorText: baseColor,
-                                          );
-                                          return;
-                                        }
+                                    Obx(() {
+                                      final checkDataWater = controller
+                                          .currentDailyWater.value.data?.amount ??
+                                          0.0;
 
-                                        Get.back();
-                                        controller
-                                            .putDailyWater();
-                                      },
-                                      // height: 60,
-                                      borderRadius: 10,
-                                    ),
+                                      final checkDataAsDouble = checkDataWater is double
+                                          ? checkDataWater
+                                          : double.tryParse(
+                                          checkDataWater.toString()) ?? 0.0;
+
+                                      final conversionFactor = 1000.0;
+
+                                      // Mengonversi nilai dari API ke nilai slider
+                                      final convertedValue = checkDataAsDouble *
+                                          conversionFactor;
+
+                                      final calculateTotal =
+                                          controller.valuesDrink.value.end.toInt() -
+                                              convertedValue.toInt();
+                                      return CommonButton(
+                                          text: calculateTotal <=
+                                              0 ? 'Tidak' : 'Belum',
+                                          style: txtButton.copyWith(
+                                              fontWeight:
+                                              FontWeight.w600,
+                                              color: primaryColor),
+                                          onPressed: () {
+                                            controller.valuesDrink.value =
+                                                initialValues;
+                                            Get.back();
+                                          },
+                                          borderRadius: 10,
+                                          border: BorderSide(
+                                            color: primaryColor,
+                                            width: 2,
+                                          ),
+                                          backgroundColor: baseColor);
+                                    }),
+                                    Obx(() {
+                                      final checkDataWater = controller
+                                          .currentDailyWater.value.data?.amount ??
+                                          0.0;
+
+                                      final checkDataAsDouble = checkDataWater is double
+                                          ? checkDataWater
+                                          : double.tryParse(
+                                          checkDataWater.toString()) ?? 0.0;
+
+                                      final conversionFactor = 1000.0;
+
+                                      // Mengonversi nilai dari API ke nilai slider
+                                      final convertedValue = checkDataAsDouble *
+                                          conversionFactor;
+
+                                      final calculateTotal =
+                                          controller.valuesDrink.value.end.toInt() -
+                                              convertedValue.toInt();
+                                      return CommonButton(
+                                        text: calculateTotal <= 0
+                                            ? 'Iya'
+                                            : 'Sudah',
+                                        onPressed: () {
+                                          if (controller
+                                              .currentDailyWater
+                                              .value
+                                              .data!
+                                              .totalGlasses! >=
+                                              10) {
+                                            Get.snackbar(
+                                              'Gagal',
+                                              'Tidak bisa menambah air minum lagi',
+                                              backgroundColor:
+                                              redMedium,
+                                              colorText: baseColor,
+                                            );
+                                            return;
+                                          }
+
+                                          Get.back();
+                                          controller
+                                              .putDailyWater();
+                                        },
+                                        // height: 60,
+                                        borderRadius: 10,
+                                      );
+                                    }),
                                   ],
                                 ),
                               ],
@@ -197,7 +260,7 @@ class CardDailyWater extends StatelessWidget {
                     controller.currentDailyWater.value.data?.amount == '0.0'
                         ? Icons.add_circle
                         : Icons.mode_edit_outlined,
-                    size: 28,
+                    size: 32,
                     color: primaryColor,
                   ),
                 )

@@ -17,6 +17,7 @@ String gifSearchLoading = '${gif}search_loading.png';
 String gifMaleAvatar = '${gif}male_profile.png';
 String gifFemaleAvatar = '${gif}woman_profile.png';
 String gifLazyPerson = '${gif}lazy_boy.png';
+String gifEmptyHistory = '${gif}empty_history.png';
 
 
 

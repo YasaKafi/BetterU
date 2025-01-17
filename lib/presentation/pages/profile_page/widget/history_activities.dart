@@ -181,11 +181,40 @@ class _HistoryActivitiesState extends State<HistoryActivities> {
                       }
 
                       if (historyList.isEmpty) {
-                        return Text(
-                          'Tidak ada data untuk filter ini',
-                          style: txtSecondaryTitle.copyWith(color: blackColor),
+                        return Container(
+                          width: screenWidth,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                gifEmptyHistory,
+                                width: 200,
+                                height: 200,
+                              ),
+                              SizedBox(height: 15),
+                              Text(
+                                'Tidak ada data',
+                                style: txtSecondaryTitle.copyWith(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: blackColor,
+                                ),
+                              ),
+                              SizedBox(height: 8), // Jarak antara title dan subtitle
+                              Text(
+                                'Silakan coba filter lain untuk melihat hasil',
+                                style: txtSecondaryTitle.copyWith(
+                                  fontSize: 14,
+                                  color: blackColor.withOpacity(0.6),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         );
                       }
+
 
                       String _monthName(int month) {
                         const List<String> months = [

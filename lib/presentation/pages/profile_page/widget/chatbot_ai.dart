@@ -119,7 +119,6 @@ class _ChatbotAiState extends State<ChatbotAi> {
                     final isAiLoading = chat['sender'] == 'AI_LOADING';
 
 
-
                     if (isAiLoading) {
                       return Align(
                         alignment: Alignment.centerLeft,

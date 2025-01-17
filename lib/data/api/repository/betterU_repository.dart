@@ -24,6 +24,7 @@ class BetterUApiRepository {
 
   static String putDailyActivity = '$mainUrl/api/daily-activity/update';
   static String putEditUser = '$mainUrl/api/users/update';
+  static String putEditDailyWater = '$mainUrl/api/daily-waters/update';
 
   static String deleteDailyActivity = '$mainUrl/api/daily-activity/delete';
   static String deleteTokenUser = '$mainUrl/api/users/logout';

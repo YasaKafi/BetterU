@@ -134,6 +134,24 @@ class NutritionServices {
     }
   }
 
+  Future<Response> putDailyWater({
+    required String amount,
+  }) async {
+    try {
+      final response = await _dioInstance.putRequest(
+        endpoint: BetterUApiRepository.putEditDailyWater,
+        data: {
+          'amount': amount,
+        },
+        isAuthorize: true,
+      );
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
 
   /// POST ///
 
@@ -166,6 +184,7 @@ class NutritionServices {
       throw Exception(e);
     }
   }
+
 
 
   Future<Response> postPredict({

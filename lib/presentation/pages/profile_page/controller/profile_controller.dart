@@ -344,7 +344,7 @@ Tugas Anda:
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('token');
-        Get.offAllNamed(Routes.LOGIN_PAGE);
+        Get.offAllNamed(Routes.ONBOARDING_FINAL_SCREEN);
       }
     } catch (e) {
       print('Error deleting token: $e');

@@ -15,6 +15,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
@@ -41,6 +42,8 @@ class HomeController extends GetxController {
   RxString responsePredict = ''.obs;
   String imageUrl = '';
   var selectedFood = ''.obs;
+  final valuesDrink = Rx<SfRangeValues>(SfRangeValues(0.0, 2000.0));
+
 
   final ImagePicker _picker = ImagePicker();
   Rxn<XFile> selectedImage = Rxn<XFile>();
@@ -110,6 +113,28 @@ class HomeController extends GetxController {
       await getCurrentTotalNutrition();
       await getCurrentDailyWater();
       await getCurrentCombo();
+    }
+  }
+
+
+  Future<void> putDailyWater() async {
+    try {
+      int waterAmount = valuesDrink.value.end.toInt();  // Menggunakan .end atau .start sesuai kebutuhan
+      String waterAmountStr = waterAmount.toString();
+      final response = await nutritionServices.putDailyWater(amount: waterAmountStr);
+
+      if (response.data != null) {
+        final currentDailyWaterData =
+            CurrentDailyWater.fromJson(response.data);
+        currentDailyWater.value = currentDailyWaterData;
+        print("Current Daily Water: ${currentDailyWater.value}");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error posting current daily water: $e');
+    } finally {
+      initialize();
     }
   }
 
@@ -1096,6 +1121,20 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
         final checkData = dailyWaterData.data?.amount ?? 0.0;
 
         print("VALUE AMOUNT OF WATER : $checkData");
+
+        final checkDataAsDouble = checkData is double ? checkData : double.tryParse(checkData.toString()) ?? 0.0;
+
+        // Faktor untuk mengonversi nilai API ke rentang slider
+        final conversionFactor = 1000.0;  // Misalnya API memiliki rentang 0.0 - 2.0 dan slider rentangnya 0.0 - 2000.0
+
+        // Mengonversi nilai dari API ke nilai slider
+        final convertedValue = checkDataAsDouble * conversionFactor;  // Mengalikan untuk mendapatkan nilai yang sesuai dengan slider
+
+        // Mengganti nilai start dari SfRangeValues dengan nilai yang sudah dikonversi
+        final updatedRangeValues = SfRangeValues(valuesDrink.value.start, convertedValue);
+        valuesDrink.value = updatedRangeValues;  // Update Rx value
+
+        print("Updated valuesDrink end: ${valuesDrink.value.start}");
       } else {
         print("Response data is null");
       }

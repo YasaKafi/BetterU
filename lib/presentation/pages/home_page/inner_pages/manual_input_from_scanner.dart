@@ -1,5 +1,4 @@
 import 'package:better_u/presentation/pages/home_page/controller/home_controller.dart';
-import 'package:better_u/presentation/pages/home_page/widget/manual_input_nutrition.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../../common/theme.dart';
 import '../../../global_components/common_button.dart';
 import '../../../global_components/textfield_auth_custom.dart';
+import 'manual_input_nutrition.dart';
 
 class ManualInputFromScanner extends StatelessWidget {
    ManualInputFromScanner({super.key});

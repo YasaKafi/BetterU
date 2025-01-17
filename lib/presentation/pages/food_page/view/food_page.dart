@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../profile_page/widget/chatbot_ai.dart';
+import '../../../../route/app_pages.dart';
 import '../controller/food_controller.dart';
 import '../widget/listview_food_horizontal.dart';
 import '../widget/listview_food_vertical.dart';
@@ -144,9 +144,8 @@ class FoodPage extends GetView<FoodController> {
         ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(
-                () => ChatbotAi(),
-          );
+          Get.toNamed(Routes.CHAT_BOT);
+
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

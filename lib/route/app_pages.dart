@@ -5,6 +5,8 @@ import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboa
 import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboarding_screen.dart';
 import 'package:better_u/presentation/initial_pages/register_page/binding/register_binding.dart';
 import 'package:better_u/presentation/initial_pages/register_page/view/register_page.dart';
+import 'package:better_u/presentation/pages/chat_bot/binding/chat_bot_binding.dart';
+import 'package:better_u/presentation/pages/chat_bot/view/chat_bot_view.dart';
 import 'package:better_u/presentation/pages/food_detail_page/binding/food_detail_binding.dart';
 import 'package:better_u/presentation/pages/food_detail_page/view/food_detail_page.dart';
 import 'package:better_u/presentation/pages/food_page/binding/food_binding.dart';
@@ -98,6 +100,13 @@ class AppPages {
         name: _Paths.SPORT_CATEGORY_DETAIL_PAGE,
         page: () => SportCategoryDetailPage(),
         binding: SportCategoryDetailPageBinding(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 500)
+    ),
+    GetPage(
+        name: _Paths.CHAT_BOT,
+        page: () => ChatBotView(),
+        binding: ChatBotBinding(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 500)
     ),

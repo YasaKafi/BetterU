@@ -8,8 +8,8 @@ import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/nutrition_service.dart';
 import 'package:better_u/presentation/global_components/common_button.dart';
 import 'package:better_u/presentation/pages/home_page/widget/bottom_sheet_eat.dart';
-import 'package:better_u/presentation/pages/home_page/widget/result_scan.dart';
-import 'package:better_u/presentation/pages/home_page/widget/show_recommendation.dart';
+import 'package:better_u/presentation/pages/home_page/inner_pages/result_scan.dart';
+import 'package:better_u/presentation/pages/home_page/inner_pages/show_recommendation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -26,12 +26,14 @@ import '../../../../data/api/model/daily_nutrition_model.dart';
 import '../../../../data/api/model/data_recommendation_food.dart';
 import '../../../../data/api/model/nutrition_information_model.dart';
 import '../../../../data/api/model/prediction_ai_model.dart';
+import '../../../../data/api/model/show_history_chatbot_model.dart';
 import '../../../../data/api/model/show_recommendation_model.dart';
 import '../../../../route/app_pages.dart';
 import '../widget/bottom_sheet_sport.dart';
 
 class HomeController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isHistoryEmpty = false.obs;
   bool isCancelled = false;
   late AuthServices userService;
   late NutritionServices nutritionServices;
@@ -43,7 +45,6 @@ class HomeController extends GetxController {
   String imageUrl = '';
   var selectedFood = ''.obs;
   final valuesDrink = Rx<SfRangeValues>(SfRangeValues(0.0, 2000.0));
-
 
   final ImagePicker _picker = ImagePicker();
   Rxn<XFile> selectedImage = Rxn<XFile>();
@@ -113,6 +114,7 @@ class HomeController extends GetxController {
       await getCurrentTotalNutrition();
       await getCurrentDailyWater();
       await getCurrentCombo();
+      await getHistoryChatBot();
     }
   }
 
@@ -858,11 +860,77 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+  Future<void> postDailyActivity(
+      {required category,
+        required String name,
+        required String kalori,
+        String? lemak,
+        String? protein,
+        String? karbohidrat,
+        required String note,
+        bool? isFromRecommendation = false,
+        bool? isFromResultScan = false,
+        bool? isInputManual = false}) async {
+    try {
+      isLoading(true);
+      final response = await nutritionServices.postDailyActivity(
+        name: name,
+        category: category,
+        kalori: kalori,
+        lemak: lemak ?? '0',
+        protein: protein ?? '0',
+        karbohidrat: karbohidrat ?? '0',
+        note: note ?? '',
+      );
+
+      print("CHECK PUT DAILY ACTIVITY RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+        print("Daily activity added successfully");
+
+        if (isFromRecommendation == true) {
+          Get.back();
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        if (isFromResultScan == true) {
+          Get.back();
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        if (isInputManual == true) {
+          Get.back();
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        Get.back();
+        Get.back();
+        Get.snackbar(
+          "Berhasil",
+          "Makanan berhasil ditambahkan",
+          backgroundColor: primaryColor,
+          colorText: baseColor,
+        );
+        refresh();
+        userMessageController.clear();
+        userMessageActivityController.clear();
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error adding daily activity: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
 
 
   /// PARSE RESPONSE AI ///
 
-// Fungsi untuk mem-parsing response AI ke dalam Map
   Map<String, dynamic> parseAiResponseAnalisisFood(String response) {
     try {
       final endIndex = response.lastIndexOf('}');
@@ -1145,6 +1213,45 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+  Future<void> getHistoryChatBot() async {
+    try {
+      isLoading(true);
+      final response = await aiService.showHistoryChatBot();
+
+      print("CHECK RESPONSE HISTORY CHAT BOT");
+      print(response.data);
+
+      if (response.data != null) {
+        final chatBot = HistoryChatBot.fromJson(response.data);
+
+        isHistoryEmpty.value = chatBot.data?.isEmpty ?? true;
+
+        print("HISTORY CHAT BOT LENGTH : ${chatBot.data?.length}");
+
+        print(
+            "History chat bot fetched : ${chatBot.data?.first.messageData?.first.message}");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+
+      Get.snackbar(
+        "Kesalahan Jaringan",
+        "Terjadi masalah dengan koneksi jaringan. Silakan coba lagi.",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: redMedium,
+        colorText: baseColor,
+        duration: Duration(seconds: 3),
+      );
+
+      Get.back();
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
   /// DELETE ///
 
   Future<void> deleteDailyActivity(int dailyActivityID) async {
@@ -1170,74 +1277,6 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
   }
 
   /// PUT ///
-
-  Future<void> postDailyActivity(
-      {required category,
-      required String name,
-      required String kalori,
-      String? lemak,
-      String? protein,
-      String? karbohidrat,
-      required String note,
-      bool? isFromRecommendation = false,
-      bool? isFromResultScan = false,
-      bool? isInputManual = false}) async {
-    try {
-      isLoading(true);
-      final response = await nutritionServices.postDailyActivity(
-        name: name,
-        category: category,
-        kalori: kalori,
-        lemak: lemak ?? '0',
-        protein: protein ?? '0',
-        karbohidrat: karbohidrat ?? '0',
-        note: note ?? '',
-      );
-
-      print("CHECK PUT DAILY ACTIVITY RESPONSE");
-      print(response.data);
-
-      if (response.data != null) {
-        print("Daily activity added successfully");
-
-        if (isFromRecommendation == true) {
-          Get.back();
-          Get.offNamedUntil(
-              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
-        }
-
-        if (isFromResultScan == true) {
-          Get.back();
-          Get.offNamedUntil(
-              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
-        }
-
-        if (isInputManual == true) {
-          Get.back();
-          Get.offNamedUntil(
-              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
-        }
-
-        Get.back();
-        Get.back();
-        Get.snackbar(
-          "Berhasil",
-          "Makanan berhasil ditambahkan",
-          backgroundColor: primaryColor,
-          colorText: baseColor,
-        );
-        refresh();
-        userMessageController.clear();
-        userMessageActivityController.clear();
-      } else {
-        print("Response data is null");
-      }
-    } catch (e) {
-      print('Error adding daily activity: $e');
-    } finally {
-      isLoading(false);
-    }
-  }
 
   Future<void> putDailyActivity(
     int dailyActivityID,

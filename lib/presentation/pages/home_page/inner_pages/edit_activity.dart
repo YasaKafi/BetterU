@@ -28,7 +28,6 @@ class _EditActivityState extends State<EditActivity> {
   void initState() {
     super.initState();
 
-    // Inisialisasi TextEditingController dengan nilai dari item
     foodController = TextEditingController(text: widget.item.name ?? '');
     kaloriController = TextEditingController(text: widget.item.kalori?.toString() ?? '');
     lemakController = TextEditingController(text: widget.item.lemak?.toString() ?? '');
@@ -38,7 +37,6 @@ class _EditActivityState extends State<EditActivity> {
 
   @override
   void dispose() {
-    // Jangan lupa untuk dispose TextEditingController untuk menghindari memory leak
     foodController.dispose();
     kaloriController.dispose();
     lemakController.dispose();
@@ -366,8 +364,6 @@ class _EditActivityState extends State<EditActivity> {
                   ],
                 ),
               ),
-
-
               Spacer(),
               Container(
                 width: screenWidth,

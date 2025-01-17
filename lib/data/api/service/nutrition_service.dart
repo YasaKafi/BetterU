@@ -6,14 +6,13 @@ import 'package:intl/intl.dart';
 import '../dio_instance.dart';
 import '../repository/betterU_repository.dart';
 
-
 class NutritionServices {
   final DioInstance _dioInstance = DioInstance();
 
-
   /// GET ///
 
-  Future<Response> showCurrentTotalNutrition({bool? isHistory = false, String? date}) async {
+  Future<Response> showCurrentTotalNutrition(
+      {bool? isHistory = false, String? date}) async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -33,7 +32,6 @@ class NutritionServices {
 
   Future<Response> showHistoryTotalNutrition({String? filterDate}) async {
     try {
-
       final response = await _dioInstance.getRequest(
         endpoint: BetterUApiRepository.getHistoryTotalNutrition,
         queryParameters: {
@@ -48,7 +46,8 @@ class NutritionServices {
     }
   }
 
-  Future<Response> showCurrentCombo({bool? isHistory = false, String? date}) async {
+  Future<Response> showCurrentCombo(
+      {bool? isHistory = false, String? date}) async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -66,7 +65,7 @@ class NutritionServices {
     }
   }
 
-  Future<Response> showCurrentDailyWater () async {
+  Future<Response> showCurrentDailyWater() async {
     try {
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -79,13 +78,12 @@ class NutritionServices {
       );
 
       return response;
-
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<Response> showCurrentDailyWaterByDate ({required String date}) async {
+  Future<Response> showCurrentDailyWaterByDate({required String date}) async {
     try {
       final response = await _dioInstance.getRequest(
         endpoint: BetterUApiRepository.getCurrentDailyWater,
@@ -96,12 +94,10 @@ class NutritionServices {
       );
 
       return response;
-
     } catch (e) {
       throw Exception(e);
     }
   }
-
 
   /// PUT ///
 
@@ -152,7 +148,6 @@ class NutritionServices {
     }
   }
 
-
   /// POST ///
 
   Future<Response> postDailyActivity({
@@ -185,8 +180,6 @@ class NutritionServices {
     }
   }
 
-
-
   Future<Response> postPredict({
     required File file,
   }) async {
@@ -213,7 +206,6 @@ class NutritionServices {
       throw Exception(e);
     }
   }
-
 
   Future<Response> postImageToUrl({
     required File file,
@@ -242,7 +234,6 @@ class NutritionServices {
     }
   }
 
-
   Future<Response> postDailyWaterIncrease() async {
     try {
       final response = await _dioInstance.postRequest(
@@ -269,15 +260,13 @@ class NutritionServices {
     }
   }
 
-
-
   /// DELETE ///
-
 
   Future<Response> deleteDailyActivity(int dailyActivityID) async {
     try {
       final response = await _dioInstance.deleteRequest(
-        endpoint: '${BetterUApiRepository.deleteDailyActivity}/$dailyActivityID',
+        endpoint:
+            '${BetterUApiRepository.deleteDailyActivity}/$dailyActivityID',
         isAuthorize: true,
       );
 
@@ -287,5 +276,3 @@ class NutritionServices {
     }
   }
 }
-
-

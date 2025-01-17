@@ -2,12 +2,12 @@
 
 import 'package:better_u/common/constant.dart';
 import 'package:better_u/presentation/global_components/shimmer_widget.dart';
-import 'package:better_u/presentation/pages/profile_page/widget/chatbot_ai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/theme.dart';
+import '../../../../route/app_pages.dart';
 import '../../../global_components/common_button.dart';
 import '../controller/profile_controller.dart';
 import '../widget/edit_profile.dart';
@@ -361,9 +361,7 @@ class ProfilePage extends GetView<ProfileController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(
-            () => ChatbotAi(),
-          );
+          Get.toNamed(Routes.CHAT_BOT);
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

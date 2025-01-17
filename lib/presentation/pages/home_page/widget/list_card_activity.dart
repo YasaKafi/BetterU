@@ -9,7 +9,7 @@ import '../../../../common/theme.dart';
 import '../../../../data/api/model/current_combo_model.dart';
 import '../../../global_components/common_button.dart';
 import '../controller/home_controller.dart';
-import 'edit_activity.dart';
+import '../inner_pages/edit_activity.dart';
 
 class FoodListView extends StatelessWidget {
   final Rx<ShowCurrentCombo> currentCombo;

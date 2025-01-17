@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:better_u/presentation/pages/home_page/controller/home_controller.dart';
-import 'package:better_u/presentation/pages/home_page/widget/manual_input_from_scanner.dart';
+import 'package:better_u/presentation/pages/home_page/inner_pages/manual_input_from_scanner.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

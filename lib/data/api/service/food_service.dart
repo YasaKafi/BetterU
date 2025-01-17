@@ -2,10 +2,8 @@ import 'package:dio/dio.dart';
 import '../dio_instance.dart';
 import '../repository/betterU_repository.dart';
 
-
 class FoodServices {
   final DioInstance _dioInstance = DioInstance();
-
 
   /// GET ///
 
@@ -69,7 +67,4 @@ class FoodServices {
       throw Exception(e);
     }
   }
-
 }
-
-

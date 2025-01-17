@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../profile_page/widget/chatbot_ai.dart';
+import '../../../../route/app_pages.dart';
 
 class SportPage extends GetView<SportController> {
   @override
@@ -188,9 +188,8 @@ class SportPage extends GetView<SportController> {
         ),
         floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(
-                () => ChatbotAi(),
-          );
+          Get.toNamed(Routes.CHAT_BOT);
+
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

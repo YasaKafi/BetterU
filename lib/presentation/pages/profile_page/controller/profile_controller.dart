@@ -19,6 +19,7 @@ import '../../../../route/app_pages.dart';
 
 class ProfileController extends GetxController {
   var currentPage = 0.obs;
+  final RxInt currentPageChat = 0.obs;
   RxBool isLoading = false.obs;
   RxBool isLoadingResponseAi = false.obs;
   ShowCurrentUserResponse userResponse = ShowCurrentUserResponse();
@@ -187,6 +188,10 @@ Tugas Anda:
       if (response.data != null) {
         final chatBot = HistoryChatBot.fromJson(response.data);
         historyChatBot.value = chatBot;
+
+        // if (chatBot.data != null) {
+        //   currentPageChat.value = 1;
+        // }
 
         print(
             "History chat bot fetched : ${chatBot.data?.first.messageData?.first.message}");

@@ -1,60 +1,53 @@
-import 'package:better_u/common/constant.dart';
-import 'package:better_u/common/theme.dart';
+import 'package:better_u/presentation/pages/chat_bot/controller/chat_bot_controller.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../common/constant.dart';
+import '../../../../common/theme.dart';
 import '../../../global_components/textfield_auth_custom.dart';
-import '../controller/profile_controller.dart';
 
-class ChatbotAi extends StatefulWidget {
-  @override
-  _ChatbotAiState createState() => _ChatbotAiState();
-}
 
-class _ChatbotAiState extends State<ChatbotAi> {
-  final ProfileController profileController = Get.put(ProfileController());
-  final ScrollController _scrollController = ScrollController();
+class ChatBotView extends GetView<ChatBotController> {
+  const ChatBotView({super.key});
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchHistoryChatBot();
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _fetchHistoryChatBot() async {
-    await profileController.getHistoryChatBot();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
-    });
-  }
-
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      Future.delayed(Duration(milliseconds: 800), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    print('Chat List Updated: ${profileController.chatList.length}');
+    final ScrollController _scrollController = ScrollController();
+
+    AppBar _buildAppBar() {
+      final screenHeight = MediaQuery.of(context).size.height;
+      return AppBar(
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          height: screenHeight,
+          decoration:  BoxDecoration(color: baseColor),
+          padding:
+          const EdgeInsets.only(top: 30, bottom: 10, left: 10, right: 10),
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () => Get.back(),
+                ),
+                Text(
+                  'Better AI',
+                  style: txtSecondaryHeader.copyWith(
+                      fontWeight: FontWeight.w700, color: blackColor),
+                ),
+                SizedBox(width: 40),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: primaryColor2,
@@ -63,10 +56,9 @@ class _ChatbotAiState extends State<ChatbotAi> {
         padding: const EdgeInsets.only(bottom: 16, top: 16),
         child: Column(
           children: [
-            // Menampilkan Riwayat dan Realtime Chat
             Expanded(
               child: Obx(() {
-                if (profileController.isLoading.value) {
+                if (controller.isLoading.value) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
@@ -78,7 +70,7 @@ class _ChatbotAiState extends State<ChatbotAi> {
 
                 // Mengambil data riwayat chat
                 final historyChat =
-                    profileController.historyChatBot.value?.data ?? [];
+                    controller.historyChatBot.value?.data ?? [];
 
                 // Menggabungkan riwayat chat dan chat real-time
                 final combinedChat = [
@@ -91,7 +83,7 @@ class _ChatbotAiState extends State<ChatbotAi> {
                     'createdAt':
                     message.createdAt, // Properti dari MessageData
                   }),
-                  ...profileController.chatList.map((chat) => {
+                  ...controller.chatList.map((chat) => {
                     'sender': chat['sender'],
                     'message': chat['message'],
                     'createdAt': chat[
@@ -106,7 +98,7 @@ class _ChatbotAiState extends State<ChatbotAi> {
                 combinedChat.sort(
                         (a, b) => a['createdAt']?.compareTo(b['createdAt']) ?? 0);
 
-                if (profileController.isLoadingResponseAi.value) {
+                if (controller.isLoadingResponseAi.value) {
                   combinedChat.add({'sender': 'AI_LOADING', 'message': null});
                 }
 
@@ -214,7 +206,7 @@ class _ChatbotAiState extends State<ChatbotAi> {
 
             // Bagian untuk menulis pesan baru
             Obx(() {
-              return profileController.isLoadingResponseAi.value == true
+              return controller.isLoadingResponseAi.value == true
                   ? Padding(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
@@ -233,7 +225,7 @@ class _ChatbotAiState extends State<ChatbotAi> {
                             Expanded(
                               child: CustomTextFieldAuth(
                                 controller:
-                                profileController.userMessageController,
+                                controller.userMessageController,
                                 title: 'Tanyakan apapun',
                                 borderSide: BorderSide.none,
                                 readOnly: true,
@@ -276,17 +268,17 @@ class _ChatbotAiState extends State<ChatbotAi> {
                             Expanded(
                               child: CustomTextFieldAuth(
                                 controller:
-                                profileController.userMessageController,
+                                controller.userMessageController,
                                 title: 'Tanyakan apapun',
                                 borderSide: BorderSide.none,
                               ),
                             ),
                             InkWell(
                               onTap: () {
-                                final value = profileController
+                                final value = controller
                                     .userMessageController.text;
                                 if (value.isNotEmpty) {
-                                  profileController.sendMessage(value);
+                                  controller.sendMessage(value);
                                 }
                               },
                               child: CircleAvatar(
@@ -310,37 +302,8 @@ class _ChatbotAiState extends State<ChatbotAi> {
         ),
       ),
     );
+
   }
 
-  AppBar _buildAppBar() {
-    final screenHeight = MediaQuery.of(context).size.height;
-    return AppBar(
-      automaticallyImplyLeading: false,
-      flexibleSpace: Container(
-        height: screenHeight,
-        decoration: const BoxDecoration(color: baseColor),
-        padding:
-            const EdgeInsets.only(top: 30, bottom: 10, left: 10, right: 10),
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () => Navigator.pop(context),
-              ),
-              Text(
-                'Better AI',
-                style: txtSecondaryHeader.copyWith(
-                    fontWeight: FontWeight.w700, color: blackColor),
-              ),
-              SizedBox(width: 40),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+
 }

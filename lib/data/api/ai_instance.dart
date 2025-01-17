@@ -6,7 +6,6 @@ class OpenRouterAPI {
   final String apiUrl = dotenv.env['MODEL_AI_URL'] ?? 'default_value';
   final String apiKey = dotenv.env['APIKEY_META'] ?? 'default_value';
 
-  // Fungsi untuk mengirimkan permintaan POST ke API
   Future<String> callChatModel(String userMessage) async {
     final body = {
       'model': dotenv.env['MODEL_AI'] ?? 'default_value',
@@ -25,7 +24,7 @@ class OpenRouterAPI {
           'Authorization': 'Bearer $apiKey',
           'Content-Type': 'application/json',
         },
-        body: json.encode(body), // Ubah body ke format JSON
+        body: json.encode(body),
       );
 
       print("Response status code: ${response.statusCode}");

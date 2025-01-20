@@ -15,13 +15,12 @@ class FoodListView extends StatelessWidget {
   final Rx<ShowCurrentCombo> currentCombo;
   HomeController controller = Get.find();
 
-   FoodListView({Key? key, required this.currentCombo}) : super(key: key);
+  FoodListView({Key? key, required this.currentCombo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       final comboData = currentCombo.value;
-
 
       return Obx(() {
         return controller.isLoading.value
@@ -29,62 +28,60 @@ class FoodListView extends StatelessWidget {
             : comboData.data == null || comboData.data!.isEmpty
                 ? Center(
                     child: Container(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            gifLazyPerson,
-                            width: 300,
-                            height: 300,
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          gifLazyPerson,
+                          width: 300,
+                          height: 300,
+                        ),
+                        Text(
+                          "Aktivitas Anda Kosong",
+                          style: txtPrimaryTitle.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: blackColor,
                           ),
-                          Text(
-                            "Aktivitas Anda Kosong",
-                            style: txtPrimaryTitle.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: blackColor,
-                            ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Tambahkan aktivitas harian Anda",
+                          style: txtPrimarySubTitle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: blackColor30,
                           ),
-                          const SizedBox(height: 10),
-                          Text(
-                            "Tambahkan aktivitas harian Anda",
-                            style: txtPrimarySubTitle.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: blackColor30,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  )
-                :
-          Column(
-          children: List.generate(
-            comboData.data!.length,
-                (index) {
-              final item = comboData.data![index];
-              return ActivityItemCard(
-                category: item.category ?? "Kategori Tidak Diketahui",
-                name: item.name ?? "Nama Tidak Diketahui",
-                icon: item.category == "Makan"
-                    ? icEatActivity
-                    : item.category == "Aktivitas"
-                    ? icSportActivity
-                    : icEatActivity,
-                kalori: item.kalori ?? 0,
-                item: item,
-                onTap: () {
-                  showMaterialModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) =>
-                    item.category == "Makan"
-                        ? _buildBottomSheetContentEat(context, item)
-                        : _buildBottomSheetContentSport(context, item),
+                        ),
+                      ],
+                    ),
+                  ))
+                : Column(
+                    children: List.generate(
+                      comboData.data!.length,
+                      (index) {
+                        final item = comboData.data![index];
+                        return ActivityItemCard(
+                          category: item.category ?? "Kategori Tidak Diketahui",
+                          name: item.name ?? "Nama Tidak Diketahui",
+                          icon: item.category == "Makan"
+                              ? icEatActivity
+                              : item.category == "Aktivitas"
+                                  ? icSportActivity
+                                  : icEatActivity,
+                          kalori: item.kalori ?? 0,
+                          item: item,
+                          onTap: () {
+                            showMaterialModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => item.category == "Makan"
+                                  ? _buildBottomSheetContentEat(context, item)
+                                  : _buildBottomSheetContentSport(
+                                      context, item),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   );
-                },
-              );
-            },
-          ),
-        );
       });
     });
   }
@@ -120,19 +117,13 @@ class FoodListView extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(top: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -318,10 +309,7 @@ class FoodListView extends StatelessWidget {
                     onPressed: () => Get.back(),
                     height: 60,
                     borderRadius: 10,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
+                    width: MediaQuery.of(context).size.width,
                     border: BorderSide(
                       color: primaryColor,
                       width: 2,
@@ -366,10 +354,7 @@ class FoodListView extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(top: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -454,10 +439,7 @@ class FoodListView extends StatelessWidget {
                     onPressed: () => Get.back(),
                     height: 60,
                     borderRadius: 10,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
+                    width: MediaQuery.of(context).size.width,
                     border: BorderSide(
                       color: primaryColor,
                       width: 2,
@@ -549,40 +531,92 @@ class ActivityItemCard extends StatelessWidget {
                       // Tambahkan logika untuk opsi Edit
                       Get.to(() => EditActivity(item));
                     } else if (value == 'delete') {
-                      // Tambahkan logika untuk opsi Delete
-                      Get.defaultDialog(
-                        title: 'Hapus Aktivitas',
-                        middleText: 'Apakah Anda yakin ingin menghapus aktivitas ini?',
-                        textConfirm: 'Hapus',
-                        textCancel: 'Batal',
-                        confirmTextColor: Colors.white,
-                        onConfirm: () {
-                          Get.back();
-                          Get.find<HomeController>().deleteDailyActivity(item
-                              .id ?? 0);
-                        },
+                      Get.dialog(
+                        Dialog(
+                          backgroundColor: baseColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Hapus Aktivitas',
+                                  style: txtPrimaryTitle.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: blackColor),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Apakah Anda yakin ingin menghapus aktivitas ini?',
+                                  textAlign: TextAlign.center,
+                                  style: txtSecondaryTitle.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: blackColor,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    CommonButton(
+                                        text: 'Batal',
+                                        style: txtButton.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: primaryColor),
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        borderRadius: 10,
+                                        border: BorderSide(
+                                          color: primaryColor,
+                                          width: 2,
+                                        ),
+                                        backgroundColor: baseColor),
+                                    CommonButton(
+                                      text: 'Hapus',
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.find<HomeController>()
+                                            .deleteDailyActivity(item.id ?? 0);
+                                      },
+                                      // height: 60,
+                                      borderRadius: 10,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       );
                     }
                   },
                   itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<String>>[
+                      <PopupMenuEntry<String>>[
                     PopupMenuItem<String>(
                       value: 'edit',
                       child: Row(
-                        children:  [
+                        children: [
                           Icon(Icons.edit, color: primaryColor),
                           SizedBox(width: 8),
-                          Text('Edit', style: txtPrimarySubTitle.copyWith(color: primaryColor)),
+                          Text('Edit',
+                              style: txtPrimarySubTitle.copyWith(
+                                  color: primaryColor)),
                         ],
                       ),
                     ),
                     PopupMenuItem<String>(
                       value: 'delete',
                       child: Row(
-                        children:  [
+                        children: [
                           Icon(Icons.delete, color: redMedium),
                           SizedBox(width: 8),
-                          Text('Hapus', style: txtPrimarySubTitle.copyWith(color: redMedium)),
+                          Text('Hapus',
+                              style: txtPrimarySubTitle.copyWith(
+                                  color: redMedium)),
                         ],
                       ),
                     ),

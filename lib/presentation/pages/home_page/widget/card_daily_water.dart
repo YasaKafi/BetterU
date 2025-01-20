@@ -282,8 +282,8 @@ class CardDailyWater extends StatelessWidget {
                           0)
                       ? icGlassActive // Gunakan ikon gelas aktif
                       : icGlassUnactive, // Gunakan ikon gelas tidak aktif
-                  width: 32,
-                  height: 32,
+                  width: 30,
+                  height: 30,
                 );
               }),
             ),

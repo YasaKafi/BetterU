@@ -125,8 +125,12 @@ class BottomNavigationBarCustom extends StatelessWidget {
 
   void _openCamera(BuildContext context) {
     final HomeController controller = Get.find();
+    // deleted selectedImag before opened camera
+    controller.selectedImage.value = null;
 
     controller.pickImageFromCamera().then((_) {
+
+
       if (controller.selectedImage.value != null) {
         controller.postPredictAndAnalyzeFood(context);
       }

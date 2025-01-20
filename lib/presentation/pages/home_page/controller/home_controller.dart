@@ -135,6 +135,8 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print('Error posting current daily water: $e');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     } finally {
       initialize();
     }
@@ -235,43 +237,43 @@ class HomeController extends GetxController {
   /// POST ///
 
 
-  Future<void> postCurrentDailyWaterIncrease() async {
-    try {
-      final response = await nutritionServices.postDailyWaterIncrease();
-
-      if (response.data != null) {
-        final currentDailyWaterData =
-            CurrentDailyWater.fromJson(response.data);
-        currentDailyWater.value = currentDailyWaterData;
-        print("Current Daily Water: ${currentDailyWater.value}");
-      } else {
-        print("Response data is null");
-      }
-    } catch (e) {
-      print('Error posting current daily water: $e');
-    } finally {
-      initialize();
-    }
-  }
-
-  Future<void> postCurrentDailyWaterDecrease() async {
-    try {
-      final response = await nutritionServices.postDailyWaterDecrease();
-
-      if (response.data != null) {
-        final currentDailyWaterData =
-            CurrentDailyWater.fromJson(response.data);
-        currentDailyWater.value = currentDailyWaterData;
-        print("Current Daily Water: ${currentDailyWater.value}");
-      } else {
-        print("Response data is null");
-      }
-    } catch (e) {
-      print('Error posting current daily water: $e');
-    } finally {
-      initialize();
-    }
-  }
+  // Future<void> postCurrentDailyWaterIncrease() async {
+  //   try {
+  //     final response = await nutritionServices.postDailyWaterIncrease();
+  //
+  //     if (response.data != null) {
+  //       final currentDailyWaterData =
+  //           CurrentDailyWater.fromJson(response.data);
+  //       currentDailyWater.value = currentDailyWaterData;
+  //       print("Current Daily Water: ${currentDailyWater.value}");
+  //     } else {
+  //       print("Response data is null");
+  //     }
+  //   } catch (e) {
+  //     print('Error posting current daily water: $e');
+  //   } finally {
+  //     initialize();
+  //   }
+  // }
+  //
+  // Future<void> postCurrentDailyWaterDecrease() async {
+  //   try {
+  //     final response = await nutritionServices.postDailyWaterDecrease();
+  //
+  //     if (response.data != null) {
+  //       final currentDailyWaterData =
+  //           CurrentDailyWater.fromJson(response.data);
+  //       currentDailyWater.value = currentDailyWaterData;
+  //       print("Current Daily Water: ${currentDailyWater.value}");
+  //     } else {
+  //       print("Response data is null");
+  //     }
+  //   } catch (e) {
+  //     print('Error posting current daily water: $e');
+  //   } finally {
+  //     initialize();
+  //   }
+  // }
 
   Future<void> postImageToURL(BuildContext context) async {
     try {
@@ -300,6 +302,8 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print('Error fetching recommendation food: $e');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     }
   }
 
@@ -346,6 +350,8 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print('Error fetching recommendation food: $e');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     }
   }
 
@@ -552,6 +558,10 @@ class HomeController extends GetxController {
     } catch (e, stackTrace) {
       print('Error: $e');
       print('Stack trace: $stackTrace');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
+    } finally {
+      userMessageController.clear();
     }
   }
 
@@ -620,8 +630,13 @@ class HomeController extends GetxController {
         }
       }
     } catch (e, s) {
+
       print('Error posting chat model: $e');
       print('Stack Trace: $s');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
+    } finally {
+      userMessageActivityController.clear();
     }
   }
 
@@ -769,6 +784,8 @@ Tolong lengkapi data yang hilang dalam format JSON seperti berikut:
     } catch (e, stackTrace) {
       print('Error: $e');
       print('Stack trace: $stackTrace');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     }
   }
 
@@ -795,7 +812,7 @@ Formatkan respons Anda dalam JSON dengan struktur berikut:
   "kalori": "$kalori",
   "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk, berupa 1 paragraf"
 }
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }  jika response anda tidak terdapat tag penutup -> } sebelumnya.
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan.
 '''
               .trim();
         }
@@ -808,7 +825,7 @@ Formatkan respons Anda dalam JSON dengan struktur berikut:
   "kalori": "Jumlah kalori terbakar dalam Kkal",
   "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk, berupa 1 paragraf"
 }
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }  jika response anda tidak terdapat tag penutup -> } sebelumnya.
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan.
 '''
             .trim();
       }
@@ -923,6 +940,9 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       }
     } catch (e) {
       print('Error adding daily activity: $e');
+
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     } finally {
       isLoading(false);
     }
@@ -1235,16 +1255,6 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       }
     } catch (e) {
       print('Error fetching user data: $e');
-
-      Get.snackbar(
-        "Kesalahan Jaringan",
-        "Terjadi masalah dengan koneksi jaringan. Silakan coba lagi.",
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: redMedium,
-        colorText: baseColor,
-        duration: Duration(seconds: 3),
-      );
-
       Get.back();
     } finally {
       isLoading(false);

@@ -73,7 +73,7 @@ class RegisterPage extends GetView<RegisterController> {
                     screenWidth, screenHeight, controller, datePicker),
                 buildGoalsInputPage(screenWidth, screenHeight, controller),
                 buildActivityInputPage(screenWidth, screenHeight, controller),
-                buildBbTbInputPage(screenWidth, screenHeight, controller),
+                buildBbTbInputPage(screenWidth, screenHeight, controller, context),
                 buildSuccessCreateAccount(screenWidth, screenHeight, controller),
               ],
             );

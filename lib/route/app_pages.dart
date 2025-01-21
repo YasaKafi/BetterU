@@ -5,11 +5,16 @@ import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboa
 import 'package:better_u/presentation/initial_pages/onboarding_screen/view/onboarding_screen.dart';
 import 'package:better_u/presentation/initial_pages/register_page/binding/register_binding.dart';
 import 'package:better_u/presentation/initial_pages/register_page/view/register_page.dart';
+import 'package:better_u/presentation/pages/chat_bot/binding/chat_bot_binding.dart';
+import 'package:better_u/presentation/pages/chat_bot/view/chat_bot_view.dart';
 import 'package:better_u/presentation/pages/food_detail_page/binding/food_detail_binding.dart';
 import 'package:better_u/presentation/pages/food_detail_page/view/food_detail_page.dart';
 import 'package:better_u/presentation/pages/food_page/binding/food_binding.dart';
 import 'package:better_u/presentation/pages/food_page/view/food_page.dart';
+import 'package:better_u/presentation/pages/sport_category_detail_page/binding/sport_category_detail_binding.dart';
+import 'package:better_u/presentation/pages/sport_category_detail_page/view/sport_category_detail_page.dart';
 import 'package:better_u/presentation/pages/sport_page/binding/sport_binding.dart';
+import 'package:better_u/presentation/pages/sport_page/view/sport_page.dart';
 import 'package:get/get.dart';
 
 import '../presentation/global_components/bottom_navbar/view/navbar.dart';
@@ -23,7 +28,7 @@ class AppPages {
   AppPages._();
 
 
-  static const INITIAL = Routes.BOTTOM_NAVBAR;
+  static const INITIAL = Routes.SPLASH_SCREEN;
 
   static final routes = [
     GetPage(
@@ -81,6 +86,27 @@ class AppPages {
         name: _Paths.FOOD_DETAIL_PAGE,
         page: () => FoodDetailPage(),
         binding: FoodDetailPageBinding(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 500)
+    ),
+    GetPage(
+        name: _Paths.SPORT_PAGE,
+        page: () => SportPage(),
+        binding: SportPageBinding(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 500)
+    ),
+    GetPage(
+        name: _Paths.SPORT_CATEGORY_DETAIL_PAGE,
+        page: () => SportCategoryDetailPage(),
+        binding: SportCategoryDetailPageBinding(),
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 500)
+    ),
+    GetPage(
+        name: _Paths.CHAT_BOT,
+        page: () => ChatBotView(),
+        binding: ChatBotBinding(),
         transition: Transition.fadeIn,
         transitionDuration: const Duration(milliseconds: 500)
     ),

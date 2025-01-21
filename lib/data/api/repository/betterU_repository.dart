@@ -12,6 +12,7 @@ class BetterUApiRepository {
 
 
   static String getCurrentUser = '$mainUrl/api/users/show-current';
+  static String getHistoryChatBot = '$mainUrl/api/chatbots/show-current';
   static String getCurrentTotalNutrition = '$mainUrl/api/daily-activity/show-total-nutrition';
   static String getCurrentCombo = '$mainUrl/api/daily-activity/show-current';
   static String getCurrentDailyWater= '$mainUrl/api/daily-waters/show-current';
@@ -23,6 +24,7 @@ class BetterUApiRepository {
 
   static String putDailyActivity = '$mainUrl/api/daily-activity/update';
   static String putEditUser = '$mainUrl/api/users/update';
+  static String putEditDailyWater = '$mainUrl/api/daily-waters/update';
 
   static String deleteDailyActivity = '$mainUrl/api/daily-activity/delete';
   static String deleteTokenUser = '$mainUrl/api/users/logout';
@@ -36,5 +38,6 @@ class BetterUApiRepository {
   static String postDailyActivity = '$mainUrl/api/daily-activity/store';
   static String postDailyWaterIncrease = '$mainUrl/api/daily-waters/increase';
   static String postDailyWaterDecrease = '$mainUrl/api/daily-waters/decrease';
+  static String postChatBot = '$mainUrl/api/chatbots/store';
 
 }

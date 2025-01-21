@@ -43,7 +43,7 @@ class ButtonWatchRecipe extends StatelessWidget {
 
                   SizedBox(width: screenWidth * 0.025),
 
-                  Text('Watch Recipe', style: txtPrimarySubTitle.copyWith(
+                  Text('Tonton Resep', style: txtPrimarySubTitle.copyWith(
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
                   )),

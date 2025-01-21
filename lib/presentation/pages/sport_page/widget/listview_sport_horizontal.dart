@@ -8,11 +8,9 @@ class ListviewSportHorizontal extends StatelessWidget {
   const ListviewSportHorizontal({
     super.key,
     required this.sportCategory,
-    required this.onTap
   });
 
   final Rx<SportCategoryModel> sportCategory;
-  final Function(String) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,11 @@ class ListviewSportHorizontal extends StatelessWidget {
           final item = categoryData.data![index];
           return InkWell(
             onTap: () {
-              onTap(item.name ?? '');
+              Get.toNamed('/sport-category-detail-page',
+                arguments: {
+                  'category': item.name ?? '',
+                },
+              );
             },
             child: Container(
               width: screenWidth * 0.3,

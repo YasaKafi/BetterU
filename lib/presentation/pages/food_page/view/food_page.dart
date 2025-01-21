@@ -3,7 +3,9 @@ import 'package:better_u/presentation/global_components/shimmer_widget.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
+import '../../../../route/app_pages.dart';
 import '../controller/food_controller.dart';
 import '../widget/listview_food_horizontal.dart';
 import '../widget/listview_food_vertical.dart';
@@ -139,7 +141,37 @@ class FoodPage extends GetView<FoodController> {
               }
             }),
           ),
-        )
+        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(Routes.CHAT_BOT);
+
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              betterAiLogo,
+              width: 28,
+              height: 28,
+            ),
+            Text(
+              'Better AI',
+              style: txtThirdSubTitle.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: primaryColor,
+                  fontSize: 8
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: baseColor,
+
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 }

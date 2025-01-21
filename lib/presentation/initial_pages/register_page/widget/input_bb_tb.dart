@@ -6,7 +6,7 @@ import '../../../global_components/common_button.dart';
 import '../../../global_components/textfield_auth_custom.dart';
 import '../controller/register_controller.dart';
 
-Widget buildBbTbInputPage(double screenWidth, double screenHeight, RegisterController controller) {
+Widget buildBbTbInputPage(double screenWidth, double screenHeight, RegisterController controller, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 28.0),
     child: Column(
@@ -157,15 +157,10 @@ Widget buildBbTbInputPage(double screenWidth, double screenHeight, RegisterContr
               Expanded(
                 child:CommonButton(
                   text: 'Selesai',
-                  // onPressed: () async {
-                  //   try {
-                  //     await controller.postRegister();
-                  //     await controller.postCalculateNutrition();
-                  //   } catch (e) {
-                  //     print('Error: $e');
-                  //   }
-                  // },
-                  onPressed: () => controller.postRegister(),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    controller.postRegister();
+                  },
                   height: 60,
                   borderRadius: 80,
                 ),

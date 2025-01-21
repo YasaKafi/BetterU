@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
-import '../../../../data/api/model/nutrition_information.dart';
+import '../../../../data/api/model/nutrition_information_model.dart';
 import '../../../../route/app_pages.dart';
 
 class ResultScan extends StatelessWidget {

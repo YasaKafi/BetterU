@@ -5,6 +5,7 @@ String svgImages = 'assets/svg/';
 
 //CONSTANT IMAGE
 String imgExFood = '${images}example_food.png';
+String betterAiLogo = '${images}better_ai.png';
 
 //CONSTANT GIF
 String gifListDiet = '${gif}diet_list.png';
@@ -16,6 +17,7 @@ String gifSearchLoading = '${gif}search_loading.png';
 String gifMaleAvatar = '${gif}male_profile.png';
 String gifFemaleAvatar = '${gif}woman_profile.png';
 String gifLazyPerson = '${gif}lazy_boy.png';
+String gifEmptyHistory = '${gif}empty_history.png';
 
 
 
@@ -25,6 +27,7 @@ String icWavingHand = '${svgImages}waving_hand.svg';
 String icGoogle = '${svgImages}ic_google.svg';
 String icHistory = '${svgImages}history.svg';
 String icEdit = '${svgImages}edit.svg';
+String icSend = '${svgImages}ic_send.svg';
 String icGlassActive = '${svgImages}glass_active.svg';
 String icGlassUnactive = '${svgImages}glass_unactive.svg';
 String icCalendar = '${svgImages}calnder_outline.svg';

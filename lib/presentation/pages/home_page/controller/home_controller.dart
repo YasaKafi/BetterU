@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:better_u/data/api/ai_instance.dart';
@@ -8,12 +9,14 @@ import 'package:better_u/data/api/service/auth_services.dart';
 import 'package:better_u/data/api/service/nutrition_service.dart';
 import 'package:better_u/presentation/global_components/common_button.dart';
 import 'package:better_u/presentation/pages/home_page/widget/bottom_sheet_eat.dart';
-import 'package:better_u/presentation/pages/home_page/widget/result_scan.dart';
-import 'package:better_u/presentation/pages/home_page/widget/show_recommendation.dart';
+import 'package:better_u/presentation/pages/home_page/inner_pages/result_scan.dart';
+import 'package:better_u/presentation/pages/home_page/inner_pages/show_recommendation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
@@ -22,14 +25,16 @@ import '../../../../data/api/model/current_total_nutrition_model.dart';
 import '../../../../data/api/model/current_user_model.dart';
 import '../../../../data/api/model/daily_nutrition_model.dart';
 import '../../../../data/api/model/data_recommendation_food.dart';
-import '../../../../data/api/model/nutrition_information.dart';
+import '../../../../data/api/model/nutrition_information_model.dart';
 import '../../../../data/api/model/prediction_ai_model.dart';
+import '../../../../data/api/model/show_history_chatbot_model.dart';
 import '../../../../data/api/model/show_recommendation_model.dart';
 import '../../../../route/app_pages.dart';
 import '../widget/bottom_sheet_sport.dart';
 
 class HomeController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isHistoryEmpty = false.obs;
   bool isCancelled = false;
   late AuthServices userService;
   late NutritionServices nutritionServices;
@@ -40,6 +45,7 @@ class HomeController extends GetxController {
   RxString responsePredict = ''.obs;
   String imageUrl = '';
   var selectedFood = ''.obs;
+  final valuesDrink = Rx<SfRangeValues>(SfRangeValues(0.0, 2000.0));
 
   final ImagePicker _picker = ImagePicker();
   Rxn<XFile> selectedImage = Rxn<XFile>();
@@ -109,6 +115,30 @@ class HomeController extends GetxController {
       await getCurrentTotalNutrition();
       await getCurrentDailyWater();
       await getCurrentCombo();
+      await getHistoryChatBot();
+    }
+  }
+
+  Future<void> putDailyWater() async {
+    try {
+      int waterAmount = valuesDrink.value.end.toInt();  // Menggunakan .end atau .start sesuai kebutuhan
+      String waterAmountStr = waterAmount.toString();
+      final response = await nutritionServices.putDailyWater(amount: waterAmountStr);
+
+      if (response.data != null) {
+        final currentDailyWaterData =
+            CurrentDailyWater.fromJson(response.data);
+        currentDailyWater.value = currentDailyWaterData;
+        print("Current Daily Water: ${currentDailyWater.value}");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error posting current daily water: $e');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
+    } finally {
+      initialize();
     }
   }
 
@@ -207,43 +237,43 @@ class HomeController extends GetxController {
   /// POST ///
 
 
-  Future<void> postCurrentDailyWaterIncrease() async {
-    try {
-      final response = await nutritionServices.postDailyWaterIncrease();
-
-      if (response.data != null) {
-        final currentDailyWaterData =
-            CurrentDailyWater.fromJson(response.data);
-        currentDailyWater.value = currentDailyWaterData;
-        print("Current Daily Water: ${currentDailyWater.value}");
-      } else {
-        print("Response data is null");
-      }
-    } catch (e) {
-      print('Error posting current daily water: $e');
-    } finally {
-      initialize();
-    }
-  }
-
-  Future<void> postCurrentDailyWaterDecrease() async {
-    try {
-      final response = await nutritionServices.postDailyWaterDecrease();
-
-      if (response.data != null) {
-        final currentDailyWaterData =
-            CurrentDailyWater.fromJson(response.data);
-        currentDailyWater.value = currentDailyWaterData;
-        print("Current Daily Water: ${currentDailyWater.value}");
-      } else {
-        print("Response data is null");
-      }
-    } catch (e) {
-      print('Error posting current daily water: $e');
-    } finally {
-      initialize();
-    }
-  }
+  // Future<void> postCurrentDailyWaterIncrease() async {
+  //   try {
+  //     final response = await nutritionServices.postDailyWaterIncrease();
+  //
+  //     if (response.data != null) {
+  //       final currentDailyWaterData =
+  //           CurrentDailyWater.fromJson(response.data);
+  //       currentDailyWater.value = currentDailyWaterData;
+  //       print("Current Daily Water: ${currentDailyWater.value}");
+  //     } else {
+  //       print("Response data is null");
+  //     }
+  //   } catch (e) {
+  //     print('Error posting current daily water: $e');
+  //   } finally {
+  //     initialize();
+  //   }
+  // }
+  //
+  // Future<void> postCurrentDailyWaterDecrease() async {
+  //   try {
+  //     final response = await nutritionServices.postDailyWaterDecrease();
+  //
+  //     if (response.data != null) {
+  //       final currentDailyWaterData =
+  //           CurrentDailyWater.fromJson(response.data);
+  //       currentDailyWater.value = currentDailyWaterData;
+  //       print("Current Daily Water: ${currentDailyWater.value}");
+  //     } else {
+  //       print("Response data is null");
+  //     }
+  //   } catch (e) {
+  //     print('Error posting current daily water: $e');
+  //   } finally {
+  //     initialize();
+  //   }
+  // }
 
   Future<void> postImageToURL(BuildContext context) async {
     try {
@@ -272,6 +302,8 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print('Error fetching recommendation food: $e');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     }
   }
 
@@ -318,6 +350,8 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print('Error fetching recommendation food: $e');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     }
   }
 
@@ -422,6 +456,8 @@ class HomeController extends GetxController {
       bool? isFromInputManual = false}) async {
     try {
       // Nama makanan dari user input
+      await dotenv.load();
+      String promptTemplate = dotenv.env['PROMPT_TEMPLATE'] ?? '';
 
       String userMessage = '';
 
@@ -439,20 +475,7 @@ class HomeController extends GetxController {
 
       showLoadingDialog(context, message: 'makanan');
 
-      // Prompt yang digunakan untuk AI
-      String prompt = '''
-Berikan informasi tentang komposisi nutrisi makanan berikut: "$userMessage". 
-Formatkan respons Anda dalam JSON dengan struktur berikut:
-{
-  "kalori": "Jumlah kalori dalam Kkal",
-  "protein": "Jumlah protein dalam gram",
-  "lemak": "Jumlah lemak dalam gram",
-  "karbohidrat": "Jumlah karbohidrat dalam gram",
-  "catatan": "Saran kesehatan untuk makanan ini dan sebutkan efek bagi tubuh jika makanan ini menurut kesehatan ini tidak baik , berupa 1 paragraf"
-}
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }.
-'''
-          .trim();
+      String prompt = promptTemplate.replaceFirst('{userMessage}', userMessage);
 
 
 
@@ -535,11 +558,19 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     } catch (e, stackTrace) {
       print('Error: $e');
       print('Stack trace: $stackTrace');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
+    } finally {
+      userMessageController.clear();
     }
   }
 
   Future<void> postChatModelAnalisisActivity(BuildContext context) async {
     try {
+
+      await dotenv.load();
+      String promptTemplateActivity = dotenv.env['PROMPT_TEMPLATE_ACTIVITY'] ?? '';
+
 
       if (userMessageActivityController.text.isEmpty) {
         Get.snackbar('Error', 'Tidak ada aktivitas yang dimasukkan.');
@@ -552,17 +583,10 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       // Nama makanan dari user input
       final String userMessage = userMessageActivityController.text.trim();
 
-      // Prompt yang digunakan untuk AI
-      String prompt = '''
-Berikan informasi tentang komposisi aktivitas olahraga berikut: "$userMessage". 
-Formatkan respons Anda dalam JSON dengan struktur berikut:
-{
-  "kalori": "Jumlah kalori terbakar dalam Kkal",
-  "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk , berupa 1 paragraf",
-}
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> } jika response anda tidak terdapat tag penutup -> } sebelumnya.
-'''
-          .trim();
+      String prompt = promptTemplateActivity.replaceFirst('{userMessage}', userMessage);
+
+
+
 
       // Panggil API untuk mendapatkan hasil dari prompt
       final response = await openRouterAPI.callChatModel(prompt);
@@ -606,8 +630,13 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
         }
       }
     } catch (e, s) {
+
       print('Error posting chat model: $e');
       print('Stack Trace: $s');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
+    } finally {
+      userMessageActivityController.clear();
     }
   }
 
@@ -755,6 +784,8 @@ Tolong lengkapi data yang hilang dalam format JSON seperti berikut:
     } catch (e, stackTrace) {
       print('Error: $e');
       print('Stack trace: $stackTrace');
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
     }
   }
 
@@ -781,7 +812,7 @@ Formatkan respons Anda dalam JSON dengan struktur berikut:
   "kalori": "$kalori",
   "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk, berupa 1 paragraf"
 }
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }  jika response anda tidak terdapat tag penutup -> } sebelumnya.
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan.
 '''
               .trim();
         }
@@ -794,7 +825,7 @@ Formatkan respons Anda dalam JSON dengan struktur berikut:
   "kalori": "Jumlah kalori terbakar dalam Kkal",
   "catatan": "Saran kesehatan untuk olahraga ini dan sebutkan efek bagi tubuh jika melakukan olahraga ini baik atau buruk, berupa 1 paragraf"
 }
-Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan dan tolong tambahkan tag penutup -> }  jika response anda tidak terdapat tag penutup -> } sebelumnya.
+Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan.
 '''
             .trim();
       }
@@ -846,11 +877,80 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
     }
   }
 
+  Future<void> postDailyActivity(
+      {required category,
+        required String name,
+        required String kalori,
+        String? lemak,
+        String? protein,
+        String? karbohidrat,
+        required String note,
+        bool? isFromRecommendation = false,
+        bool? isFromResultScan = false,
+        bool? isInputManual = false}) async {
+    try {
+      isLoading(true);
+      final response = await nutritionServices.postDailyActivity(
+        name: name,
+        category: category,
+        kalori: kalori,
+        lemak: lemak ?? '0',
+        protein: protein ?? '0',
+        karbohidrat: karbohidrat ?? '0',
+        note: note ?? '',
+      );
+
+      print("CHECK PUT DAILY ACTIVITY RESPONSE");
+      print(response.data);
+
+      if (response.data != null) {
+        print("Daily activity added successfully");
+
+        if (isFromRecommendation == true) {
+          Get.back();
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        if (isFromResultScan == true) {
+          Get.back();
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        if (isInputManual == true) {
+          Get.back();
+          Get.offNamedUntil(
+              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
+        }
+
+        Get.back();
+        Get.back();
+        Get.snackbar(
+          "Berhasil",
+          "Makanan berhasil ditambahkan",
+          backgroundColor: primaryColor,
+          colorText: baseColor,
+        );
+        refresh();
+        userMessageController.clear();
+        userMessageActivityController.clear();
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error adding daily activity: $e');
+
+      String errorMessage = e.toString().replaceAll('Exception: ', '');
+      Get.snackbar("Error", "$errorMessage", snackPosition: SnackPosition.TOP);
+    } finally {
+      isLoading(false);
+    }
+  }
 
 
   /// PARSE RESPONSE AI ///
 
-// Fungsi untuk mem-parsing response AI ke dalam Map
   Map<String, dynamic> parseAiResponseAnalisisFood(String response) {
     try {
       final endIndex = response.lastIndexOf('}');
@@ -1109,6 +1209,20 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
         final checkData = dailyWaterData.data?.amount ?? 0.0;
 
         print("VALUE AMOUNT OF WATER : $checkData");
+
+        final checkDataAsDouble = checkData is double ? checkData : double.tryParse(checkData.toString()) ?? 0.0;
+
+        // Faktor untuk mengonversi nilai API ke rentang slider
+        final conversionFactor = 1000.0;  // Misalnya API memiliki rentang 0.0 - 2.0 dan slider rentangnya 0.0 - 2000.0
+
+        // Mengonversi nilai dari API ke nilai slider
+        final convertedValue = checkDataAsDouble * conversionFactor;  // Mengalikan untuk mendapatkan nilai yang sesuai dengan slider
+
+        // Mengganti nilai start dari SfRangeValues dengan nilai yang sudah dikonversi
+        final updatedRangeValues = SfRangeValues(valuesDrink.value.start, convertedValue);
+        valuesDrink.value = updatedRangeValues;  // Update Rx value
+
+        print("Updated valuesDrink end: ${valuesDrink.value.start}");
       } else {
         print("Response data is null");
       }
@@ -1118,6 +1232,35 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
       isLoading(false);
     }
   }
+
+  Future<void> getHistoryChatBot() async {
+    try {
+      isLoading(true);
+      final response = await aiService.showHistoryChatBot();
+
+      print("CHECK RESPONSE HISTORY CHAT BOT");
+      print(response.data);
+
+      if (response.data != null) {
+        final chatBot = HistoryChatBot.fromJson(response.data);
+
+        isHistoryEmpty.value = chatBot.data?.isEmpty ?? true;
+
+        print("HISTORY CHAT BOT LENGTH : ${chatBot.data?.length}");
+
+        print(
+            "History chat bot fetched : ${chatBot.data?.first.messageData?.first.message}");
+      } else {
+        print("Response data is null");
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+      Get.back();
+    } finally {
+      isLoading(false);
+    }
+  }
+
 
   /// DELETE ///
 
@@ -1144,74 +1287,6 @@ Pastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan
   }
 
   /// PUT ///
-
-  Future<void> postDailyActivity(
-      {required category,
-      required String name,
-      required String kalori,
-      String? lemak,
-      String? protein,
-      String? karbohidrat,
-      required String note,
-      bool? isFromRecommendation = false,
-      bool? isFromResultScan = false,
-      bool? isInputManual = false}) async {
-    try {
-      isLoading(true);
-      final response = await nutritionServices.postDailyActivity(
-        name: name,
-        category: category,
-        kalori: kalori,
-        lemak: lemak ?? '0',
-        protein: protein ?? '0',
-        karbohidrat: karbohidrat ?? '0',
-        note: note ?? '',
-      );
-
-      print("CHECK PUT DAILY ACTIVITY RESPONSE");
-      print(response.data);
-
-      if (response.data != null) {
-        print("Daily activity added successfully");
-
-        if (isFromRecommendation == true) {
-          Get.back();
-          Get.offNamedUntil(
-              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
-        }
-
-        if (isFromResultScan == true) {
-          Get.back();
-          Get.offNamedUntil(
-              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
-        }
-
-        if (isInputManual == true) {
-          Get.back();
-          Get.offNamedUntil(
-              Routes.BOTTOM_NAVBAR, ModalRoute.withName(Routes.BOTTOM_NAVBAR));
-        }
-
-        Get.back();
-        Get.back();
-        Get.snackbar(
-          "Berhasil",
-          "Makanan berhasil ditambahkan",
-          backgroundColor: primaryColor,
-          colorText: baseColor,
-        );
-        refresh();
-        userMessageController.clear();
-        userMessageActivityController.clear();
-      } else {
-        print("Response data is null");
-      }
-    } catch (e) {
-      print('Error adding daily activity: $e');
-    } finally {
-      isLoading(false);
-    }
-  }
 
   Future<void> putDailyActivity(
     int dailyActivityID,

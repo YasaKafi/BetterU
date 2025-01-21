@@ -10,11 +10,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../route/app_pages.dart';
 
 class LoginController extends GetxController {
+  var currentPage = 0.obs;
   var isLoading = false.obs;
   final AuthServices authServices = AuthServices();
   final AiServices aiServices = AiServices();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  String formatGender(String gender) {
+    return gender.toLowerCase().replaceAll('-', ' ');
+  }
+
 
   @override
   void onClose() {
@@ -26,8 +32,6 @@ class LoginController extends GetxController {
   void goToHomePage() {
     Get.offNamed(Routes.BOTTOM_NAVBAR);
   }
-
-  var currentPage = 0.obs;
 
   void nextPage() {
     if (currentPage.value < 8) {
@@ -43,10 +47,6 @@ class LoginController extends GetxController {
 
   void registerUser() {
     Get.snackbar("Success", "Akun berhasil dibuat!");
-  }
-
-  String formatGender(String gender) {
-    return gender.toLowerCase().replaceAll('-', ' ');
   }
 
   Future<void> postLogin() async {

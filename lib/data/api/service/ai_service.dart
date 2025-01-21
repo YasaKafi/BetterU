@@ -3,9 +3,23 @@ import 'package:dio/dio.dart';
 import '../dio_instance.dart';
 import '../repository/betterU_repository.dart';
 
-
 class AiServices {
   final DioInstance _dioInstance = DioInstance();
+
+  /// GET ///
+
+  Future<Response> showHistoryChatBot() async {
+    try {
+      final response = await _dioInstance.getRequest(
+          endpoint: BetterUApiRepository.getHistoryChatBot, isAuthorize: true);
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  /// POST ///
 
   Future<Response> postCalculateNutrition({
     required String dateOfBirth,
@@ -34,34 +48,21 @@ class AiServices {
     }
   }
 
-  Future<Response> postRecommendationFood({String? imageUrl}) async {
+  Future<Response> postChatBot({
+    required String message,
+    required String sender,
+    required String createdAt,
+  }) async {
     try {
       final response = await _dioInstance.postRequest(
-        endpoint: BetterUApiRepository.urlMetaAi,
+        endpoint: BetterUApiRepository.postChatBot,
         isAuthorize: true,
-        isMetaToken: true,
+        isMetaToken: false,
         data: {
-          "model": "meta-llama/Llama-3.2-11B-Vision-Instruct",
-          "messages": [
-            {
-              "role": "user",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Berikan informasi tentang 4 makanan yang similar dengan: \"nasi goreng\". Formatkan respons Anda dalam JSON dengan struktur berikut:\n{\n\"makanan_one\": \"\",\n\"makanan_two\": \"\",\n\"makanan_three\": \"\",\n\"makanan_four\": \"\",\n}\nPastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan."
-                },
-                {
-                  "type": "image_url",
-                  "image_url": {
-                    "url": imageUrl
-                  }
-                }
-              ]
-            }
-          ],
-          "max_tokens": 500,
-          "stream": false
-        }
+          'message': message,
+          'sender': sender,
+          'created_at': createdAt,
+        },
       );
 
       return response;
@@ -70,19 +71,52 @@ class AiServices {
     }
   }
 
+  Future<Response> postRecommendationFood({String? imageUrl}) async {
+    try {
+      final response = await _dioInstance.postRequest(
+          endpoint: BetterUApiRepository.urlMetaAi,
+          isAuthorize: true,
+          isMetaToken: true,
+          data: {
+            "model": "meta-llama/Llama-3.2-11B-Vision-Instruct",
+            "messages": [
+              {
+                "role": "user",
+                "content": [
+                  {
+                    "type": "text",
+                    "text":
+                        "Berikan informasi tentang 4 makanan yang similar dengan: \"nasi goreng\". Formatkan respons Anda dalam JSON dengan struktur berikut:\n{\n\"makanan_one\": \"\",\n\"makanan_two\": \"\",\n\"makanan_three\": \"\",\n\"makanan_four\": \"\",\n}\nPastikan untuk hanya memberikan data dalam format JSON tanpa penjelasan tambahan."
+                  },
+                  {
+                    "type": "image_url",
+                    "image_url": {"url": imageUrl}
+                  }
+                ]
+              }
+            ],
+            "max_tokens": 500,
+            "stream": false
+          });
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
   int calculateAge(String dateOfBirth) {
-    final birthDate = DateTime.parse(dateOfBirth); 
+    final birthDate = DateTime.parse(dateOfBirth);
     final currentDate = DateTime.now();
-    
+
     int age = currentDate.year - birthDate.year;
 
-    if (currentDate.month < birthDate.month || (currentDate.month == birthDate.month && currentDate.day < birthDate.day)) {
+    if (currentDate.month < birthDate.month ||
+        (currentDate.month == birthDate.month &&
+            currentDate.day < birthDate.day)) {
       age--;
     }
 
     return age;
   }
-
-
 }

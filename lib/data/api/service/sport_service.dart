@@ -2,10 +2,8 @@ import 'package:dio/dio.dart';
 import '../dio_instance.dart';
 import '../repository/betterU_repository.dart';
 
-
 class SportServices {
   final DioInstance _dioInstance = DioInstance();
-
 
   /// GET ///
 
@@ -69,7 +67,4 @@ class SportServices {
       throw Exception(e);
     }
   }
-
 }
-
-

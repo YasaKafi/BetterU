@@ -3,16 +3,13 @@ import 'package:dio/dio.dart';
 import '../dio_instance.dart';
 import '../repository/betterU_repository.dart';
 
-
 class AuthServices {
   final DioInstance _dioInstance = DioInstance();
 
   Future<Response> showCurrentUser() async {
     try {
       final response = await _dioInstance.getRequest(
-          endpoint: BetterUApiRepository.getCurrentUser,
-          isAuthorize: true
-      );
+          endpoint: BetterUApiRepository.getCurrentUser, isAuthorize: true);
 
       return response;
     } catch (e) {
@@ -23,9 +20,7 @@ class AuthServices {
   Future<Response> deleteTokenUser() async {
     try {
       final response = await _dioInstance.deleteRequest(
-          endpoint: BetterUApiRepository.deleteTokenUser,
-          isAuthorize: true
-      );
+          endpoint: BetterUApiRepository.deleteTokenUser, isAuthorize: true);
 
       return response;
     } catch (e) {
@@ -112,10 +107,8 @@ class AuthServices {
       return response;
     } catch (e) {
       throw Exception(e);
-
     }
   }
-
 
   Future<Response> postOtpCode({
     required String email,
@@ -132,8 +125,6 @@ class AuthServices {
       throw Exception(e);
     }
   }
-
-
 
   Future<Response> postOtpCheck({
     required String email,
@@ -152,6 +143,4 @@ class AuthServices {
       throw Exception(e);
     }
   }
-
-
 }

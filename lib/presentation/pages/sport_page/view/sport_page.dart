@@ -6,7 +6,9 @@ import 'package:better_u/presentation/pages/sport_page/widget/listview_sport_ver
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/constant.dart';
 import '../../../../common/theme.dart';
+import '../../../../route/app_pages.dart';
 
 class SportPage extends GetView<SportController> {
   @override
@@ -110,11 +112,6 @@ class SportPage extends GetView<SportController> {
                               } else {
                                 return ListviewSportHorizontal(
                                   sportCategory: controller.sportCategory,
-                                  onTap: (categoryName) {
-                                    controller.isLoadingSportByCategory.value = true;
-                                    controller.currentCategory.value = categoryName;
-                                    controller.getAllSportByCategory(category: categoryName);
-                                  },
                                 );
                               }
                             }),
@@ -179,38 +176,7 @@ class SportPage extends GetView<SportController> {
                   );
                 }
 
-                // ** UI Olahraga Berdasarkan Kategori ** //
-                else if (controller.currentTypePage.value == "CATEGORY") {
-                  return SingleChildScrollView(
-                    child: Container(
-                      width: screenWidth,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // ** Olahraga Berdasarkan Kategori ** //
-                          const SizedBox(height: 15),
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                            child: Obx(() {
-                              if (controller.isLoadingSportByCategory.value) {
-                                return SizedBox(
-                                  width: screenWidth,
-                                  height: screenWidth * 0.5,
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              } else {
-                                return ListviewSportVertical(sport: controller.sportByCategory);
-                              }
-                            }),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                } else {
+                else {
                   return Center(
                     child: Text(controller.currentTypePage.value),
                   );
@@ -219,7 +185,37 @@ class SportPage extends GetView<SportController> {
               }
             }),
           ),
-        )
+        ),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(Routes.CHAT_BOT);
+
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              betterAiLogo,
+              width: 28,
+              height: 28,
+            ),
+            Text(
+              'Better AI',
+              style: txtThirdSubTitle.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: primaryColor,
+                  fontSize: 8
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: baseColor,
+
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 }

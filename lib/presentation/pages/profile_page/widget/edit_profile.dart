@@ -24,7 +24,7 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController weightController;
   late TextEditingController ageController;
 
-  final List<String> goalsOptions = ['Menurunkan Berat Badan', 'Mempertahankan Berat Badan', 'Menaikkan Berat Badan'];
+  final List<String> goalsOptions = ['Menurunkan Berat Badan', 'Menjaga Berat Badan', 'Menaikkan Berat Badan'];
   final List<String> activityLevelOptions = ['Sangat Jarang Beraktivitas', 'Jarang Beraktivitas', 'Cukup Beraktivitas', 'Sering Beraktivitas', 'Sangat Sering Beraktivitas'];
 
   String? selectedGoal;
@@ -215,37 +215,75 @@ class _EditProfileState extends State<EditProfile> {
 
                         // Cek jika ada perubahan pada selectedGoal atau selectedActivityLevel
                         if (selectedGoal != widget.item.goals || selectedActivityLevel != widget.item.activityLevel) {
-                          // Tampilkan dialog konfirmasi
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text("Perubahan Tujuan atau Aktivitas"),
-                              content: Text(
-                                "Jika Anda mengubah tujuan atau level aktivitas, kebutuhan nutrisi harian Anda akan direset. Apakah Anda yakin ingin melanjutkan?",
+                          Get.dialog(
+                            Dialog(
+                              backgroundColor: baseColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Perubahan Tujuan atau Aktivitas',
+                                      style: txtPrimaryTitle.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: blackColor),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'Jika Anda mengubah tujuan atau level aktivitas, kebutuhan nutrisi harian Anda akan direset. Apakah Anda yakin ingin melanjutkan?',
+                                      textAlign: TextAlign.center,
+                                      style: txtPrimarySubTitle.copyWith(
+                                        fontWeight: FontWeight.w400,
+                                        color: blackColor,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        CommonButton(
+                                            text: 'Batal',
+                                            style: txtButton.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                color: primaryColor),
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            borderRadius: 10,
+                                            border: BorderSide(
+                                              color: primaryColor,
+                                              width: 2,
+                                            ),
+                                            backgroundColor: baseColor),
+                                        CommonButton(
+                                          text: 'Lanjutkan',
+                                          onPressed: () {
+                                            Get.back();
+                                            widget.controller.putEditProfile(
+                                              birthDateController: calculatedDateOfBirth,
+                                              weightController: weightController,
+                                              heightController: heightController,
+                                              selectedGoal: selectedGoal ?? widget.item.goals ?? '',
+                                              selectedActivity: selectedActivityLevel ?? widget.item.activityLevel ?? '',
+                                            );
+                                            Get.back();
+
+                                          },
+                                          // height: 60,
+                                          borderRadius: 10,
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context), // Tutup dialog
-                                  child: Text("Batal"),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Tutup dialog
-                                    // Lanjutkan proses edit
-                                    widget.controller.putEditProfile(
-                                      birthDateController: calculatedDateOfBirth,
-                                      weightController: weightController,
-                                      heightController: heightController,
-                                      selectedGoal: selectedGoal ?? widget.item.goals ?? '',
-                                      selectedActivity: selectedActivityLevel ?? widget.item.activityLevel ?? '',
-                                    );
-                                    Get.back(); // Kembali ke halaman sebelumnya
-                                  },
-                                  child: Text("Lanjutkan"),
-                                ),
-                              ],
                             ),
                           );
+
                         } else {
                           // Jika tidak ada perubahan, langsung panggil method putEditProfile
                           widget.controller.putEditProfile(

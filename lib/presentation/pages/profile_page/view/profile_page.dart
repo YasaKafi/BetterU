@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/theme.dart';
+import '../../../../route/app_pages.dart';
 import '../../../global_components/common_button.dart';
 import '../controller/profile_controller.dart';
 import '../widget/edit_profile.dart';
@@ -30,8 +31,14 @@ class ProfilePage extends GetView<ProfileController> {
             if (controller.isLoading.value) {
               return ShimmerWidgets.layoutProfile(screenwWidth);
             } else {
+
+              String formatGender(String gender) {
+                return gender.toLowerCase().replaceAll('-', ' ');
+              }
+
               String gif() {
-                final String gender = controller.dataUser.value?.gender ?? 'laki laki';
+
+                final String gender = formatGender(controller.dataUser.value?.gender ?? 'laki laki') ;
 
                 if (gender == 'laki laki') {
                   return gifMaleAvatar;
@@ -350,6 +357,35 @@ class ProfilePage extends GetView<ProfileController> {
               );
             }
           })),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(Routes.CHAT_BOT);
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              betterAiLogo,
+              width: 28,
+              height: 28,
+            ),
+            Text(
+              'Better AI',
+              style: txtThirdSubTitle.copyWith(
+                fontWeight: FontWeight.w600,
+                color: primaryColor,
+                fontSize: 8
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: baseColor,
+
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );

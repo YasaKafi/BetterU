@@ -30,7 +30,7 @@ class SplashScreen extends GetView<SplashController> {
         });
       }  else {
         Future.delayed(const Duration(seconds: 2), () {
-          Get.offAllNamed(Routes.LOGIN_PAGE);
+          Get.offAllNamed(Routes.ONBOARDING_FINAL_SCREEN);
         });
       }
     });
